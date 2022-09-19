@@ -1,0 +1,12 @@
+*.json
+*.tsv
+*.tsv.gz
+*.csv
+*.csv.gz
+*.owl
+*.obo
+*.snakemake
+
+*.pyc
+
+data/*/*yaml

@@ -1,0 +1,35 @@
+---
+configuration:
+  output_directory: ../data/processed
+  checkpoint: false
+
+merged_graph:
+  name: KG
+  source:
+    gene_ontology:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/go_nodes.tsv
+          - ../data/processed/go_edges.tsv
+    human_phenotype_ontology:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/hpo_nodes.tsv
+          - ../data/processed/hpo_edges.tsv
+          
+  operations:
+    - name: kgx.graph_operations.summarize_graph.generate_graph_stats
+      args:
+        graph_name: KG
+        filename: ../data/processed/merged_graph_stats.yaml
+        node_facet_properties:
+          - provided_by
+        edge_facet_properties:
+          - provided_by
+  destination:
+    merged-kg-tsv:
+      format: tsv
+      compression: gz
+      filename: merged

@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+#filetype: py
+import os
+
+
+shell.prefix("unset pipefail; ")
+configfile: "../config/config.yaml"
+merge_config = 1
+
+
+# Gene Ontology
+include: "rules/go.smk"
+## TODO: implement these
+# Human Phenotype Ontology
+include: "rules/hpo.smk"
+# Mondo  
+#include: "rules/mondo.smk"
+# Ensembl Genes (or NCBI??) 
+#include: "rules/ensembl.smk"
+# Disgenet
+#include: "rules/disgenet.smk"
+# RNACentral ncRNAs
+#include: "rules/rnacentral.smk"
+
+
+rule all:
+    input: "../data/processed/merged_nodes.tsv", "../data/processed/merged_nodes.tsv"
+
+rule gather_data:
+    input: "../data/processed/go_nodes.tsv", "../data/processed/go_edges.tsv",
+           "../data/processed/hpo_nodes.tsv", "../data/processed/hpo_edges.tsv"
+    output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
+    shell: "kgx merge --merge-config ../config/merge_config.yaml"
+

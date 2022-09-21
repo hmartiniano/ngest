@@ -18,7 +18,12 @@ merged_graph:
         filename:
           - ../data/processed/hpo_nodes.tsv
           - ../data/processed/hpo_edges.tsv
-          
+    mondo:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/mondo_nodes.tsv
+          - ../data/processed/mondo_edges.tsv
   operations:
     - name: kgx.graph_operations.summarize_graph.generate_graph_stats
       args:

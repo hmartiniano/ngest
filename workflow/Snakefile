@@ -17,11 +17,15 @@ include: "rules/hpo.smk"
 # Mondo  
 include: "rules/mondo.smk"
 # Ensembl Genes (or NCBI??) 
-#include: "rules/ensembl.smk"
+include: "rules/ensembl.smk"
 # Disgenet
 #include: "rules/disgenet.smk"
+#Uniprot
+include: "rules/uniprot.smk"
 # RNACentral ncRNAs
 #include: "rules/rnacentral.smk"
+# RO
+include: "rules/ro.smk"
 
 
 rule all:

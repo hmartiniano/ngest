@@ -12,3 +12,5 @@
 data/*/*yaml
 
 .idea
+
+.pybiomart.sqlite

@@ -24,6 +24,12 @@ merged_graph:
         filename:
           - ../data/processed/mondo_nodes.tsv
           - ../data/processed/mondo_edges.tsv
+    ensembl:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/ensembl_nodes.tsv
+          - ../data/processed/ensembl_edges.tsv
   operations:
     - name: kgx.graph_operations.summarize_graph.generate_graph_stats
       args:

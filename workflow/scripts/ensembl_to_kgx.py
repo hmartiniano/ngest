@@ -10,11 +10,14 @@ def read_files(fname):
     return df
 
 
-def transform_nodes(ensembl, uniprot):
+def transform_nodes(ensembl, uniprot, rnacentral):
 
     ensemblf = ensembl
     nodes = pd.DataFrame(columns=["provided_by", "id", "name", "category", "xref"])
     uniprotf = uniprot
+
+    rnacentralf = rnacentral[rnacentral['Database'] == 'ENSEMBL']
+    rnacentralf['Ensembl ID'] = rnacentralf.apply(lambda x: x['Accession'][0:x['Accession'].find('.')], axis=1)
 
     genes, rnas, proteins = [],[],[]
 
@@ -30,6 +33,7 @@ def transform_nodes(ensembl, uniprot):
         genes.append(geneinfo)
 
         #only RNACentral ID
+
         if ensemblf["RNACentral Id"][i] != "" and str(ensemblf["RNACentral Id"][i]) != "nan":
             rnainfo = {
                 "provided_by": "ENSEMBL",
@@ -40,8 +44,17 @@ def transform_nodes(ensembl, uniprot):
             }
             rnas.append(rnainfo)
 
-        else:
-            continue
+        #look in RNACentral file for extra matches
+
+        elif ensemblf["Transcript ID"][i] in rnacentralf['Ensembl ID'].values:
+            rnainfo = {
+                "provided_by": "ENSEMBL",
+                "id": "RNACentral:" + rnacentralf[rnacentralf['Ensembl ID'] == ensemblf["Transcript ID"][i]]['Upi'].values[0],
+                "category": "biolink:Transcript",
+                "name": ensemblf["Transcript Name"][i],
+                "xref": "ENSEMBL:" + ensemblf["Transcript ID"][i]
+            }
+            rnas.append(rnainfo)
 
         # ignores proteins without Uniprot ID
         if ensemblf["Uniprot ID"][i] != "" and str(ensemblf["Uniprot ID"][i]) != "nan":
@@ -113,7 +126,8 @@ def main():
     # Transform nodes
     uniprotf = read_files(args.input[1])
     ensemblf = read_files(args.input[0])
-    ensemblnodes = transform_nodes(ensemblf, uniprotf)
+    rnacentral = read_files(args.input[2])
+    ensemblnodes = transform_nodes(ensemblf, uniprotf, rnacentral)
     ensemblnodes[["id", "name", "category", "provided_by", "xref"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
     #Transform edges
     ensemblegdes = transform_edges(ensemblf)

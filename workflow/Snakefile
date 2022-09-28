@@ -23,7 +23,7 @@ include: "rules/ensembl.smk"
 #Uniprot
 include: "rules/uniprot.smk"
 # RNACentral ncRNAs
-#include: "rules/rnacentral.smk"
+include: "rules/rnacentral.smk"
 # RO
 #include: "rules/ro.smk"
 

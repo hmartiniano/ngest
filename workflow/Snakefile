@@ -11,21 +11,26 @@ merge_config = 1
 
 # Gene Ontology
 include: "rules/go.smk"
-## TODO: implement these
 # Human Phenotype Ontology
 include: "rules/hpo.smk"
 # Mondo  
 include: "rules/mondo.smk"
 # Ensembl Genes (or NCBI??) 
 include: "rules/ensembl.smk"
-# Disgenet
-#include: "rules/disgenet.smk"
 #Uniprot
 include: "rules/uniprot.smk"
 # RNACentral ncRNAs
 include: "rules/rnacentral.smk"
 # RO
-#include: "rules/ro.smk"
+include: "rules/ro.smk"
+#GOA
+include: "rules/goa.smk"
+
+## TODO: implement these
+# Disgenet
+#include: "rules/disgenet.smk"
+#HPOA
+#include: "rules/hpoa.smk"
 
 
 rule all:
@@ -36,6 +41,7 @@ rule gather_data:
            ,"../data/processed/hpo_nodes.tsv", "../data/processed/hpo_edges.tsv"
            ,"../data/processed/mondo_nodes.tsv", "../data/processed/mondo_edges.tsv"
            ,"../data/processed/ensembl_nodes.tsv", "../data/processed/ensembl_edges.tsv"
+           ,"../data/processed/goa_nodes.tsv", "../data/processed/goa_edges.tsv"
     output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"
 

@@ -46,7 +46,7 @@ def main():
     hpoa["subject"] = hpoa["HPO ID"]
     hpoa["id"] = hpoa.id.apply(lambda x: uuid.uuid4())
     hpoa["category"] = "biolink:DiseaseToPhenotypicFeatureAssociation"
-    hpoa["negated"] = hpoa["Qualifier"]
+    hpoa["negated"] = hpoa.Qualifier.str.startswith("NOT")
     hpoa["predicate"] = "biolink:has_phenotype"
     hpoa["relation"] = "RO:0002200"
     hpoa[["id", "subject", "predicate", "object","negated", "category", "relation", "provided_by"]].to_csv(f"{args.output[1]}",

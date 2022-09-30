@@ -1,7 +1,7 @@
 GOAP = "http://geneontology.org/gene-associations/goa_human.gaf.gz"
 GOAC = "http://geneontology.org/gene-associations/goa_human_complex.gaf.gz"
 GOAR = "http://geneontology.org/gene-associations/goa_human_rna.gaf.gz"
-# GOAI = "http://geneontology.org/gene-associations/goa_human_isoform.gaf.gz"
+GOAI = "http://geneontology.org/gene-associations/goa_human_isoform.gaf.gz"
 
 rule download_goa_proteins:
   output: "../data/raw/goa_Protein.gaf"
@@ -15,9 +15,9 @@ rule download_goa_rna:
   output: "../data/raw/goa_Transcript.gaf"
   shell: "wget -qO- {GOAR}  | gzip  -d > {output}"
 
-# rule download_goa_isoform:
-#   output: "../data/raw/goa_ProteinIsoform.gaf"
-#   shell: "wget -c {GOAI} -O {output}"
+rule download_goa_isoform:
+   output: "../data/raw/goa_ProteinIsoform.gaf"
+   shell: "wget -qO- {GOAI}  | gzip  -d >  {output}"
 
 
 rule process_goa:

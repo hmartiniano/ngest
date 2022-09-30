@@ -30,12 +30,18 @@ merged_graph:
         filename:
           - ../data/processed/ensembl_nodes.tsv
           - ../data/processed/ensembl_edges.tsv
-    goa:
+    gene_ontology_annotation:
       input:
         format: tsv
         filename:
           - ../data/processed/goa_nodes.tsv
           - ../data/processed/goa_edges.tsv
+    human_phenotype_ontology_annotation:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/hpoa_nodes.tsv
+          - ../data/processed/hpoa_edges.tsv
   operations:
     - name: kgx.graph_operations.summarize_graph.generate_graph_stats
       args:

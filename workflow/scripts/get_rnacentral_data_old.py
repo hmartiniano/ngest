@@ -1,3 +1,6 @@
+#Not needed anymore
+
+
 import argparse
 import pandas as pd
 import psycopg2
@@ -14,7 +17,7 @@ RNA_COLUMNS = ["Upi",
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(prog="get_rnacentral_data.py", description='RNAcentral to tsv: download RNACentral tsv file')
+    parser = argparse.ArgumentParser(prog="get_rnacentral_data_old.py", description='RNAcentral to tsv: download RNACentral tsv file')
     parser.add_argument('-o','--output', default="rnacentral", help="Output file.")
     return parser
 

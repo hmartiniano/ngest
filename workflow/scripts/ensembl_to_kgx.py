@@ -4,111 +4,86 @@ import argparse
 import pandas as pd
 
 
+def read_id_mapping_uniprot(fname):
+    df = pd.read_csv(fname, sep="\t", header=None, low_memory=False)
+    df.columns = ["ID", "Database", "Database ID"]
+    df = df[df['Database'] == 'UniProtKB-ID']
+    df = df[["ID", "Database ID"]].drop_duplicates().set_index("ID")
+    df = df[~df.index.duplicated(keep='first')].iloc[:, 0]
+    return df
 
-def read_files(fname):
+def read_ensembl(fname):
     df = pd.read_csv(fname, sep="\t", comment="!", low_memory=False)
     return df
 
-
-def transform_nodes(ensembl, uniprot, rnacentral):
-
-    ensemblf = ensembl
-    nodes = pd.DataFrame(columns=["provided_by", "id", "name", "category", "xref"])
-    uniprotf = uniprot
-
-    rnacentralf = rnacentral[rnacentral['Database'] == 'ENSEMBL']
-    rnacentralf['Ensembl ID'] = rnacentralf.apply(lambda x: x['Accession'][0:x['Accession'].find('.')], axis=1)
-
-    genes, rnas, proteins = [],[],[]
-
-    for i in range(len(ensemblf)):
-
-        geneinfo = {
-            "provided_by" : "ENSEMBL",
-            "id": "ENSEMBL:" + ensemblf["Gene ID"][i],
-            "category": "biolink:Gene",
-            "name": ensemblf["Gene Name"][i],
-            "xref": ""
-        }
-        genes.append(geneinfo)
-
-        #only RNACentral ID
-
-        if ensemblf["RNACentral Id"][i] != "" and str(ensemblf["RNACentral Id"][i]) != "nan":
-            rnainfo = {
-                "provided_by": "ENSEMBL",
-                "id": "RNACentral:" + ensemblf["RNACentral Id"][i],
-                "category": "biolink:Transcript",
-                "name": ensemblf["Transcript Name"][i],
-                "xref": "ENSEMBL:" + ensemblf["Transcript ID"][i]
-            }
-            rnas.append(rnainfo)
-
-        #look in RNACentral file for extra matches
-
-        elif ensemblf["Transcript ID"][i] in rnacentralf['Ensembl ID'].values:
-            rnainfo = {
-                "provided_by": "ENSEMBL",
-                "id": "RNACentral:" + rnacentralf[rnacentralf['Ensembl ID'] == ensemblf["Transcript ID"][i]]['Upi'].values[0],
-                "category": "biolink:Transcript",
-                "name": ensemblf["Transcript Name"][i],
-                "xref": "ENSEMBL:" + ensemblf["Transcript ID"][i]
-            }
-            rnas.append(rnainfo)
-
-        # ignores proteins without Uniprot ID
-        if ensemblf["Uniprot ID"][i] != "" and str(ensemblf["Uniprot ID"][i]) != "nan":
-            name = ""
-
-            if ensemblf["Uniprot ID"][i] in uniprotf["Entry"].values:
-                name = uniprotf[uniprotf['Entry'] == ensemblf["Uniprot ID"][i]]['Entry Name'].values[0]
+def read_id_mapping_rnacentral(fname):
+    df = pd.read_csv(fname, sep=" ", header=None, low_memory=False)
+    df.columns = ["ID", "Database", "Database ID","Taxon","Type", "Version"]
+    return df
 
 
-            proteininfo = {
-                "provided_by": "ENSEMBL",
-                "id": "UniProtKB:" + str(ensemblf["Uniprot ID"][i]),
-                "category": "biolink:Protein",
-                "name": name,
-                "xref": "ENSEMBL:" + ensemblf["Protein ID"][i]
-            }
-            proteins.append(proteininfo)
+def transform_data(ensemblf, uniprotf, rnacentralf):
+    # Transform nodes
 
-    nodes = pd.concat([pd.DataFrame(genes),pd.DataFrame(rnas),pd.DataFrame(proteins)]).drop_duplicates()
-    return nodes
+    rnacentral_mapping =  rnacentralf[["ID", "Database ID"]].drop_duplicates().set_index("ID")
+    rnacentral_mapping = rnacentral_mapping[~rnacentral_mapping.index.duplicated(keep='first')].iloc[:, 0]
 
-def transform_edges(ensemblf):
-
-    ensemblf["FinalID"] = ensemblf["Gene ID"].apply(lambda x: uuid.uuid4())
-    edges = pd.DataFrame(columns=["object", "subject", "id", "predicate", "provided by", "relation"])
-    rnas, proteins = [], []
-
-    for i in range(len(ensemblf)):
-        if ensemblf["RNACentral Id"][i] != "" and str(ensemblf["RNACentral Id"][i]) != "nan":
-            genetorna = {
-                "object": "ENSEMBL:" + ensemblf["Gene ID"][i],
-                "subject": "RNACentral:" + ensemblf["RNACentral Id"][i],
-                "id": ensemblf['FinalID'],
-                "predicate": "biolink:has_gene_product",
-                "provided by": "ENSEMBL",
-                "relation": "RO:0002511"
-            }
-            rnas.append(genetorna)
-
-        if ensemblf["Uniprot ID"][i] != "" and str(ensemblf["Uniprot ID"][i]) != "nan":
-            genetoprotein = {
-                "object": "ENSEMBL:" + ensemblf["Gene ID"][i],
-                "subject":"UniProtKB:" + str(ensemblf["Uniprot ID"][i]),
-                "id": ensemblf['FinalID'],
-                "predicate": "biolink:has_gene_product",
-                "provided by" : "ENSEMBL",
-                "relation": "RO:0002205"
-            }
-            proteins.append(genetoprotein)
+    rnacentral_type = rnacentralf[["Database ID", "Type"]].drop_duplicates().set_index("Database ID")
+    rnacentral_type = rnacentral_type[~rnacentral_type.index.duplicated(keep='first')].iloc[:, 0]
 
 
-    edges = pd.concat([pd.DataFrame(rnas), pd.DataFrame(proteins)])
-    return edges
+    ensemblf["transcript rnacentral"] = ensemblf["Transcript ID"].map(rnacentral_mapping)
+    ensemblf["protein name"] = ensemblf["Uniprot ID"].map(uniprotf)
+    ensemblf["transcript type"] = ensemblf["transcript rnacentral"].map(rnacentral_type)
+    ensemblf["provided_by"] = "ENSEMBL"
 
+
+    gene_to_rna = ensemblf.dropna(subset=["transcript rnacentral"])
+    gene_to_rna["object"] = gene_to_rna["Gene ID"]
+    gene_to_rna["subject"] = gene_to_rna["transcript rnacentral"]
+    gene_to_rna['id'] = gene_to_rna["Gene ID"].apply(lambda x: uuid.uuid4())
+    gene_to_rna["predicate"] = "biolink:has_gene_product"
+    gene_to_rna["relation"] = "RO:0002511"
+    gene_to_rna = gene_to_rna[
+        ["id", "subject", "predicate", "object", "relation", "provided_by"]]
+
+
+    rna = ensemblf.dropna(subset=["transcript rnacentral"])
+    rna["id"] = rna["transcript rnacentral"]
+    rna["category"] = "biolink:Transcript"
+    rna["name"] = rna["Transcript Name"]
+    rna["xref"] = "ENSEMBL:" + rna["Transcript ID"]
+    rna["node_property"] = rna["transcript type"]
+    rna = rna[["id", "category", "name", "xref", "node_property", "provided_by"]]
+
+    gene_to_protein = ensemblf.dropna(subset=["Uniprot ID"])
+    gene_to_protein['object'] = gene_to_protein["Gene ID"]
+    gene_to_protein['subject'] = "UniProtKB:" + gene_to_protein["Uniprot ID"]
+    gene_to_protein['id'] = gene_to_protein["Gene ID"].apply(lambda x: uuid.uuid4())
+    gene_to_protein["predicate"] = "biolink:has_gene_product"
+    gene_to_protein["relation"] = "RO:0002205"
+    gene_to_protein = gene_to_protein[
+        ["id", "subject", "predicate", "object", "relation", "provided_by"]]
+
+    protein = ensemblf.dropna(subset=["Uniprot ID"])
+
+    protein["id"] = "UniProtKB:" + str(protein["Uniprot ID"])
+    protein["category"] = "biolink:Protein"
+    protein["name"] = protein["protein name"]
+    protein["xref"] = "ENSEMBL:" + ensemblf["Protein ID"]
+    protein = protein[["id", "category", "name", "xref", "provided_by"]]
+
+    edges = pd.concat([gene_to_rna, gene_to_protein])
+
+    genes = ensemblf
+    genes["id"] = "ENSEMBL:" + ensemblf["Gene ID"]
+    genes["category"] = "biolink:Gene"
+    genes["name"] = genes["Gene Name"]
+    genes = genes[["id", "category", "name", "provided_by"]]
+
+    nodes = pd.concat([genes, rna, protein])
+
+    return (nodes, edges)
 
 
 def get_parser():
@@ -122,17 +97,14 @@ def get_parser():
 def main():
     parser = get_parser()
     args = parser.parse_args()
+    uniprotf = read_id_mapping_uniprot(args.input[1])
+    ensemblf = read_ensembl(args.input[0])
+    rnacentralf = read_id_mapping_rnacentral(args.input[2])
 
     # Transform nodes
-    uniprotf = read_files(args.input[1])
-    ensemblf = read_files(args.input[0])
-    rnacentral = read_files(args.input[2])
-    ensemblnodes = transform_nodes(ensemblf, uniprotf, rnacentral)
-    ensemblnodes[["id", "name", "category", "provided_by", "xref"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
-    #Transform edges
-    ensemblegdes = transform_edges(ensemblf)
-    ensemblegdes[["object", "subject", "id", "predicate", "provided by", "relation"]].to_csv(
-        f"{args.output[1]}", sep="\t", index=False)
+    ensembl = transform_data(ensemblf, uniprotf, rnacentralf)
+    ensembl[0][["id", "name", "category", "provided_by", "xref", "node_property"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
+    ensembl[1][["object", "subject", "id", "predicate", "provided_by", "relation"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 
 if __name__ == '__main__':

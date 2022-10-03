@@ -8,6 +8,9 @@ rule download_ensembl:
   output: "../data/raw/ensembl.tsv"
   shell: "python scripts/get_ensembl_data.py -o {output}"
 
+rule download_ensembl_to_entrez_mapping:
+  output: "../data/raw/ensembl_to_entrez.tsv"
+  shell: "python scripts/ensembl_to_entrez.py -o {output}"
 
 rule process_ensembl:
   input: "../data/raw/ensembl.tsv" , "../data/raw/uniprot.tsv", "../data/raw/rnacentral.tsv"

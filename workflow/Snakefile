@@ -27,11 +27,8 @@ include: "rules/ro.smk"
 include: "rules/goa.smk"
 #HPOA
 include: "rules/hpoa.smk"
-
-
-## TODO: implement these
 # Disgenet
-#include: "rules/disgenet.smk"
+include: "rules/disgenet.smk"
 
 
 rule all:
@@ -44,6 +41,7 @@ rule gather_data:
            ,"../data/processed/ensembl_nodes.tsv", "../data/processed/ensembl_edges.tsv"
            ,"../data/processed/goa_nodes.tsv", "../data/processed/goa_edges.tsv"
            ,"../data/processed/hpoa_nodes.tsv", "../data/processed/hpoa_edges.tsv"
+           ,"../data/processed/disgenet_nodes.tsv", "../data/processed/disgenet_edges.tsv"
     output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"
 

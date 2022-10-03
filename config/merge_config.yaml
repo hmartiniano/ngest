@@ -42,6 +42,12 @@ merged_graph:
         filename:
           - ../data/processed/hpoa_nodes.tsv
           - ../data/processed/hpoa_edges.tsv
+    disgenet:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/disgenet_nodes.tsv
+          - ../data/processed/disgenet_edges.tsv
   operations:
     - name: kgx.graph_operations.summarize_graph.generate_graph_stats
       args:

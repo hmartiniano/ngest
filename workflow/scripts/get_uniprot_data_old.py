@@ -1,3 +1,4 @@
+#Not needed anymore
 import argparse
 import re
 import requests
@@ -26,7 +27,7 @@ def get_batch(batch_url):
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(prog="get_uniprot_data.py", description='Uniprot to tsv: download Uniprot tsv file')
+    parser = argparse.ArgumentParser(prog="get_uniprot_data_old.py", description='Uniprot to tsv: download Uniprot tsv file')
     parser.add_argument('-o','--output', default="uniprot", help="Output file.")
     return parser
 

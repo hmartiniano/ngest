@@ -21,7 +21,6 @@ rule download_goa_isoform:
 
 
 rule process_goa:
-  input: "../data/raw/goa_Protein.gaf","../data/raw/goa_MacromolecularComplexMixin.gaf","../data/raw/goa_Transcript.gaf" #, "../data/raw/goa_proteins.gaf"
-  params: "../data/raw/ro.json"
+  input: ro="../data/raw/ro.json", protein="../data/raw/goa_Protein.gaf", rna="../data/raw/goa_Transcript.gaf", complex="../data/raw/goa_MacromolecularComplexMixin.gaf"  #, "../data/raw/goa_proteins.gaf"
   output: "../data/processed/goa_nodes.tsv","../data/processed/goa_edges.tsv"
-  shell: "python scripts/goa_to_kgx.py -i {input} -r {params} -o {output}"
+  shell: "python scripts/goa_to_kgx.py -i {input.protein} {input.rna} -r {input.ro} -o {output}"

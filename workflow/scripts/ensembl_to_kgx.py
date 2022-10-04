@@ -28,22 +28,22 @@ def read_id_mapping_rnacentral(fname):
 def transform_data(ensemblf, uniprotf, rnacentralf):
     # Transform nodes
 
-    rnacentral_mapping =  rnacentralf[["ID", "Database ID"]].drop_duplicates().set_index("ID")
+    rnacentral_mapping =  rnacentralf[["ID", "Database ID"]].drop_duplicates().set_index("Database ID")
     rnacentral_mapping = rnacentral_mapping[~rnacentral_mapping.index.duplicated(keep='first')].iloc[:, 0]
 
-    rnacentral_type = rnacentralf[["Database ID", "Type"]].drop_duplicates().set_index("Database ID")
+    rnacentral_type = rnacentralf[["ID", "Type"]].drop_duplicates().set_index("ID")
     rnacentral_type = rnacentral_type[~rnacentral_type.index.duplicated(keep='first')].iloc[:, 0]
 
 
-    ensemblf["transcript rnacentral"] = ensemblf["Transcript ID"].map(rnacentral_mapping)
+    ensemblf["transcript rnacentral"] =  ensemblf["RNACentral Id"].combine_first(ensemblf["Transcript ID"].map(rnacentral_mapping))
     ensemblf["protein name"] = ensemblf["Uniprot ID"].map(uniprotf)
     ensemblf["transcript type"] = ensemblf["transcript rnacentral"].map(rnacentral_type)
     ensemblf["provided_by"] = "ENSEMBL"
 
 
     gene_to_rna = ensemblf.dropna(subset=["transcript rnacentral"])
-    gene_to_rna["object"] = gene_to_rna["Gene ID"]
-    gene_to_rna["subject"] = gene_to_rna["transcript rnacentral"]
+    gene_to_rna["object"] = "ENSEMBL:" + gene_to_rna["Gene ID"]
+    gene_to_rna["subject"] = "RNACENTRAL:" + gene_to_rna["transcript rnacentral"]
     gene_to_rna['id'] = gene_to_rna["Gene ID"].apply(lambda x: uuid.uuid4())
     gene_to_rna["predicate"] = "biolink:has_gene_product"
     gene_to_rna["relation"] = "RO:0002511"
@@ -52,7 +52,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
 
 
     rna = ensemblf.dropna(subset=["transcript rnacentral"])
-    rna["id"] = rna["transcript rnacentral"]
+    rna["id"] = "RNACENTRAL:" + rna["transcript rnacentral"]
     rna["category"] = "biolink:Transcript"
     rna["name"] = rna["Transcript Name"]
     rna["xref"] = "ENSEMBL:" + rna["Transcript ID"]
@@ -60,7 +60,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
     rna = rna[["id", "category", "name", "xref", "node_property", "provided_by"]]
 
     gene_to_protein = ensemblf.dropna(subset=["Uniprot ID"])
-    gene_to_protein['object'] = gene_to_protein["Gene ID"]
+    gene_to_protein['object'] = "ENSEMBL:" + gene_to_protein["Gene ID"]
     gene_to_protein['subject'] = "UniProtKB:" + gene_to_protein["Uniprot ID"]
     gene_to_protein['id'] = gene_to_protein["Gene ID"].apply(lambda x: uuid.uuid4())
     gene_to_protein["predicate"] = "biolink:has_gene_product"
@@ -70,13 +70,13 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
 
     protein = ensemblf.dropna(subset=["Uniprot ID"])
 
-    protein["id"] = "UniProtKB:" + str(protein["Uniprot ID"])
+    protein["id"] = "UniProtKB:" + protein["Uniprot ID"]
     protein["category"] = "biolink:Protein"
     protein["name"] = protein["protein name"]
     protein["xref"] = "ENSEMBL:" + ensemblf["Protein ID"]
     protein = protein[["id", "category", "name", "xref", "provided_by"]]
 
-    edges = pd.concat([gene_to_rna, gene_to_protein])
+    edges = pd.concat([gene_to_rna, gene_to_protein]).drop_duplicates()
 
     genes = ensemblf
     genes["id"] = "ENSEMBL:" + ensemblf["Gene ID"]

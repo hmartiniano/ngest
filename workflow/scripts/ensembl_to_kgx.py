@@ -1,5 +1,6 @@
 import uuid
 import json
+
 import argparse
 import pandas as pd
 
@@ -12,13 +13,15 @@ def read_id_mapping_uniprot(fname):
     df = df[~df.index.duplicated(keep='first')].iloc[:, 0]
     return df
 
+
 def read_ensembl(fname):
     df = pd.read_csv(fname, sep="\t", comment="!", low_memory=False)
     return df
 
+
 def read_id_mapping_rnacentral(fname):
     df = pd.read_csv(fname, sep=" ", header=None, low_memory=False)
-    df.columns = ["ID", "Database", "Database ID","Taxon","Type", "Version"]
+    df.columns = ["ID", "Database", "Database ID", "Taxon", "Type", "Version"]
     return df
 
 
@@ -102,9 +105,9 @@ def main():
     rnacentralf = read_id_mapping_rnacentral(args.input[2])
 
     # Transform nodes
-    ensembl = transform_data(ensemblf, uniprotf, rnacentralf)
-    ensembl[0][["id", "name", "category", "provided_by", "xref", "node_property"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
-    ensembl[1][["object", "subject", "id", "predicate", "provided_by", "relation"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
+    nodes, edges = transform_data(ensemblf, uniprotf, rnacentralf)
+    nodes[["id", "name", "category", "provided_by", "xref", "node_property"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
+    edges[["object", "subject", "id", "predicate", "provided_by", "relation"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 
 if __name__ == '__main__':

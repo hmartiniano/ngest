@@ -11,8 +11,14 @@ RNACENTRAL = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/id_
 
 rule download_rnacentral:
   output: "../data/raw/rnacentral.tsv"
-  params: "{print $0}"
-  shell: "wget -qO- {RNACENTRAL}  | awk '$4 = 9606 {params}' > {output}"
+  shell: "wget {RNACENTRAL} -O {output}"
+
+rule filter_rnacentral:
+  input: "../data/raw/rnacentral.tsv"
+  output: "../data/processed/rnacentral.tsv"
+  shell: "awk '$4 = 9606 {{print $0}}' {input} > {output}"
+
+
 
 
 

@@ -29,7 +29,7 @@ def main():
     disgenetmapping = disgenetmapping[~disgenetmapping.index.duplicated(keep='first')].iloc[:, 0]
 
     disgenet["subject"] = disgenet["diseaseId"].map(disgenetmapping)
-    disgenet["object"] = disgenet["geneId"].map(entrez_to_ensembl)
+    disgenet["object"] = "ENSEMBL:" + disgenet["geneId"].map(entrez_to_ensembl)
     disgenet["provided_by"] = "Disgenet"
 
     disgenet = disgenet.dropna(subset=["object", "subject"])

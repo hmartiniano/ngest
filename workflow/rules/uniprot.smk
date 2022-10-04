@@ -2,5 +2,5 @@ UNIPROT = "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowled
 
 
 rule download_uniprot:
-  output: "../data/raw/uniprot.tsv"
-  shell: "wget -qO- {UNIPROT}  | gzip  -d > {output}"
+  output: "../data/raw/uniprot.tsv.gz"
+  shell: "wget -qO- {UNIPROT} > {output}"

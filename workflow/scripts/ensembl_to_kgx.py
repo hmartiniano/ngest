@@ -81,7 +81,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
     genes["name"] = genes["Gene Name"]
     genes = genes[["id", "category", "name", "provided_by"]]
 
-    nodes = pd.concat([genes, rna, protein])
+    nodes = pd.concat([genes, rna, protein]).drop_duplicates()
 
     return (nodes, edges)
 

@@ -1,6 +1,6 @@
 *.json
 *.tsv
-*.tsv.gz
+*.gz
 *.csv
 *.csv.gz
 *.owl

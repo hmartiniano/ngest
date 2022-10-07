@@ -1,1 +1,59 @@
-a: 1
+classes:
+  - database: "ENSEMBL"
+    class:  "biolink:Gene"
+  - database: "UNIPROTKB"
+    class: "biolink:Protein"
+  - database: "RNACENTRAL"
+    class: "biolink:Transcript"
+  - database: "COMPLEXPORTAL"
+    class: "biolink:MacromolecularComplexMixin"
+  - database: "MONDO"
+    class: "biolink:Disease"
+  - database: "HP"
+    class: "biolink:PhenotypicFeature"
+
+# How to distinguish Isoforms from proteins?
+# - database: "UniprotKB"
+#   class: "biolink:ProteinIsoform"
+
+
+edges_relations:
+  - object: "GO"
+    category: "biolink:FunctionalAssociation"
+  - subject: "ENSEMBL"
+    object: "HP"
+    category: "biolink:GeneToPhenotypicFeatureAssociation"
+    predicate: "biolink:associated_with"
+    relation: "RO:0016001"
+  - subject: "ENSEMBL"
+    object: "MONDO"
+    category: "biolink:GeneToDiseaseAssociation"
+    predicate: "biolink:associated_with"
+    relation: "RO:0016001"
+  - subject: "ENSEMBL"
+    object: "UniprotKB"
+    predicate: "biolink:has_gene_product"
+    relation: "RO:0002205"
+  - subject: "ENSEMBL"
+    object: "RNACentral"
+    predicate: "biolink:has_gene_product"
+    relation: "RO:0002205"
+  - subject: "OMIM"
+    object: "HP"
+    category: "biolink:DiseaseToPhenotypicFeatureAssociation"
+    predicate: "biolink:has_phenotype"
+    relation: "RO:0002200"
+  - subject: "DECIPHER"
+    object: "HP"
+    category: "biolink:DiseaseToPhenotypicFeatureAssociation"
+    predicate: "biolink:has_phenotype"
+    relation: "RO:0002200"
+  - subject: "ORPHA"
+    object: "HP"
+    category: "biolink:DiseaseToPhenotypicFeatureAssociation"
+    predicate: "biolink:has_phenotype"
+    relation: "RO:0002200"
+
+
+
+

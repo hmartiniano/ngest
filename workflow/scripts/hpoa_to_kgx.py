@@ -42,8 +42,8 @@ def main():
     hpoa["name"] = hpoa["DB Name"]
     hpoa[["id", "name", "category", "provided_by"]].to_csv(f"{args.output[0]}", sep="\t", index=False)
     # Now edges
-    hpoa["object"] = hpoa["DatabaseId"]
-    hpoa["subject"] = hpoa["HPO ID"]
+    hpoa["subject"] = hpoa["DatabaseId"]
+    hpoa["object"] = hpoa["HPO ID"]
     hpoa["id"] = hpoa.id.apply(lambda x: uuid.uuid4())
     hpoa["category"] = "biolink:DiseaseToPhenotypicFeatureAssociation"
     hpoa["negated"] = hpoa.Qualifier.str.startswith("NOT")

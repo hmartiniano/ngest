@@ -1,8 +1,8 @@
 # TODO
 
-* Notebooks with statistics for raw and processed data
-* Do not compress goa raw files
-* Create a function to identify biolink model classes from CURIES
-* Same as above for relationships
+* Notebooks with statistics for raw and processed data - done
+* Do not compress goa raw files - done
+* Create a function to identify biolink model classes from CURIES - done
+* Same as above for relationships - done but missing the RO file ones, are they needed?
 * Add database versions as node/edge properties (choose appropriate slot name)
 * Automate the creation of the merge config file 

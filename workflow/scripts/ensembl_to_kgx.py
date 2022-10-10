@@ -61,7 +61,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
 
     gene_to_protein = ensemblf.dropna(subset=["Uniprot ID"])
     gene_to_protein['subject'] = "ENSEMBL:" + gene_to_protein["Gene ID"]
-    gene_to_protein['object'] = "UniProtKB:" + gene_to_protein["Uniprot ID"]
+    gene_to_protein['object'] = "UNIPROTKB:" + gene_to_protein["Uniprot ID"]
     gene_to_protein['id'] = gene_to_protein["Gene ID"].apply(lambda x: uuid.uuid4())
     gene_to_protein["predicate"] = "biolink:has_gene_product"
     gene_to_protein["relation"] = "RO:0002205"
@@ -70,7 +70,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
 
     protein = ensemblf.dropna(subset=["Uniprot ID"])
 
-    protein["id"] = "UniProtKB:" + protein["Uniprot ID"]
+    protein["id"] = "UNIPROTKB:" + protein["Uniprot ID"]
     protein["category"] = "biolink:Protein"
     protein["name"] = protein["protein name"]
     protein["xref"] = "ENSEMBL:" + ensemblf["Protein ID"]

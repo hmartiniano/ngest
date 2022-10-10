@@ -12,6 +12,7 @@ classes:
   - database: "HP"
     class: "biolink:PhenotypicFeature"
 
+
 # How to distinguish Isoforms from proteins?
 # - database: "UniprotKB"
 #   class: "biolink:ProteinIsoform"
@@ -31,11 +32,11 @@ edges_relations:
     predicate: "biolink:associated_with"
     relation: "RO:0016001"
   - subject: "ENSEMBL"
-    object: "UniprotKB"
+    object: "UNIPROTKB"
     predicate: "biolink:has_gene_product"
     relation: "RO:0002205"
   - subject: "ENSEMBL"
-    object: "RNACentral"
+    object: "RNACENTRAL"
     predicate: "biolink:has_gene_product"
     relation: "RO:0002205"
   - subject: "OMIM"

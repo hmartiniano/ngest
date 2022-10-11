@@ -5,8 +5,9 @@
 #  shell: "curl {ENSEMBL} -o {output}"
 
 rule download_ensembl:
+  input: cfg = "../config/config.yaml"
   output: "../data/raw/ensembl.tsv"
-  shell: "python scripts/get_ensembl_data.py -o {output}"
+  shell: "python scripts/get_ensembl_data.py -c {input.cfg} -o {output}"
 
 rule download_ensembl_to_entrez_mapping:
   output: "../data/raw/ensembl_to_entrez.tsv"

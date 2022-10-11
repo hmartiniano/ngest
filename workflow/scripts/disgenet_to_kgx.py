@@ -78,7 +78,5 @@ def main():
     nodes[["id", "name", "category", "provided_by"]].to_csv(f"{args.output[0]}", sep="\t", index=False)
 
 
-
-
 if __name__ == '__main__':
     main()

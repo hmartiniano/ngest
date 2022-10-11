@@ -2,6 +2,7 @@ GOAP = "http://geneontology.org/gene-associations/goa_human.gaf.gz"
 GOAC = "http://geneontology.org/gene-associations/goa_human_complex.gaf.gz"
 GOAR = "http://geneontology.org/gene-associations/goa_human_rna.gaf.gz"
 #GOAI = "http://geneontology.org/gene-associations/goa_human_isoform.gaf.gz"
+GOAVERSION = "http://current.geneontology.org/metadata/release-date.json"
 
 rule download_goa_proteins:
   output: "../data/raw/goa_human.gaf.gz"
@@ -19,6 +20,9 @@ rule download_goa_rna:
 #   output: "../data/raw/goa_human_isoform.gaf.gz"
 #   shell: "curl -L {GOAI} -o {output}"
 
+rule download_goa_version:
+  output: "../data/raw/goa_release-date.json"
+  shell: "curl -L {GOAVERSION} -o {output}"
 
 rule process_goa:
   input: ro="../data/raw/ro.json", cfg= "../config/config.yaml", protein="../data/raw/goa_human.gaf.gz", rna="../data/raw/goa_human_rna.gaf.gz", complex="../data/raw/goa_human_complex.gaf.gz"  #, "../data/raw/goa_human_isoform.gaf.gz"

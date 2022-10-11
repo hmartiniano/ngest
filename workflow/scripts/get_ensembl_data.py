@@ -2,7 +2,9 @@ import uuid
 import json
 import argparse
 import pandas as pd
-from pybiomart import Dataset
+from pybiomart import Dataset, Server
+import yaml
+import files_versions
 
 dataset = Dataset(name='hsapiens_gene_ensembl',
                   host='http://www.ensembl.org')
@@ -16,6 +18,7 @@ ENSEMBL = dataset.query(attributes=['ensembl_gene_id',
                                     'rnacentral',
                                     'ensembl_peptide_id',
                                     'uniprotswissprot'])
+
 ENSEMBL_COLUMNS = [
     "Gene ID",
     "Gene Name",
@@ -35,6 +38,7 @@ def ensembl_data():
 
 def get_parser():
     parser = argparse.ArgumentParser(prog="get_ensembl_data.py", description='ensembl to csv: download ensembl csv file')
+    parser.add_argument('-c', '--cfg', help="Input config.yaml file")
     parser.add_argument('-o','--output', default="ensembl", help="Output ensembl data.")
     return parser
 
@@ -43,6 +47,7 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
     ensemblf = ensembl_data()
+    files_versions.get_ensembl_version(args.cfg)
     ensemblf[["Gene ID",
     "Gene Name",
     "Transcript ID",

@@ -1,60 +1,68 @@
 classes:
-  - database: "ENSEMBL"
-    class:  "biolink:Gene"
-  - database: "UNIPROTKB"
-    class: "biolink:Protein"
-  - database: "RNACENTRAL"
-    class: "biolink:Transcript"
-  - database: "COMPLEXPORTAL"
-    class: "biolink:MacromolecularComplexMixin"
-  - database: "MONDO"
-    class: "biolink:Disease"
-  - database: "HP"
-    class: "biolink:PhenotypicFeature"
-
-
-# How to distinguish Isoforms from proteins?
-# - database: "UniprotKB"
-#   class: "biolink:ProteinIsoform"
-
-
+  - class: biolink:Gene
+    database: ENSEMBL
+  - class: biolink:Protein
+    database: UNIPROTKB
+  - class: biolink:Transcript
+    database: RNACENTRAL
+  - class: biolink:MacromolecularComplexMixin
+    database: COMPLEXPORTAL
+  - class: biolink:Disease
+    database: MONDO
+  - class: biolink:PhenotypicFeature
+    database: HP
 edges_relations:
-  - object: "GO"
-    category: "biolink:FunctionalAssociation"
-  - subject: "ENSEMBL"
-    object: "HP"
-    category: "biolink:GeneToPhenotypicFeatureAssociation"
-    predicate: "biolink:associated_with"
-    relation: "RO:0016001"
-  - subject: "ENSEMBL"
-    object: "MONDO"
-    category: "biolink:GeneToDiseaseAssociation"
-    predicate: "biolink:associated_with"
-    relation: "RO:0016001"
-  - subject: "ENSEMBL"
-    object: "UNIPROTKB"
-    predicate: "biolink:has_gene_product"
-    relation: "RO:0002205"
-  - subject: "ENSEMBL"
-    object: "RNACENTRAL"
-    predicate: "biolink:has_gene_product"
-    relation: "RO:0002205"
-  - subject: "OMIM"
-    object: "HP"
-    category: "biolink:DiseaseToPhenotypicFeatureAssociation"
-    predicate: "biolink:has_phenotype"
-    relation: "RO:0002200"
-  - subject: "DECIPHER"
-    object: "HP"
-    category: "biolink:DiseaseToPhenotypicFeatureAssociation"
-    predicate: "biolink:has_phenotype"
-    relation: "RO:0002200"
-  - subject: "ORPHA"
-    object: "HP"
-    category: "biolink:DiseaseToPhenotypicFeatureAssociation"
-    predicate: "biolink:has_phenotype"
-    relation: "RO:0002200"
-
-
-
-
+  - category: biolink:FunctionalAssociation
+    object: GO
+  - category: biolink:GeneToPhenotypicFeatureAssociation
+    object: HP
+    predicate: biolink:associated_with
+    relation: RO:0016001
+    subject: ENSEMBL
+  - category: biolink:GeneToDiseaseAssociation
+    object: MONDO
+    predicate: biolink:associated_with
+    relation: RO:0016001
+    subject: ENSEMBL
+  - object: UNIPROTKB
+    predicate: biolink:has_gene_product
+    relation: RO:0002205
+    subject: ENSEMBL
+  - object: RNACENTRAL
+    predicate: biolink:has_gene_product
+    relation: RO:0002205
+    subject: ENSEMBL
+  - category: biolink:DiseaseToPhenotypicFeatureAssociation
+    object: HP
+    predicate: biolink:has_phenotype
+    relation: RO:0002200
+    subject: OMIM
+  - category: biolink:DiseaseToPhenotypicFeatureAssociation
+    object: HP
+    predicate: biolink:has_phenotype
+    relation: RO:0002200
+    subject: DECIPHER
+  - category: biolink:DiseaseToPhenotypicFeatureAssociation
+    object: HP
+    predicate: biolink:has_phenotype
+    relation: RO:0002200
+    subject: ORPHA
+versions:
+  - database: ENSEMBL
+    version: Ensembl Genes 107
+  - database: UNIPROTKB
+    version: null
+  - database: RNACENTRAL
+    version: null
+  - database: HPOA
+    version: null
+  - database: MONDO
+    version: null
+  - database: HP
+    version: null
+  - database: GO
+    version: null
+  - database: GOA
+    version: null
+  - database: DISGENET
+    version: 7.0, January 2020

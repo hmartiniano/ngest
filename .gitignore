@@ -8,6 +8,8 @@
 *.snakemake
 *.gaf
 *.hpoa
+*.metalink
+*.txt
 
 *.pyc
 

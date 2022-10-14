@@ -1,6 +1,4 @@
 import uuid
-import json
-
 import argparse
 import pandas as pd
 

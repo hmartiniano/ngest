@@ -48,6 +48,24 @@ merged_graph:
         filename:
           - ../data/processed/disgenet_nodes.tsv
           - ../data/processed/disgenet_edges.tsv
+#    bgee:
+#      input:
+#        format: tsv
+#        filename:
+#          - ../data/processed/bgee_nodes.tsv
+#          - ../data/processed/bgee_edges.tsv
+    uberon:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/uberon_nodes.tsv
+          - ../data/processed/uberon_edges.tsv
+    cl:
+      input:
+        format: tsv
+        filename:
+          - ../data/processed/cl_nodes.tsv
+          - ../data/processed/cl_edges.tsv
   operations:
     - name: kgx.graph_operations.summarize_graph.generate_graph_stats
       args:

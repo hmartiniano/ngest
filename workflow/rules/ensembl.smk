@@ -1,13 +1,6 @@
-#ENSEMBL = "http://ftp.ensembl.org/pub/current_json/homo_sapiens/homo_sapiens.json"
-
-#rule download_ensembl:
-#  output: "../data/raw/ensembl.json"
-#  shell: "curl {ENSEMBL} -o {output}"
-
 rule download_ensembl:
-  input: cfg = "../config/config.yaml"
   output: "../data/raw/ensembl.tsv"
-  shell: "python scripts/get_ensembl_data.py -c {input.cfg} -o {output}"
+  shell: "python scripts/get_ensembl_data.py -o {output}"
 
 rule download_ensembl_to_entrez_mapping:
   output: "../data/raw/ensembl_to_entrez.tsv"

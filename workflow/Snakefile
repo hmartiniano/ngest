@@ -29,6 +29,12 @@ include: "rules/goa.smk"
 include: "rules/hpoa.smk"
 # Disgenet
 include: "rules/disgenet.smk"
+#Uberon
+include: "rules/uberon.smk"
+#Cell Ontology
+include: "rules/cl.smk"
+#Bgee
+include: "rules/bgee.smk"
 
 
 rule all:
@@ -42,6 +48,20 @@ rule gather_data:
            ,"../data/processed/goa_nodes.tsv", "../data/processed/goa_edges.tsv"
            ,"../data/processed/hpoa_nodes.tsv", "../data/processed/hpoa_edges.tsv"
            ,"../data/processed/disgenet_nodes.tsv", "../data/processed/disgenet_edges.tsv"
+           ,"../data/processed/uberon_nodes.tsv", "../data/processed/uberon_edges.tsv"
+# Bgee commented because merge does not work with big files
+#           , "../data/processed/bgee_nodes.tsv", "../data/processed/bgee_edges.tsv"
+           , "../data/processed/cl_nodes.tsv", "../data/processed/cl_edges.tsv"
     output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"
 
+
+rule get_db_versions:
+    input: disgenet = "../data/raw/disgenet_readme.txt"
+            ,go = "../data/raw/go_release-date.json"
+            ,goa ="../data/raw/goa_release-date.json"
+            ,rnacentral ="../data/raw/rnacentral_release_notes.txt"
+            ,uniprot ="../data/raw/uniprot_release.metalink"
+            ,hpoa = "../data/raw/hpoa.hpoa"
+    output: "../data/processed/db_versions.yaml"
+    shell: "python scripts/get_db_versions.py -u {input.uniprot} -d {input.disgenet} -g {input.go} -a {input.goa} -r {input.rnacentral} -hp {input.hpoa} -o {output}"

@@ -11,6 +11,11 @@ classes:
     database: MONDO
   - class: biolink:PhenotypicFeature
     database: HP
+  - class: biolink:AnatomicalEntity
+    database: BGEE
+  - class: biolink:AnatomicalEntity
+    database: UBERON
+
 edges_relations:
   - category: biolink:FunctionalAssociation
     object: GO
@@ -47,22 +52,9 @@ edges_relations:
     predicate: biolink:has_phenotype
     relation: RO:0002200
     subject: ORPHA
-versions:
-  - database: ENSEMBL
-    version: Ensembl Genes 107
-  - database: UNIPROTKB
-    version: null
-  - database: RNACENTRAL
-    version: null
-  - database: HPOA
-    version: null
-  - database: MONDO
-    version: null
-  - database: HP
-    version: null
-  - database: GO
-    version: null
-  - database: GOA
-    version: null
-  - database: DISGENET
-    version: 7.0, January 2020
+  - category: biolink:GeneToExpressionSiteAssociation
+    object: CL
+    predicate: biolink:expressed_in
+    relation: RO:0002206
+    subject: ENSEMBL
+

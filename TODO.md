@@ -11,7 +11,7 @@
 - [x] Add database versions as ymal file
 - [x] Add GOA isoforms - review this question
 - [x] Map HPOA disease IDs to MONDO
-- [ ] check provide_by and knowledge_source
+- [x] check provide_by and knowledge_source - nodes provided_by edges knowledge_source
 - [ ] Verify KGX annotations for edges and nodes
 - [ ] Go through marged_graph stats
 - [ ] Automate the creation of the merge config file 

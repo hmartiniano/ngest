@@ -37,6 +37,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
     ensemblf["protein name"] = ensemblf["Uniprot ID"].map(uniprotf)
     ensemblf["transcript type"] = ensemblf["transcript rnacentral"].map(rnacentral_type)
     ensemblf["provided_by"] = "ENSEMBL"
+    ensemblf["knowledge_source"] = "ENSEMBL"
 
 
     gene_to_rna = ensemblf.dropna(subset=["transcript rnacentral"])
@@ -46,7 +47,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
     gene_to_rna["predicate"] = "biolink:has_gene_product"
     gene_to_rna["relation"] = "RO:0002511"
     gene_to_rna = gene_to_rna[
-        ["id", "subject", "predicate", "object", "relation", "provided_by"]]
+        ["id", "subject", "predicate", "object", "relation", "knowledge_source"]]
 
 
     rna = ensemblf.dropna(subset=["transcript rnacentral"])
@@ -64,7 +65,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
     gene_to_protein["predicate"] = "biolink:has_gene_product"
     gene_to_protein["relation"] = "RO:0002205"
     gene_to_protein = gene_to_protein[
-        ["id", "subject", "predicate", "object", "relation", "provided_by"]]
+        ["id", "subject", "predicate", "object", "relation", "knowledge_source"]]
 
     protein = ensemblf.dropna(subset=["Uniprot ID"])
 
@@ -105,7 +106,7 @@ def main():
     # Transform nodes
     nodes, edges = transform_data(ensemblf, uniprotf, rnacentralf)
     nodes[["id", "name", "category", "provided_by", "xref", "node_property"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
-    edges[["object", "subject", "id", "predicate", "provided_by", "relation"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
+    edges[["object", "subject", "id", "predicate", "knowledge_source", "relation"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 
 if __name__ == '__main__':

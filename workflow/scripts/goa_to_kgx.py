@@ -86,7 +86,8 @@ def main():
     gaf["negated"] = gaf.Qualifier.str.startswith("NOT|")
     gaf["predicate"] = "biolink:" + gaf.Qualifier.str.replace("NOT|", "", regex=False)
     gaf["relation"] = gaf.Qualifier.map(predicate_to_relation)
-    gaf[["id", "subject", "predicate", "object", "category", "negated", "relation", "provided_by"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
+    gaf["knowledge_source"] = "GOA"
+    gaf[["id", "subject", "predicate", "object", "category", "negated", "relation", "knowledge_source"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
     
 
 if __name__ == '__main__':

@@ -74,7 +74,7 @@ merged_graph:
         node_facet_properties:
           - provided_by
         edge_facet_properties:
-          - provided_by
+          - knowledge_source
   destination:
     merged-kg-tsv:
       format: tsv

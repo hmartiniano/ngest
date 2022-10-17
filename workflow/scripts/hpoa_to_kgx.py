@@ -45,6 +45,7 @@ def main():
     mondo_mapping = read_mondo(args.mapping)
 
     hpoa["provided_by"] = "HPOA"
+    hpoa["knowledge_source"] = "HPOA"
     hpoa["id"] = hpoa["DatabaseId"].map(mondo_mapping)
     hpoa["category"] = "biolink:Disease"
     hpoa["name"] = hpoa["DB Name"]
@@ -58,7 +59,7 @@ def main():
     hpoa["negated"] = hpoa.Qualifier.str.startswith("NOT")
     hpoa["predicate"] = "biolink:has_phenotype"
     hpoa["relation"] = "RO:0002200"
-    hpoa[["id", "subject", "predicate", "object","negated", "category", "relation", "provided_by"]].dropna().drop_duplicates().to_csv(f"{args.output[1]}",
+    hpoa[["id", "subject", "predicate", "object","negated", "category", "relation", "knowledge_source"]].dropna().drop_duplicates().to_csv(f"{args.output[1]}",
                                                                                                 sep="\t", index=False)
 
 

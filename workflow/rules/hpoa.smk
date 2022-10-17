@@ -5,6 +5,6 @@ rule download_hpoa:
   shell: "curl -L {HPOA} -o {output}"
 
 rule process_hpoa:
-  input: "../data/raw/hpoa.hpoa"
+  input: hpoa ="../data/raw/hpoa.hpoa", mondo_map = "../data/raw/mondo_mapping.tsv"
   output: "../data/processed/hpoa_nodes.tsv","../data/processed/hpoa_edges.tsv"
-  shell: "python scripts/hpoa_to_kgx.py -i {input} -o {output}"
+  shell: "python scripts/hpoa_to_kgx.py -i {input.hpoa} -m {input.mondo_map} -o {output}"

@@ -3,7 +3,7 @@ classes:
     database: ENSEMBL
   - class: biolink:Protein
     database: UNIPROTKB
-  - class: biolink:Transcript
+  - class: biolink:RNA
     database: RNACENTRAL
   - class: biolink:MacromolecularComplexMixin
     database: COMPLEXPORTAL

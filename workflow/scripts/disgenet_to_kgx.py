@@ -57,21 +57,21 @@ def main():
     phenotypes["id"] = gene_to_phenotype["object"]
     phenotypes["category"] = "biolink:PhenotypicFeature"
     phenotypes["name"] = gene_to_phenotype["diseaseName"]
-    phenotypes = phenotypes[["id","category","name","provided_by"]]
+    phenotypes = phenotypes[["id", "category", "name", "provided_by"]]
 
 
     diseases = gene_to_disease
     diseases["id"] = diseases["object"]
     diseases["category"] = "biolink:Disease"
     diseases["name"] = gene_to_disease["diseaseName"]
-    diseases = diseases[["id","category","name","provided_by"]]
+    diseases = diseases[["id", "category", "name", "provided_by"]]
 
 
     nodes = disgenet
     nodes["id"] = disgenet["subject"]
     nodes["category"] = "biolink:Gene"
     nodes["name"] = disgenet["geneSymbol"]
-    nodes = nodes[["id","category","name","provided_by"]]
+    nodes = nodes[["id", "category", "name", "provided_by"]]
 
     nodes = pd.concat([nodes, phenotypes, diseases])
 

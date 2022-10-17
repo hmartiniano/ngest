@@ -51,7 +51,7 @@ def transform_data(ensemblf, uniprotf, rnacentralf):
 
     rna = ensemblf.dropna(subset=["transcript rnacentral"])
     rna["id"] = "RNACENTRAL:" + rna["transcript rnacentral"]
-    rna["category"] = "biolink:Transcript"
+    rna["category"] = "biolink:RNA"
     rna["name"] = rna["Transcript Name"]
     rna["xref"] = "ENSEMBL:" + rna["Transcript ID"]
     rna["node_property"] = rna["transcript type"]

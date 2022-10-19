@@ -25,26 +25,27 @@ def main():
     bgee["object"] = bgee['Anatomical entity ID']
     bgee["subject"] = "ENSEMBL:" + bgee["Gene ID"]
     bgee["provided_by"] = "BGEE"
+    bgee = bgee[~bgee["object"].str.contains("∩", na=False)]
 
     gene_to_ae = bgee
     gene_to_ae["category"] = "biolink:GeneToExpressionSiteAssociation"
     gene_to_ae['id'] = gene_to_ae['subject'].apply(lambda x: uuid.uuid4())
     gene_to_ae["predicate"] = "biolink:expressed_in"
     gene_to_ae["relation"] = "RO:0002206"
-    bgee["knowledge_source"] = "BGEE"
+    gene_to_ae["knowledge_source"] = "BGEE"
 
  #  to include negated field for absent relations
  #   gene_to_ae["negated"] = gene_to_ae.Expression.str.startswith("absent")
 
     gene_to_ae[["id", "subject", "predicate", "object", "category", "relation", "knowledge_source"]].drop_duplicates().to_csv(
-        f"{args.output[1]}", sep="\t", index=False)
+         f"{args.output[1]}", sep="\t", index=False)
 
-    ae = gene_to_ae
+    ae = gene_to_ae[["object", "Anatomical entity name", "provided_by"]]
     ae["id"] = ae["object"]
     ae["category"] = "biolink:AnatomicalEntity"
     ae["name"] = ae["Anatomical entity name"]
 
-    genes = gene_to_ae
+    genes = gene_to_ae[["subject", "provided_by", "Gene name"]]
     genes["id"] = genes["subject"]
     genes["category"] = "biolink:Gene"
     genes["name"] = genes["Gene name"]

@@ -49,10 +49,10 @@ rule gather_data:
            ,"../data/processed/hpoa_nodes.tsv", "../data/processed/hpoa_edges.tsv"
            ,"../data/processed/disgenet_nodes.tsv", "../data/processed/disgenet_edges.tsv"
            ,"../data/processed/uberon_nodes.tsv", "../data/processed/uberon_edges.tsv"
-# Bgee commented because merge does not work with big files
 #           , "../data/processed/bgee_nodes.tsv", "../data/processed/bgee_edges.tsv"
            , "../data/processed/cl_nodes.tsv", "../data/processed/cl_edges.tsv"
     output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
+#    shell: "kgx merge --merge-config ../config/merge_config.yaml -p 2"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"
 
 

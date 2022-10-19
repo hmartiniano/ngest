@@ -16,8 +16,8 @@
 - [ ] Go through marged_graph stats
 - [ ] Automate the creation of the merge config file 
 - [ ] Add code to analyse graph stats yaml fle
-- [ ] Fix bgee code 
-- [ ] Remove UBERON/CL intersections in bgee file
+- [x] Fix bgee code 
+- [x] Remove UBERON/CL intersections in bgee file
 - [ ] Update analysis notebook
 - [ ] Try to get Gene-RNA edges directly from rnacentral file
 - [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)

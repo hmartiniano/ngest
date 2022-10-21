@@ -24,5 +24,5 @@
 - [ ] Add conda environment file
 - [ ] Add Docker file
 - [x] Import uniprot IDs and ensembl genes, proteins from ensembl
-- [ ] Drop pybiomart and download ensembl-entrez mappings directly from ensembl
+- [x] Drop pybiomart and download ensembl-entrez mappings directly from ensembl
 

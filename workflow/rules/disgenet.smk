@@ -15,6 +15,6 @@ rule download_disgenet_version:
     shell: "curl -L {DISGENETVERSION} -o {output}"
 
 rule process_disgenet:
-    input: "../data/raw/all_gene_disease_pmid_associations.tsv.gz", "../data/raw/disease_mappings.tsv.gz", "../data/raw/ensembl_to_entrez.tsv"
+    input: "../data/raw/all_gene_disease_pmid_associations.tsv.gz", "../data/raw/disease_mappings.tsv.gz", "../data/processed/ensembl_to_entrez.tsv"
     output: "../data/processed/disgenet_nodes.tsv","../data/processed/disgenet_edges.tsv"
     shell: "python scripts/disgenet_to_kgx.py -i {input}  -o {output}"

@@ -12,6 +12,7 @@
 *.gpi
 *.pyc
 
+data/*/*txt
 data/*/*yaml
 
 .idea

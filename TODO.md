@@ -13,18 +13,16 @@
 - [x] Map HPOA disease IDs to MONDO
 - [x] check provide_by and knowledge_source - nodes provided_by edges knowledge_source
 - [ ] Verify KGX automatic annotations for edges and nodes
-- [ ] Go through marged_graph stats
-- [ ] Automate the creation of the merge config file 
-- [ ] Add code to analyse graph stats yaml fle
+- [ ] Go through merged_graph stats
+- [ ] Automate the creation of the merge config file
 - [x] Fix bgee code 
 - [x] Remove UBERON/CL intersections in bgee file
-- [ ] Update analysis notebook
-- [ ] Try to get Gene-RNA edges directly from rnacentral file
+- [ ] Update analysis notebook - based on merge.stats
+- [x] Try to get Gene-RNA edges directly from rnacentral file - no gene names
 - [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)
-- [ ] Explore KGX graph validation and summary cli commands
+- [x] Explore KGX graph validation and summary cli commands
 - [ ] Add conda environment file
 - [ ] Add Docker file
-- [ ] Import uniprot IDs and ensembl genes, proteins from ensembl
-- [ ] Get RNAcentral-gene edges from rnacentral file
+- [x] Import uniprot IDs and ensembl genes, proteins from ensembl
 
 

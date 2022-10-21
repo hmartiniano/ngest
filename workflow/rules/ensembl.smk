@@ -1,13 +1,28 @@
+ENSEMBLPROTEINS = "https://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
+ENSEMBLGENES = "https://ftp.ensembl.org/pub/current_gtf/homo_sapiens/Homo_sapiens.GRCh38.108.gtf.gz"
+
+
 rule download_ensembl:
-  output: "../data/raw/ensembl.tsv"
-  shell: "python scripts/get_ensembl_data.py -o {output}"
+  output: "../data/raw/homo_sapiens_uniprot.tsv.gz"
+  shell: "curl -L {ENSEMBLPROTEINS} -o {output}"
+
+rule download_ensembl_genes:
+  output: "../data/raw/Homo_sapiens.GRCh38.108.gtf.gz"
+  shell: "curl -L {ENSEMBLGENES}  -o {output}"
+
+rule filter_ensembl_genes:
+  input: "../data/raw/Homo_sapiens.GRCh38.108.gtf.gz"
+  output: "../data/processed/ensembl_genes.csv"
+  shell: "zcat {input}| awk -F \"\t\" '$3 == \"gene\" {{ print $9 }}' | awk -F \"; \" 'BEGIN {{OFS=\"\t\"}} {{ print > \"{output}\" }}'"
+
 
 rule download_ensembl_to_entrez_mapping:
   output: "../data/raw/ensembl_to_entrez.tsv"
   shell: "python scripts/ensembl_to_entrez.py -o {output}"
 
+
 rule process_ensembl:
-  input: "../data/raw/ensembl.tsv" , "../data/raw/uniprot.tsv.gz", "../data/processed/rnacentral.tsv"
+  input: ensembl = "../data/raw/homo_sapiens_uniprot.tsv.gz" , uniprot = "../data/raw/uniprot.tsv.gz", genes = "../data/processed/ensembl_genes.csv"
   output: "../data/processed/ensembl_nodes.tsv" , "../data/processed/ensembl_edges.tsv"
-  shell: "python scripts/ensembl_to_kgx.py -i {input}  -o {output}"
+  shell: "python scripts/ensembl_to_kgx.py -i {input.ensembl} -u {input.uniprot} -g {input.genes}  -o {output}"
 

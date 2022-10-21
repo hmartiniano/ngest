@@ -31,7 +31,7 @@ def ensembl_data():
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(prog="get_ensembl_data.py", description='ensembl to csv: download ensembl csv file')
+    parser = argparse.ArgumentParser(prog="get_ensembl_data_old.py", description='ensembl to csv: download ensembl csv file')
     parser.add_argument('-o','--output', default="ensembl", help="Output ensembl data.")
     return parser
 

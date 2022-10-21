@@ -10,7 +10,7 @@
 *.hpoa
 *.metalink
 *.txt
-
+*.gpi
 *.pyc
 
 data/*/*yaml

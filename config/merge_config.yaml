@@ -18,6 +18,12 @@ merged_graph:
           - provided_by
       name: kgx.graph_operations.summarize_graph.generate_graph_stats
   source:
+    bgee:
+      input:
+        filename:
+          - ../data/processed/bgee_nodes.tsv
+          - ../data/processed/bgee_edges.tsv
+        format: tsv
     cell_ontology:
       input:
         filename:
@@ -65,6 +71,12 @@ merged_graph:
         filename:
           - ../data/processed/mondo_nodes.tsv
           - ../data/processed/mondo_edges.tsv
+        format: tsv
+    rnacentral:
+      input:
+        filename:
+          - ../data/processed/rnacentral_nodes.tsv
+          - ../data/processed/rnacentral_edges.tsv
         format: tsv
     uberon:
       input:

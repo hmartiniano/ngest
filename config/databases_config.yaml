@@ -28,7 +28,9 @@ databases:
   - source: cell_ontology
     nodes: "../data/processed/cl_nodes.tsv"
     edges: "../data/processed/cl_edges.tsv"
-#  - name: bgee
-#    nodes: "../data/processed/bgee_nodes.tsv
+#  - source: bgee
+#    nodes: "../data/processed/bgee_nodes.tsv"
 #    edges: "../data/processed/bgee_edges.tsv"
-
+  - source: rnacentral
+    nodes: "../data/processed/rnacentral_nodes.tsv"
+    edges: "../data/processed/rnacentral_edges.tsv"

@@ -15,6 +15,8 @@ classes:
     database: BGEE
   - class: biolink:AnatomicalEntity
     database: UBERON
+  - class: biolink:Cell
+    database: CL
 
 edges_relations:
   - category: biolink:FunctionalAssociation

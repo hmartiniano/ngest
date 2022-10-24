@@ -1,82 +1,74 @@
----
 configuration:
-  output_directory: ../data/processed
   checkpoint: false
-
+  output_directory: ../data/processed
 merged_graph:
+  destination:
+    merged-kg-tsv:
+      compression: gz
+      filename: merged
+      format: tsv
   name: KG
+  operations:
+    - args:
+        edge_facet_properties:
+          - knowledge_source
+        filename: ../data/processed/merged_graph_stats.yaml
+        graph_name: KG
+        node_facet_properties:
+          - provided_by
+      name: kgx.graph_operations.summarize_graph.generate_graph_stats
   source:
-    gene_ontology:
+    cell_ontology:
       input:
-        format: tsv
-        filename:
-          - ../data/processed/go_nodes.tsv
-          - ../data/processed/go_edges.tsv
-    human_phenotype_ontology:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/hpo_nodes.tsv
-          - ../data/processed/hpo_edges.tsv
-    mondo:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/mondo_nodes.tsv
-          - ../data/processed/mondo_edges.tsv
-    ensembl:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/ensembl_nodes.tsv
-          - ../data/processed/ensembl_edges.tsv
-    gene_ontology_annotation:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/goa_nodes.tsv
-          - ../data/processed/goa_edges.tsv
-    human_phenotype_ontology_annotation:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/hpoa_nodes.tsv
-          - ../data/processed/hpoa_edges.tsv
-    disgenet:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/disgenet_nodes.tsv
-          - ../data/processed/disgenet_edges.tsv
-#    bgee:
-#      input:
-#        format: tsv
-#        filename:
-#          - ../data/processed/bgee_nodes.tsv
-#          - ../data/processed/bgee_edges.tsv
-    uberon:
-      input:
-        format: tsv
-        filename:
-          - ../data/processed/uberon_nodes.tsv
-          - ../data/processed/uberon_edges.tsv
-    cl:
-      input:
-        format: tsv
         filename:
           - ../data/processed/cl_nodes.tsv
           - ../data/processed/cl_edges.tsv
-  operations:
-    - name: kgx.graph_operations.summarize_graph.generate_graph_stats
-      args:
-        graph_name: KG
-        filename: ../data/processed/merged_graph_stats.yaml
-        node_facet_properties:
-          - provided_by
-        edge_facet_properties:
-          - knowledge_source
-  destination:
-    merged-kg-tsv:
-      format: tsv
-      compression: gz
-      filename: merged
+        format: tsv
+    disgenet:
+      input:
+        filename:
+          - ../data/processed/disgenet_nodes.tsv
+          - ../data/processed/disgenet_edges.tsv
+        format: tsv
+    ensembl:
+      input:
+        filename:
+          - ../data/processed/ensembl_nodes.tsv
+          - ../data/processed/ensembl_edges.tsv
+        format: tsv
+    gene_ontology:
+      input:
+        filename:
+          - ../data/processed/go_nodes.tsv
+          - ../data/processed/go_edges.tsv
+        format: tsv
+    gene_ontology_annotation:
+      input:
+        filename:
+          - ../data/processed/goa_nodes.tsv
+          - ../data/processed/goa_edges.tsv
+        format: tsv
+    human_phenotype_ontology:
+      input:
+        filename:
+          - ../data/processed/hpo_nodes.tsv
+          - ../data/processed/hpo_edges.tsv
+        format: tsv
+    human_phenotype_ontology_annotation:
+      input:
+        filename:
+          - ../data/processed/hpoa_nodes.tsv
+          - ../data/processed/hpoa_edges.tsv
+        format: tsv
+    mondo:
+      input:
+        filename:
+          - ../data/processed/mondo_nodes.tsv
+          - ../data/processed/mondo_edges.tsv
+        format: tsv
+    uberon:
+      input:
+        filename:
+          - ../data/processed/uberon_nodes.tsv
+          - ../data/processed/uberon_edges.tsv
+        format: tsv

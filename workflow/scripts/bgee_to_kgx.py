@@ -19,7 +19,7 @@ def main():
     args = parser.parse_args()
     bgee = read_files(args.input)
 
-   # bgee = bgee[bgee["Expression"].isin(["present", "absent"])]
+    # bgee = bgee[bgee["Expression"].isin(["present", "absent"])]
 
     bgee = bgee[bgee["Expression"].isin(["present"])]
     bgee["object"] = bgee['Anatomical entity ID']
@@ -42,8 +42,9 @@ def main():
 
     ae = gene_to_ae[["object", "Anatomical entity name", "provided_by"]]
     ae["id"] = ae["object"]
-    ae["category"] = "biolink:AnatomicalEntity"
     ae["name"] = ae["Anatomical entity name"]
+    ae.loc[ae["id"].str.contains("UBERON"), "category"] = "biolink:AnatomicalEntity"
+    ae.loc[ae["id"].str.contains("CL"), "category"] = "biolink:Cell"
 
     genes = gene_to_ae[["subject", "provided_by", "Gene name"]]
     genes["id"] = genes["subject"]

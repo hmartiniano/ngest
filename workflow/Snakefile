@@ -3,6 +3,7 @@
 
 import os
 import sys
+import scripts.databases as databases
 
 shell.prefix("unset pipefail; ")
 configfile: "../config/config.yaml"
@@ -38,19 +39,10 @@ include: "rules/bgee.smk"
 
 
 rule all:
-    input: "../data/processed/merged_nodes.tsv", "../data/processed/merged_nodes.tsv"
+    input: "../data/processed/merged_nodes.tsv", "../data/processed/merged_nodes.tsv", "../data/processed/db_versions.yaml"
 
 rule gather_data:
-    input: "../data/processed/go_nodes.tsv", "../data/processed/go_edges.tsv"
-           ,"../data/processed/hpo_nodes.tsv", "../data/processed/hpo_edges.tsv"
-           ,"../data/processed/mondo_nodes.tsv", "../data/processed/mondo_edges.tsv"
-           ,"../data/processed/ensembl_nodes.tsv", "../data/processed/ensembl_edges.tsv"
-           ,"../data/processed/goa_nodes.tsv", "../data/processed/goa_edges.tsv"
-           ,"../data/processed/hpoa_nodes.tsv", "../data/processed/hpoa_edges.tsv"
-           ,"../data/processed/disgenet_nodes.tsv", "../data/processed/disgenet_edges.tsv"
-           ,"../data/processed/uberon_nodes.tsv", "../data/processed/uberon_edges.tsv"
-#           , "../data/processed/bgee_nodes.tsv", "../data/processed/bgee_edges.tsv"
-           , "../data/processed/cl_nodes.tsv", "../data/processed/cl_edges.tsv"
+    input: databases.get_input_files()
     output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
 #    shell: "kgx merge --merge-config ../config/merge_config.yaml -p 2"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"

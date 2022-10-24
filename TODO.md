@@ -20,9 +20,13 @@
 - [ ] Update analysis notebook - based on merge.stats
 - [x] Try to get Gene-RNA edges directly from rnacentral file - no gene names
 - [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)
+- [x] Add config options to select databases to include - databases_config.yaml will automatically update merge_config
 - [x] Explore KGX graph validation and summary cli commands
 - [ ] Add conda environment file
 - [ ] Add Docker file
 - [x] Import uniprot IDs and ensembl genes, proteins from ensembl
 - [x] Drop pybiomart and download ensembl-entrez mappings directly from ensembl
+- [ ] Add BGEE version
+- [ ] Alter Ensembl version
+- [x] Change BGEE CL to biolink:Cell
 

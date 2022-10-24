@@ -1,0 +1,34 @@
+#COMMENT DATABASES NOT BE INCLUDED ON MERGE FILE
+
+databases:
+  - source: gene_ontology
+    nodes: "../data/processed/go_nodes.tsv"
+    edges: "../data/processed/go_edges.tsv"
+  - source: human_phenotype_ontology
+    nodes: "../data/processed/hpo_nodes.tsv"
+    edges: "../data/processed/hpo_edges.tsv"
+  - source: mondo
+    nodes: "../data/processed/mondo_nodes.tsv"
+    edges: "../data/processed/mondo_edges.tsv"
+  - source: ensembl
+    nodes: "../data/processed/ensembl_nodes.tsv"
+    edges: "../data/processed/ensembl_edges.tsv"
+  - source: gene_ontology_annotation
+    nodes: "../data/processed/goa_nodes.tsv"
+    edges: "../data/processed/goa_edges.tsv"
+  - source: human_phenotype_ontology_annotation
+    nodes: "../data/processed/hpoa_nodes.tsv"
+    edges: "../data/processed/hpoa_edges.tsv"
+  - source: disgenet
+    nodes: "../data/processed/disgenet_nodes.tsv"
+    edges: "../data/processed/disgenet_edges.tsv"
+  - source: uberon
+    nodes: "../data/processed/uberon_nodes.tsv"
+    edges: "../data/processed/uberon_edges.tsv"
+  - source: cell_ontology
+    nodes: "../data/processed/cl_nodes.tsv"
+    edges: "../data/processed/cl_edges.tsv"
+#  - name: bgee
+#    nodes: "../data/processed/bgee_nodes.tsv
+#    edges: "../data/processed/bgee_edges.tsv"
+

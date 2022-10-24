@@ -18,12 +18,6 @@ merged_graph:
           - provided_by
       name: kgx.graph_operations.summarize_graph.generate_graph_stats
   source:
-    bgee:
-      input:
-        filename:
-          - ../data/processed/bgee_nodes.tsv
-          - ../data/processed/bgee_edges.tsv
-        format: tsv
     cell_ontology:
       input:
         filename:

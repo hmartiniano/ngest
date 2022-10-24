@@ -3,7 +3,7 @@ ENSEMBLGENES = "https://ftp.ensembl.org/pub/current_gtf/homo_sapiens/Homo_sapien
 ENSEMBLENTREZ = "https://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.108.entrez.tsv.gz"
 
 rule download_ensembl:
-  output: "../data/raw/homo_sapiens_uniprot.tsv.gz"
+  output: "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
   shell: "curl -L {ENSEMBLPROTEINS} -o {output}"
 
 rule download_ensembl_genes:
@@ -28,7 +28,7 @@ rule filter_ensembl_genes:
 
 
 rule process_ensembl:
-  input: ensembl = "../data/raw/homo_sapiens_uniprot.tsv.gz" , uniprot = "../data/raw/uniprot.tsv.gz", genes = "../data/processed/ensembl_genes.csv"
+  input: ensembl = "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz" , uniprot = "../data/raw/uniprot.tsv.gz", genes = "../data/processed/ensembl_genes.csv"
   output: "../data/processed/ensembl_nodes.tsv" , "../data/processed/ensembl_edges.tsv"
   shell: "python scripts/ensembl_to_kgx.py -i {input.ensembl} -u {input.uniprot} -g {input.genes}  -o {output}"
 

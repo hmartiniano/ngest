@@ -14,7 +14,7 @@
 - [x] check provide_by and knowledge_source - nodes provided_by edges knowledge_source
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Go through merged_graph stats
-- [ ] Automate the creation of the merge config file
+- [x] Automate the creation of the merge config file - for nodes and edges
 - [x] Fix bgee code 
 - [x] Remove UBERON/CL intersections in bgee file
 - [ ] Update analysis notebook - based on merge.stats
@@ -27,6 +27,6 @@
 - [x] Import uniprot IDs and ensembl genes, proteins from ensembl
 - [x] Drop pybiomart and download ensembl-entrez mappings directly from ensembl
 - [ ] Add BGEE version
-- [ ] Alter Ensembl version
+- [x] Alter Ensembl version
 - [x] Change BGEE CL to biolink:Cell
 

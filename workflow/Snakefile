@@ -55,5 +55,6 @@ rule get_db_versions:
             ,rnacentral ="../data/raw/rnacentral_release_notes.txt"
             ,uniprot ="../data/raw/uniprot_release.metalink"
             ,hpoa = "../data/raw/hpoa.hpoa"
+            ,ensembl = "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
     output: "../data/processed/db_versions.yaml"
-    shell: "python scripts/get_db_versions.py -u {input.uniprot} -d {input.disgenet} -g {input.go} -a {input.goa} -r {input.rnacentral} -hp {input.hpoa} -o {output}"
+    shell: "python scripts/get_db_versions.py -u {input.uniprot} -d {input.disgenet} -g {input.go} -a {input.goa} -e {input.ensembl} -r {input.rnacentral} -hp {input.hpoa} -o {output}"

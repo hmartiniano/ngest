@@ -1,6 +1,5 @@
 import json
 import pandas as pd
-from pybiomart import Dataset, Server
 import yaml
 import requests
 import argparse
@@ -14,6 +13,7 @@ def get_parser():
     parser = argparse.ArgumentParser(prog="get_db_versions.py",
                                      description='get_db_versions: get all databases versions.')
     parser.add_argument('-u', '--uniprot', help="UniprotKB version file")
+    parser.add_argument('-e', '--ensembl', help="Ensembl version file")
     parser.add_argument('-r', '--rnacentral', help="RNACentral version file")
     parser.add_argument('-g', '--go', help="GO version file")
     parser.add_argument('-a', '--goa', help="GOA version file")
@@ -29,9 +29,10 @@ def main():
     args = parser.parse_args()
 
     #ENSEMBL
-    server = Server(host='http://www.ensembl.org')
-    version = server.list_marts()['display_name'][0]
-    versions["ENSEMBL"] = version
+    #ensembl = args.ensembl
+    ensembl = "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
+    version = ensembl.split(".")
+    versions["ENSEMBL"] = version[3] + " " + version[4]
 
     #UNIPROT
     filef = pd.read_xml(args.uniprot)
@@ -79,6 +80,7 @@ def main():
     response = requests.get("https://api.github.com/repos/obophenotype/cell-ontology/releases/latest")
     version = response.json()["name"]
     versions["CL"] = version
+
 
     #DISGENET
     with open(args.disgenet) as f:

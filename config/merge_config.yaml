@@ -24,57 +24,67 @@ merged_graph:
           - ../data/processed/cl_nodes.tsv
           - ../data/processed/cl_edges.tsv
         format: tsv
+        name: CL
     disgenet:
       input:
         filename:
           - ../data/processed/disgenet_nodes.tsv
           - ../data/processed/disgenet_edges.tsv
         format: tsv
+        name: Disgenet
     ensembl:
       input:
         filename:
           - ../data/processed/ensembl_nodes.tsv
           - ../data/processed/ensembl_edges.tsv
         format: tsv
+        name: ENSEMBL
     gene_ontology:
       input:
         filename:
           - ../data/processed/go_nodes.tsv
           - ../data/processed/go_edges.tsv
         format: tsv
+        name: GO
     gene_ontology_annotation:
       input:
         filename:
           - ../data/processed/goa_nodes.tsv
           - ../data/processed/goa_edges.tsv
         format: tsv
+        name: GOA
     human_phenotype_ontology:
       input:
         filename:
           - ../data/processed/hpo_nodes.tsv
           - ../data/processed/hpo_edges.tsv
         format: tsv
+        name: HP
     human_phenotype_ontology_annotation:
       input:
         filename:
           - ../data/processed/hpoa_nodes.tsv
           - ../data/processed/hpoa_edges.tsv
         format: tsv
+        name: HPOA
     mondo:
       input:
         filename:
           - ../data/processed/mondo_nodes.tsv
           - ../data/processed/mondo_edges.tsv
         format: tsv
+        name: MONDO
     rnacentral:
       input:
         filename:
           - ../data/processed/rnacentral_nodes.tsv
           - ../data/processed/rnacentral_edges.tsv
         format: tsv
+        name: RNACentral
     uberon:
       input:
         filename:
           - ../data/processed/uberon_nodes.tsv
           - ../data/processed/uberon_edges.tsv
         format: tsv
+        name: Uberon

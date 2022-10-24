@@ -1,5 +1,4 @@
 # TODO
-
 - [x] Notebooks with statistics for raw and processed data
 - [x] Do not compress goa raw files
 - [x] Create a function to identify biolink model classes from CURIES
@@ -12,21 +11,21 @@
 - [x] Add GOA isoforms - review this question
 - [x] Map HPOA disease IDs to MONDO
 - [x] check provide_by and knowledge_source - nodes provided_by edges knowledge_source
-- [ ] Verify KGX automatic annotations for edges and nodes
-- [ ] Go through merged_graph stats
 - [x] Automate the creation of the merge config file - for nodes and edges
 - [x] Fix bgee code 
 - [x] Remove UBERON/CL intersections in bgee file
-- [ ] Update analysis notebook - based on merge.stats
 - [x] Try to get Gene-RNA edges directly from rnacentral file - no gene names
-- [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)
 - [x] Add config options to select databases to include - databases_config.yaml will automatically update merge_config
 - [x] Explore KGX graph validation and summary cli commands
-- [ ] Add conda environment file
-- [ ] Add Docker file
 - [x] Import uniprot IDs and ensembl genes, proteins from ensembl
 - [x] Drop pybiomart and download ensembl-entrez mappings directly from ensembl
-- [ ] Add BGEE version
 - [x] Alter Ensembl version
 - [x] Change BGEE CL to biolink:Cell
+- [ ] Verify KGX automatic annotations for edges and nodes
+- [ ] Go through merged_graph stats
+- [ ] Update analysis notebook - based on merge.stats
+- [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)
+- [ ] Add conda environment file
+- [ ] Add Docker file
+- [ ] Add BGEE version
 

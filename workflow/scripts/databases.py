@@ -14,6 +14,7 @@ def get_input_files():
             info = {}
             input = {}
             input["format"] = "tsv"
+            input["name"] = databases["name"][i]
             input["filename"] = [databases["nodes"][i], databases["edges"][i]]
             info["input"] = input
             source[databases["source"][i]] = info

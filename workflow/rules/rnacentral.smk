@@ -4,7 +4,7 @@
 #Ensembl Mappings
 
 RNACENTRALMAPPING = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/id_mapping/database_mappings/ensembl.tsv"
-RNACENTRAL = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/gpi.gz/rnacentral.gpi.gz"
+RNACENTRAL = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/gpi/rnacentral.gpi.gz"
 RNAVERSION = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/release_notes.txt"
 
 rule download_rnacentral_mapping:

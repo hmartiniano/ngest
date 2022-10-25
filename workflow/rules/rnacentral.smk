@@ -4,7 +4,7 @@
 #Ensembl Mappings
 
 RNACENTRALMAPPING = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/id_mapping/database_mappings/ensembl.tsv"
-RNACENTRAL = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/gpi/rnacentral.gpi"
+RNACENTRAL = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/gpi.gz/rnacentral.gpi.gz"
 RNAVERSION = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/release_notes.txt"
 
 rule download_rnacentral_mapping:
@@ -12,7 +12,7 @@ rule download_rnacentral_mapping:
   shell: "curl -L {RNACENTRALMAPPING} -o {output}"
 
 rule download_rnacentral:
-  output: "../data/raw/rnacentral.gpi"
+  output: "../data/raw/rnacentral.gpi.gz"
   shell: "curl -L {RNACENTRAL} -o {output}"
 
 
@@ -26,7 +26,7 @@ rule filter_rnacentral_mapping:
   shell: "awk 'BEGIN {{OFS=\"\t\"}} {{ if ($4 == 9606) print $0}}' {input} > {output}"
 
 rule filter_rnacentral:
-  input:  "../data/raw/rnacentral.gpi"
+  input:  "../data/raw/rnacentral.gpi.gz"
   output: "../data/processed/rnacentral_human.tsv"
   shell: "awk -F \"\t\"  'BEGIN {{OFS=\"\t\"}} {{ if ($1!~/^!/ && $7 == \"taxon:9606\") print $1,$2,$4,$6}}' {input} > {output}"
 

@@ -28,7 +28,7 @@ rule filter_rnacentral_mapping:
 rule filter_rnacentral:
   input:  "../data/raw/rnacentral.gpi.gz"
   output: "../data/processed/rnacentral_human.tsv"
-  shell: "awk -F \"\t\"  'BEGIN {{OFS=\"\t\"}} {{ if ($1!~/^!/ && $7 == \"taxon:9606\") print $1,$2,$4,$6}}' {input} > {output}"
+  shell: "zcat {input} awk -F \"\t\"  'BEGIN {{OFS=\"\t\"}} {{ if ($1!~/^!/ && $7 == \"taxon:9606\") print $1,$2,$4,$6}}' > {output}"
 
 
 rule process_rnacentral:

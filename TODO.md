@@ -21,9 +21,9 @@
 - [x] Drop pybiomart and download ensembl-entrez mappings directly from ensembl
 - [x] Alter Ensembl version
 - [x] Change BGEE CL to biolink:Cell
+- [x] Update analysis notebook - based on merge.stats
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Go through merged_graph stats
-- [ ] Update analysis notebook - based on merge.stats
 - [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)
 - [ ] Add conda environment file
 - [ ] Add Docker file

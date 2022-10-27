@@ -1,43 +1,257 @@
-#COMMENT DATABASES NOT BE INCLUDED ON MERGE FILE
-
+#COMMENT DATABASES AND FILTERS NOT BE INCLUDED ON MERGE FILE
 databases:
   - source: gene_ontology
     name: GO
     nodes: "../data/processed/go_nodes.tsv"
     edges: "../data/processed/go_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:BiologicalProcess
+          - biolink:CellularComponent
+          - biolink:MolecularActivity
+          - biolink:OntologyClass
+      edge_filters:
+        edge_label:
+            - biolink:has_part
+            - biolink:negatively_regulates
+            - biolink:occurs_in
+            - biolink:part_of
+            - biolink:positively_regulates
+            - biolink:regulates
+            - biolink:related_to
+            - biolink:subclass_of
   - source: human_phenotype_ontology
     name: HP
     nodes: "../data/processed/hpo_nodes.tsv"
     edges: "../data/processed/hpo_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:MolecularActivity
+          - biolink:OntologyClass
+          - biolink:PhenotypicFeature
+      edge_filters:
+        edge_label:
+          - biolink:subclass_of
   - source: mondo
     name: MONDO
     nodes: "../data/processed/mondo_nodes.tsv"
     edges: "../data/processed/mondo_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:AnatomicalEntity
+          - biolink:BiologicalProcess
+          - biolink:Cell
+          - biolink:CellularComponent
+          - biolink:ChemicalSubstance
+          - biolink:Disease
+          - biolink:MolecularActivity
+          - biolink:NamedThing
+          - biolink:OntologyClass
+          - biolink:OrganismalEntity
+          - biolink:PhenotypicFeature
+          - biolink:SequenceFeature
+      edge_filters:
+        edge_label:
+          - biolink:actively_involved_in
+          - biolink:acts_upstream_of
+          - biolink:acts_upstream_of_negative_effect
+          - biolink:acts_upstream_of_or_within
+          - biolink:acts_upstream_of_or_within_negative_effect
+          - biolink:acts_upstream_of_or_within_positive_effect
+          - biolink:acts_upstream_of_positive_effect
+          - biolink:affects
+          - biolink:affects_localization_of
+          - biolink:associated_with
+          - biolink:capable_of
+          - biolink:caused_by
+          - biolink:causes
+          - biolink:coexists_with
+          - biolink:colocalizes_with
+          - biolink:contributes_to
+          - biolink:derives_from
+          - biolink:develops_from
+          - biolink:disrupts
+          - biolink:enables
+          - biolink:expresses
+          - biolink:has_attribute
+          - biolink:has_gene_product
+          - biolink:has_input
+          - biolink:has_output
+          - biolink:has_part
+          - biolink:has_participant
+          - biolink:has_phenotype
+          - biolink:homologous_to
+          - biolink:in_taxon
+          - biolink:increases_degradation_of
+          - biolink:interacts_with
+          - biolink:involved_in
+          - biolink:located_in
+          - biolink:location_of
+          - biolink:model_of
+          - biolink:negatively_regulates
+          - biolink:occurs_in
+          - biolink:overlaps
+          - biolink:part_of
+          - biolink:participates_in
+          - biolink:positively_regulates
+          - biolink:preceded_by
+          - biolink:precedes
+          - biolink:produced_by
+          - biolink:produces
+          - biolink:regulates
+          - biolink:related_to
+          - biolink:subclass_of
+          - biolink:temporally_related_to
+          - biolink:type
   - source: ensembl
     name: ENSEMBL
     nodes: "../data/processed/ensembl_nodes.tsv"
     edges: "../data/processed/ensembl_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:Gene
+          - biolink:Protein
+      edge_filters:
+        edge_label:
+          - biolink:has_gene_product
   - source: gene_ontology_annotation
     name: GOA
     nodes: "../data/processed/goa_nodes.tsv"
     edges: "../data/processed/goa_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:biolink:RNA
+          - biolink:biolink:Protein
+          - biolink:biolink:MacromolecularComplexMixin
+      edge_filters:
+        edge_label:
+          - biolink:active_in
+          - biolink:acts_upstream_of
+          - biolink:acts_upstream_of_negative_effect
+          - biolink:acts_upstream_of_or_within
+          - biolink:acts_upstream_of_or_within_negative_effect
+          - biolink:acts_upstream_of_or_within_positive_effect
+          - biolink:acts_upstream_of_positive_effect
+          - biolink:colocalizes_with
+          - biolink:contributes_to
+          - biolink:enables
+          - biolink:involved_in
+          - biolink:located_in
+          - biolink:part_of
   - source: human_phenotype_ontology_annotation
     name: HPOA
     nodes: "../data/processed/hpoa_nodes.tsv"
     edges: "../data/processed/hpoa_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:Disease
+      edge_filters:
+        edge_label:
+          - biolink:has_phenotype
   - source: disgenet
     name: Disgenet
     nodes: "../data/processed/disgenet_nodes.tsv"
     edges: "../data/processed/disgenet_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:Gene
+          - biolink:Protein
+      edge_filters:
+        edge_label:
+          - biolink:active_in
   - source: uberon
     name: Uberon
     nodes: "../data/processed/uberon_nodes.tsv"
     edges: "../data/processed/uberon_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:OntologyClass
+          - biolink:AnatomicalEntity
+          - biolink:Cell
+      edge_filters:
+        edge_label:
+          - biolink:subclass_of
+          - biolink:part_of
+          - biolink:related_to
+          - biolink:has_part
+          - biolink:develops_from
+          - biolink:overlaps
+          - biolink:coexists_with
+          - biolink:causes
+          - biolink:subPropertyOf
+          - biolink:located_in
+          - biolink:temporally_related_to
+          - biolink:inverseOf
+          - biolink:produces
+          - biolink:produced_by
+          - biolink:preceded_by
+          - biolink:location_of
+          - biolink:precedes
+          - biolink:homologous_to
   - source: cell_ontology
     name: CL
     nodes: "../data/processed/cl_nodes.tsv"
     edges: "../data/processed/cl_edges.tsv"
-#  - source: bgee
+    filters:
+      node_filters:
+        category:
+          - biolink:BiologicalProcess
+          - biolink:MolecularActivity
+          - biolink:CellularComponent
+          - biolink:OntologyClass
+          - biolink:AnatomicalEntity
+          - biolink:Cell
+          - biolink:Protein
+          - biolink:ChemicalSubstance
+          - biolink:OrganismalEntity
+          - biolink:NamedThing
+      edge_filters:
+        edge_label:
+          - biolink:subclass_of
+          - biolink:part_of
+          - biolink:related_to
+          - biolink:has_part
+          - biolink:has_output
+          - biolink:regulates
+          - biolink:develops_from
+          - biolink:negatively_regulates
+          - biolink:positively_regulates
+          - biolink:overlaps
+          - biolink:has_input
+          - biolink:coexists_with
+          - biolink:in_taxon
+          - biolink:capable_of
+          - biolink:causes
+          - biolink:subPropertyOf
+          - biolink:located_in
+          - biolink:has_attribute
+          - biolink:occurs_in
+          - biolink:affects
+          - biolink:participates_in
+          - biolink:has_participant
+          - biolink:temporally_related_to
+          - biolink:inverseOf
+          - biolink:expresses
+          - biolink:produces
+          - biolink:caused_by
+          - biolink:produced_by
+          - biolink:interacts_with
+          - biolink:preceded_by
+          - biolink:location_of
+          - biolink:increases_degradation_of
+          - biolink:precedes
+          - biolink:homologous_to
+          - biolink:affects_localization_of
+          - biolink:derives_from
+  #  - source: bgee
 #    name: Bgee
 #    nodes: "../data/processed/bgee_nodes.tsv"
 #    edges: "../data/processed/bgee_edges.tsv"
@@ -45,3 +259,11 @@ databases:
     name: RNACentral
     nodes: "../data/processed/rnacentral_nodes.tsv"
     edges: "../data/processed/rnacentral_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:Gene
+          - biolink:RNA
+      edge_filters:
+        edge_label:
+          - biolink:has_gene_product

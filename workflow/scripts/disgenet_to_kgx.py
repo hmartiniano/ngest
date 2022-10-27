@@ -19,6 +19,7 @@ def main():
     disgenet = read_files(args.input[0])
     disgenetmapping = read_files(args.input[1])
     entrez_to_ensembl = read_files(args.input[2]).drop_duplicates().set_index("Entrez Gene ID")
+
     entrez_to_ensembl = entrez_to_ensembl[~entrez_to_ensembl.index.duplicated(keep='first')].iloc[:, 0]
 
     # Transform nodes
@@ -27,6 +28,8 @@ def main():
     disgenetmapping["code"] = (disgenetmapping["vocabulary"] + ":" + disgenetmapping["code"]).str.replace("HPO:", "")
     disgenetmapping = disgenetmapping[["diseaseId", "code"]].drop_duplicates().set_index("diseaseId")
     disgenetmapping = disgenetmapping[~disgenetmapping.index.duplicated(keep='first')].iloc[:, 0]
+
+    disgenet["geneId"] = disgenet["geneId"].map(str)
 
     disgenet["object"] = disgenet["diseaseId"].map(disgenetmapping)
     disgenet["subject"] = "ENSEMBL:" + disgenet["geneId"].map(entrez_to_ensembl)

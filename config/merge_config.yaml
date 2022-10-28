@@ -23,6 +23,57 @@ merged_graph:
         filename:
           - ../data/processed/cl_nodes.tsv
           - ../data/processed/cl_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:subclass_of
+              - biolink:part_of
+              - biolink:related_to
+              - biolink:has_part
+              - biolink:has_output
+              - biolink:regulates
+              - biolink:develops_from
+              - biolink:negatively_regulates
+              - biolink:positively_regulates
+              - biolink:overlaps
+              - biolink:has_input
+              - biolink:coexists_with
+              - biolink:in_taxon
+              - biolink:capable_of
+              - biolink:causes
+              - biolink:subPropertyOf
+              - biolink:located_in
+              - biolink:has_attribute
+              - biolink:occurs_in
+              - biolink:affects
+              - biolink:participates_in
+              - biolink:has_participant
+              - biolink:temporally_related_to
+              - biolink:inverseOf
+              - biolink:expresses
+              - biolink:produces
+              - biolink:caused_by
+              - biolink:produced_by
+              - biolink:interacts_with
+              - biolink:preceded_by
+              - biolink:location_of
+              - biolink:increases_degradation_of
+              - biolink:precedes
+              - biolink:homologous_to
+              - biolink:affects_localization_of
+              - biolink:derives_from
+          node_filters:
+            category:
+              - biolink:BiologicalProcess
+              - biolink:MolecularActivity
+              - biolink:CellularComponent
+              - biolink:OntologyClass
+              - biolink:AnatomicalEntity
+              - biolink:Cell
+              - biolink:Protein
+              - biolink:ChemicalSubstance
+              - biolink:OrganismalEntity
+              - biolink:NamedThing
         format: tsv
         name: CL
     disgenet:
@@ -30,6 +81,14 @@ merged_graph:
         filename:
           - ../data/processed/disgenet_nodes.tsv
           - ../data/processed/disgenet_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:active_in
+          node_filters:
+            category:
+              - biolink:Gene
+              - biolink:Protein
         format: tsv
         name: Disgenet
     ensembl:
@@ -37,6 +96,14 @@ merged_graph:
         filename:
           - ../data/processed/ensembl_nodes.tsv
           - ../data/processed/ensembl_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:has_gene_product
+          node_filters:
+            category:
+              - biolink:Gene
+              - biolink:Protein
         format: tsv
         name: ENSEMBL
     gene_ontology:
@@ -44,6 +111,23 @@ merged_graph:
         filename:
           - ../data/processed/go_nodes.tsv
           - ../data/processed/go_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:has_part
+              - biolink:negatively_regulates
+              - biolink:occurs_in
+              - biolink:part_of
+              - biolink:positively_regulates
+              - biolink:regulates
+              - biolink:related_to
+              - biolink:subclass_of
+          node_filters:
+            category:
+              - biolink:BiologicalProcess
+              - biolink:CellularComponent
+              - biolink:MolecularActivity
+              - biolink:OntologyClass
         format: tsv
         name: GO
     gene_ontology_annotation:
@@ -51,6 +135,27 @@ merged_graph:
         filename:
           - ../data/processed/goa_nodes.tsv
           - ../data/processed/goa_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:active_in
+              - biolink:acts_upstream_of
+              - biolink:acts_upstream_of_negative_effect
+              - biolink:acts_upstream_of_or_within
+              - biolink:acts_upstream_of_or_within_negative_effect
+              - biolink:acts_upstream_of_or_within_positive_effect
+              - biolink:acts_upstream_of_positive_effect
+              - biolink:colocalizes_with
+              - biolink:contributes_to
+              - biolink:enables
+              - biolink:involved_in
+              - biolink:located_in
+              - biolink:part_of
+          node_filters:
+            category:
+              - biolink:biolink:RNA
+              - biolink:biolink:Protein
+              - biolink:biolink:MacromolecularComplexMixin
         format: tsv
         name: GOA
     human_phenotype_ontology:
@@ -58,6 +163,15 @@ merged_graph:
         filename:
           - ../data/processed/hpo_nodes.tsv
           - ../data/processed/hpo_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:subclass_of
+          node_filters:
+            category:
+              - biolink:MolecularActivity
+              - biolink:OntologyClass
+              - biolink:PhenotypicFeature
         format: tsv
         name: HP
     human_phenotype_ontology_annotation:
@@ -65,6 +179,13 @@ merged_graph:
         filename:
           - ../data/processed/hpoa_nodes.tsv
           - ../data/processed/hpoa_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:has_phenotype
+          node_filters:
+            category:
+              - biolink:Disease
         format: tsv
         name: HPOA
     mondo:
@@ -72,6 +193,64 @@ merged_graph:
         filename:
           - ../data/processed/mondo_nodes.tsv
           - ../data/processed/mondo_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:actively_involved_in
+              - biolink:acts_upstream_of
+              - biolink:acts_upstream_of_negative_effect
+              - biolink:acts_upstream_of_or_within
+              - biolink:acts_upstream_of_or_within_negative_effect
+              - biolink:acts_upstream_of_or_within_positive_effect
+              - biolink:acts_upstream_of_positive_effect
+              - biolink:affects
+              - biolink:affects_localization_of
+              - biolink:associated_with
+              - biolink:capable_of
+              - biolink:caused_by
+              - biolink:causes
+              - biolink:coexists_with
+              - biolink:colocalizes_with
+              - biolink:contributes_to
+              - biolink:derives_from
+              - biolink:develops_from
+              - biolink:disrupts
+              - biolink:enables
+              - biolink:expresses
+              - biolink:has_attribute
+              - biolink:has_gene_product
+              - biolink:has_input
+              - biolink:has_output
+              - biolink:has_part
+              - biolink:has_participant
+              - biolink:has_phenotype
+              - biolink:homologous_to
+              - biolink:increases_degradation_of
+              - biolink:interacts_with
+              - biolink:involved_in
+              - biolink:located_in
+              - biolink:location_of
+              - biolink:negatively_regulates
+              - biolink:occurs_in
+              - biolink:overlaps
+              - biolink:part_of
+              - biolink:participates_in
+              - biolink:positively_regulates
+              - biolink:preceded_by
+              - biolink:precedes
+              - biolink:produced_by
+              - biolink:produces
+              - biolink:regulates
+              - biolink:related_to
+          node_filters:
+            category:
+              - biolink:AnatomicalEntity
+              - biolink:BiologicalProcess
+              - biolink:Cell
+              - biolink:CellularComponent
+              - biolink:Disease
+              - biolink:MolecularActivity
+              - biolink:PhenotypicFeature
         format: tsv
         name: MONDO
     rnacentral:
@@ -79,6 +258,14 @@ merged_graph:
         filename:
           - ../data/processed/rnacentral_nodes.tsv
           - ../data/processed/rnacentral_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:has_gene_product
+          node_filters:
+            category:
+              - biolink:Gene
+              - biolink:RNA
         format: tsv
         name: RNACentral
     uberon:
@@ -86,5 +273,31 @@ merged_graph:
         filename:
           - ../data/processed/uberon_nodes.tsv
           - ../data/processed/uberon_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:subclass_of
+              - biolink:part_of
+              - biolink:related_to
+              - biolink:has_part
+              - biolink:develops_from
+              - biolink:overlaps
+              - biolink:coexists_with
+              - biolink:causes
+              - biolink:subPropertyOf
+              - biolink:located_in
+              - biolink:temporally_related_to
+              - biolink:inverseOf
+              - biolink:produces
+              - biolink:produced_by
+              - biolink:preceded_by
+              - biolink:location_of
+              - biolink:precedes
+              - biolink:homologous_to
+          node_filters:
+            category:
+              - biolink:OntologyClass
+              - biolink:AnatomicalEntity
+              - biolink:Cell
         format: tsv
         name: Uberon

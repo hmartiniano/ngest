@@ -24,7 +24,7 @@
 - [x] Update analysis notebook - based on merge.stats
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Go through merged_graph stats
-- [ ] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.)
+- [x] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.) - by category
 - [ ] Add conda environment file
 - [ ] Add Docker file
 - [ ] Add BGEE version

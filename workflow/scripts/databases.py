@@ -16,6 +16,8 @@ def get_input_files():
             input["format"] = "tsv"
             input["name"] = databases["name"][i]
             input["filename"] = [databases["nodes"][i], databases["edges"][i]]
+            if databases["filters"][i]:
+                input["filters"] = databases["filters"][i]
             info["input"] = input
             source[databases["source"][i]] = info
             files.append(databases["nodes"][i])

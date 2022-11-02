@@ -36,8 +36,8 @@ merged_graph:
     cell_ontology:
       input:
         filename:
-          - ../data/processed/cl_nodes_final.tsv
-          - ../data/processed/cl_edges_final.tsv
+          - ../data/processed/cl_nodes.tsv
+          - ../data/processed/cl_edges.tsv
         filters:
           edge_filters:
             predicate:

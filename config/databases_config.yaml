@@ -198,8 +198,8 @@ databases:
           - biolink:homologous_to
   - source: cell_ontology
     name: CL
-    nodes: "../data/processed/cl_nodes_final.tsv"
-    edges: "../data/processed/cl_edges_final.tsv"
+    nodes: "../data/processed/cl_nodes.tsv"
+    edges: "../data/processed/cl_edges.tsv"
     filters:
       node_filters:
         category:

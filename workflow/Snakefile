@@ -44,8 +44,7 @@ rule all:
 rule gather_data:
     input: databases.get_input_files()
     output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
-#    shell: "kgx merge --merge-config ../config/merge_config.yaml -p 2"
-    shell: "kgx merge --merge-config ../config/merge_config.yaml"
+    shell: "kgx merge --merge-config ../config/merge_config.yaml -p 2"
 
 
 rule get_db_versions:

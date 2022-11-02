@@ -10,7 +10,7 @@ databases:
           - biolink:BiologicalProcess
           - biolink:CellularComponent
           - biolink:MolecularActivity
-          - biolink:OntologyClass
+#          - biolink:OntologyClass
       edge_filters:
         predicate:
             - biolink:has_part
@@ -29,7 +29,7 @@ databases:
       node_filters:
         category:
           - biolink:MolecularActivity
-          - biolink:OntologyClass
+#          - biolink:OntologyClass
           - biolink:PhenotypicFeature
       edge_filters:
         predicate:
@@ -94,7 +94,7 @@ databases:
           - biolink:negatively_regulates
           - biolink:occurs_in
           - biolink:overlaps
-          - biolink:part_of
+#          - biolink:part_of
           - biolink:participates_in
           - biolink:positively_regulates
           - biolink:preceded_by
@@ -137,12 +137,12 @@ databases:
           - biolink:acts_upstream_of_or_within_negative_effect
           - biolink:acts_upstream_of_or_within_positive_effect
           - biolink:acts_upstream_of_positive_effect
-          - biolink:colocalizes_with
+#          - biolink:colocalizes_with
           - biolink:contributes_to
           - biolink:enables
           - biolink:involved_in
           - biolink:located_in
-          - biolink:part_of
+#          - biolink:part_of
   - source: human_phenotype_ontology_annotation
     name: HPOA
     nodes: "../data/processed/hpoa_nodes.tsv"
@@ -173,20 +173,20 @@ databases:
     filters:
       node_filters:
         category:
-          - biolink:OntologyClass
+#          - biolink:OntologyClass
           - biolink:AnatomicalEntity
           - biolink:Cell
       edge_filters:
         predicate:
-          - biolink:subclass_of
-          - biolink:part_of
+#          - biolink:subclass_of
+#          - biolink:part_of
           - biolink:related_to
           - biolink:has_part
           - biolink:develops_from
           - biolink:overlaps
           - biolink:coexists_with
           - biolink:causes
-          - biolink:subPropertyOf
+#          - biolink:subPropertyOf
           - biolink:located_in
           - biolink:temporally_related_to
           - biolink:inverseOf
@@ -198,25 +198,25 @@ databases:
           - biolink:homologous_to
   - source: cell_ontology
     name: CL
-    nodes: "../data/processed/cl_nodes.tsv"
-    edges: "../data/processed/cl_edges.tsv"
+    nodes: "../data/processed/cl_nodes_final.tsv"
+    edges: "../data/processed/cl_edges_final.tsv"
     filters:
       node_filters:
         category:
           - biolink:BiologicalProcess
           - biolink:MolecularActivity
           - biolink:CellularComponent
-          - biolink:OntologyClass
+#          - biolink:OntologyClass
           - biolink:AnatomicalEntity
           - biolink:Cell
           - biolink:Protein
-          - biolink:ChemicalSubstance
-          - biolink:OrganismalEntity
-          - biolink:NamedThing
+#          - biolink:ChemicalSubstance
+#          - biolink:OrganismalEntity
+#          - biolink:NamedThing
       edge_filters:
         predicate:
-          - biolink:subclass_of
-          - biolink:part_of
+#          - biolink:subclass_of
+#          - biolink:part_of
           - biolink:related_to
           - biolink:has_part
           - biolink:has_output
@@ -227,7 +227,7 @@ databases:
           - biolink:overlaps
           - biolink:has_input
           - biolink:coexists_with
-          - biolink:in_taxon
+#          - biolink:in_taxon
           - biolink:capable_of
           - biolink:causes
           - biolink:subPropertyOf
@@ -251,19 +251,19 @@ databases:
           - biolink:homologous_to
           - biolink:affects_localization_of
           - biolink:derives_from
-  #  - source: bgee
-#    name: Bgee
-#    nodes: "../data/processed/bgee_nodes.tsv"
-#    edges: "../data/processed/bgee_edges.tsv"
-#    filters:
-#      node_filters:
-#        category:
+  - source: bgee
+    name: Bgee
+    nodes: "../data/processed/bgee_nodes.tsv"
+    edges: "../data/processed/bgee_edges.tsv"
+    filters:
+      node_filters:
+        category:
 #          - biolink:AnatomicalEntity
-#            biolink:Cell
-#            biolink:Gene
-#      edge_filters:
-#        predicate:
-#          - biolink:expressed_in
+          - biolink:Cell
+          - biolink:Gene
+      edge_filters:
+        predicate:
+          - biolink:expressed_in
   - source: rnacentral
     name: RNACentral
     nodes: "../data/processed/rnacentral_nodes.tsv"

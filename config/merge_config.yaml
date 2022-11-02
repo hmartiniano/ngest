@@ -18,16 +18,29 @@ merged_graph:
           - provided_by
       name: kgx.graph_operations.summarize_graph.generate_graph_stats
   source:
-    cell_ontology:
+    bgee:
       input:
         filename:
-          - ../data/processed/cl_nodes.tsv
-          - ../data/processed/cl_edges.tsv
+          - ../data/processed/bgee_nodes.tsv
+          - ../data/processed/bgee_edges.tsv
         filters:
           edge_filters:
             predicate:
-              - biolink:subclass_of
-              - biolink:part_of
+              - biolink:expressed_in
+          node_filters:
+            category:
+              - biolink:Cell
+              - biolink:Gene
+        format: tsv
+        name: Bgee
+    cell_ontology:
+      input:
+        filename:
+          - ../data/processed/cl_nodes_final.tsv
+          - ../data/processed/cl_edges_final.tsv
+        filters:
+          edge_filters:
+            predicate:
               - biolink:related_to
               - biolink:has_part
               - biolink:has_output
@@ -38,7 +51,6 @@ merged_graph:
               - biolink:overlaps
               - biolink:has_input
               - biolink:coexists_with
-              - biolink:in_taxon
               - biolink:capable_of
               - biolink:causes
               - biolink:subPropertyOf
@@ -67,13 +79,9 @@ merged_graph:
               - biolink:BiologicalProcess
               - biolink:MolecularActivity
               - biolink:CellularComponent
-              - biolink:OntologyClass
               - biolink:AnatomicalEntity
               - biolink:Cell
               - biolink:Protein
-              - biolink:ChemicalSubstance
-              - biolink:OrganismalEntity
-              - biolink:NamedThing
         format: tsv
         name: CL
     disgenet:
@@ -127,7 +135,6 @@ merged_graph:
               - biolink:BiologicalProcess
               - biolink:CellularComponent
               - biolink:MolecularActivity
-              - biolink:OntologyClass
         format: tsv
         name: GO
     gene_ontology_annotation:
@@ -145,12 +152,10 @@ merged_graph:
               - biolink:acts_upstream_of_or_within_negative_effect
               - biolink:acts_upstream_of_or_within_positive_effect
               - biolink:acts_upstream_of_positive_effect
-              - biolink:colocalizes_with
               - biolink:contributes_to
               - biolink:enables
               - biolink:involved_in
               - biolink:located_in
-              - biolink:part_of
           node_filters:
             category:
               - biolink:biolink:RNA
@@ -170,7 +175,6 @@ merged_graph:
           node_filters:
             category:
               - biolink:MolecularActivity
-              - biolink:OntologyClass
               - biolink:PhenotypicFeature
         format: tsv
         name: HP
@@ -233,7 +237,6 @@ merged_graph:
               - biolink:negatively_regulates
               - biolink:occurs_in
               - biolink:overlaps
-              - biolink:part_of
               - biolink:participates_in
               - biolink:positively_regulates
               - biolink:preceded_by
@@ -276,15 +279,12 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:subclass_of
-              - biolink:part_of
               - biolink:related_to
               - biolink:has_part
               - biolink:develops_from
               - biolink:overlaps
               - biolink:coexists_with
               - biolink:causes
-              - biolink:subPropertyOf
               - biolink:located_in
               - biolink:temporally_related_to
               - biolink:inverseOf
@@ -296,7 +296,6 @@ merged_graph:
               - biolink:homologous_to
           node_filters:
             category:
-              - biolink:OntologyClass
               - biolink:AnatomicalEntity
               - biolink:Cell
         format: tsv

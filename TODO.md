@@ -23,8 +23,8 @@
 - [x] Change BGEE CL to biolink:Cell
 - [x] Update analysis notebook - based on merge.stats
 - [ ] Verify KGX automatic annotations for edges and nodes
-- [ ] Go through merged_graph stats
-- [x] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.) - by category
+- [x] Go through merged_graph stats
+- [x] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.) - by category and predicate
 - [ ] Add conda environment file
 - [ ] Add Docker file
 - [ ] Add BGEE version

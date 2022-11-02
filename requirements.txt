@@ -1,5 +1,4 @@
 kgx==1.7.2
 pandas==1.5.1
 snakemake==7.16.1
-pybiomart==0.2.0
 lxml==4.9.1

@@ -75,7 +75,7 @@ def main():
     gaf = read_gaf(args.input, biolinkclasses)
     gaf["provided_by"] = "GOA"
     gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"]
-    gaf["category"] = "biolink:" + gaf['Biolink Category']
+    gaf["category"] = gaf['Biolink Category']
     gaf["name"] = gaf["DB Object Symbol"]
     gaf[["id", "name", "category", "provided_by"]].to_csv(f"{args.output[0]}", sep="\t", index=False)
     # Now edges

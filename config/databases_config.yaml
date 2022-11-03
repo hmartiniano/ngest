@@ -125,9 +125,9 @@ databases:
     filters:
       node_filters:
         category:
-          - biolink:biolink:RNA
-          - biolink:biolink:Protein
-          - biolink:biolink:MacromolecularComplexMixin
+          - biolink:RNA
+          - biolink:Protein
+          - biolink:MacromolecularComplexMixin
       edge_filters:
         predicate:
           - biolink:active_in

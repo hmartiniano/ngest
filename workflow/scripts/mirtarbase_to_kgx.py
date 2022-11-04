@@ -37,8 +37,10 @@ def main():
     mirtarbase["knowledge_source"] = "Mirtarbase"
     mirtarbase["predicate"] = "biolink:interacts_with"
     mirtarbase["relation"] = "RO:0002434"
-    mirtarbase["id"] = mirtarbase['subject'].apply(lambda x: uuid.uuid4())
     mirtarbase = mirtarbase.dropna(subset=["object", "subject"])
+    edges = mirtarbase[["object", "subject", "predicate", "knowledge_source", "relation"]].drop_duplicates()
+    edges["id"] = mirtarbase['subject'].apply(lambda x: uuid.uuid4())
+
 
     rna = mirtarbase[["subject", "miRNA", "provided_by"]]
     rna["id"] = rna["subject"]
@@ -54,7 +56,7 @@ def main():
     nodes = pd.concat([dna, rna]).drop_duplicates()
 
     nodes[["id", "name", "category", "provided_by", "xref"]].to_csv(f"{args.output [0]}", sep="\t", index=False)
-    mirtarbase[["object", "subject", "id", "predicate", "knowledge_source", "relation"]].drop_duplicates().to_csv(f"{args.output[1]}", sep="\t", index=False)
+    edges.to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 
 if __name__ == '__main__':

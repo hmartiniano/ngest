@@ -31,4 +31,5 @@
 - [ ] Add conda environment file
 - [ ] Add Docker file
 - [ ] Add BGEE version
+- [ ] Add NPInter
 

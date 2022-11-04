@@ -5,6 +5,7 @@
 *.csv.gz
 *.owl
 *.obo
+*.xlsx
 *.snakemake
 *.gaf
 *.hpoa
@@ -13,6 +14,7 @@
 *.pyc
 
 data/*/*txt
+data/*/*/*yaml
 data/*/*yaml
 
 .idea

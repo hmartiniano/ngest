@@ -1,6 +1,6 @@
 configuration:
   checkpoint: false
-  output_directory: ../data/processed
+  output_directory: ../data/processed/finals
 merged_graph:
   destination:
     merged-kg-tsv:
@@ -12,7 +12,7 @@ merged_graph:
     - args:
         edge_facet_properties:
           - knowledge_source
-        filename: ../data/processed/merged_graph_stats.yaml
+        filename: ../data/processed/finals/merged_graph_stats.yaml
         graph_name: KG
         node_facet_properties:
           - provided_by
@@ -21,8 +21,8 @@ merged_graph:
     bgee:
       input:
         filename:
-          - ../data/processed/bgee_nodes.tsv
-          - ../data/processed/bgee_edges.tsv
+          - ../data/processed/finals/bgee_nodes.tsv
+          - ../data/processed/finals/bgee_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -36,8 +36,8 @@ merged_graph:
     cell_ontology:
       input:
         filename:
-          - ../data/processed/cl_nodes.tsv
-          - ../data/processed/cl_edges.tsv
+          - ../data/processed/finals/cl_nodes.tsv
+          - ../data/processed/finals/cl_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -87,8 +87,8 @@ merged_graph:
     disgenet:
       input:
         filename:
-          - ../data/processed/disgenet_nodes.tsv
-          - ../data/processed/disgenet_edges.tsv
+          - ../data/processed/finals/disgenet_nodes.tsv
+          - ../data/processed/finals/disgenet_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -102,8 +102,8 @@ merged_graph:
     ensembl:
       input:
         filename:
-          - ../data/processed/ensembl_nodes.tsv
-          - ../data/processed/ensembl_edges.tsv
+          - ../data/processed/finals/ensembl_nodes.tsv
+          - ../data/processed/finals/ensembl_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -117,8 +117,8 @@ merged_graph:
     gene_ontology:
       input:
         filename:
-          - ../data/processed/go_nodes.tsv
-          - ../data/processed/go_edges.tsv
+          - ../data/processed/finals/go_nodes.tsv
+          - ../data/processed/finals/go_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -140,8 +140,8 @@ merged_graph:
     gene_ontology_annotation:
       input:
         filename:
-          - ../data/processed/goa_nodes.tsv
-          - ../data/processed/goa_edges.tsv
+          - ../data/processed/finals/goa_nodes.tsv
+          - ../data/processed/finals/goa_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -158,16 +158,16 @@ merged_graph:
               - biolink:located_in
           node_filters:
             category:
-              - biolink:biolink:RNA
-              - biolink:biolink:Protein
-              - biolink:biolink:MacromolecularComplexMixin
+              - biolink:RNA
+              - biolink:Protein
+              - biolink:MacromolecularComplexMixin
         format: tsv
         name: GOA
     human_phenotype_ontology:
       input:
         filename:
-          - ../data/processed/hpo_nodes.tsv
-          - ../data/processed/hpo_edges.tsv
+          - ../data/processed/finals/hpo_nodes.tsv
+          - ../data/processed/finals/hpo_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -181,8 +181,8 @@ merged_graph:
     human_phenotype_ontology_annotation:
       input:
         filename:
-          - ../data/processed/hpoa_nodes.tsv
-          - ../data/processed/hpoa_edges.tsv
+          - ../data/processed/finals/hpoa_nodes.tsv
+          - ../data/processed/finals/hpoa_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -195,8 +195,8 @@ merged_graph:
     mondo:
       input:
         filename:
-          - ../data/processed/mondo_nodes.tsv
-          - ../data/processed/mondo_edges.tsv
+          - ../data/processed/finals/mondo_nodes.tsv
+          - ../data/processed/finals/mondo_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -259,8 +259,8 @@ merged_graph:
     rnacentral:
       input:
         filename:
-          - ../data/processed/rnacentral_nodes.tsv
-          - ../data/processed/rnacentral_edges.tsv
+          - ../data/processed/finals/rnacentral_nodes.tsv
+          - ../data/processed/finals/rnacentral_edges.tsv
         filters:
           edge_filters:
             predicate:
@@ -274,8 +274,8 @@ merged_graph:
     uberon:
       input:
         filename:
-          - ../data/processed/uberon_nodes.tsv
-          - ../data/processed/uberon_edges.tsv
+          - ../data/processed/finals/uberon_nodes.tsv
+          - ../data/processed/finals/uberon_edges.tsv
         filters:
           edge_filters:
             predicate:

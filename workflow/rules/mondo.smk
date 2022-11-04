@@ -11,5 +11,5 @@ rule mondo_mapping:
 
 rule process_mondo:
   input: "../data/raw/mondo.json"
-  output: "../data/processed/mondo_nodes.tsv", "../data/processed/mondo_edges.tsv"
-  shell: "kgx transform -i obojson -o ../data/processed/mondo -f tsv {input} "
+  output: "../data/processed/finals/mondo_nodes.tsv", "../data/processed/finals/mondo_edges.tsv"
+  shell: "kgx transform -i obojson -o ../data/processed/finals/mondo -f tsv {input} "

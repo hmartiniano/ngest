@@ -26,5 +26,5 @@ rule download_goa_version:
 
 rule process_goa:
   input: ro="../data/raw/ro.json", cfg= "../config/config.yaml", protein="../data/raw/goa_human.gaf.gz", rna="../data/raw/goa_human_rna.gaf.gz", complex="../data/raw/goa_human_complex.gaf.gz"  , isoform = "../data/raw/goa_human_isoform.gaf.gz"
-  output: "../data/processed/goa_nodes.tsv","../data/processed/goa_edges.tsv"
+  output: "../data/processed/finals/goa_nodes.tsv","../data/processed/finals/goa_edges.tsv"
   shell: "python scripts/goa_to_kgx.py -i {input.rna} {input.protein} {input.complex} {input.isoform} -r {input.ro}  -c {input.cfg} -o {output}"

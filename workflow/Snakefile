@@ -39,11 +39,11 @@ include: "rules/bgee.smk"
 
 
 rule all:
-    input: "../data/processed/merged_nodes.tsv", "../data/processed/merged_nodes.tsv", "../data/processed/db_versions.yaml"
+    input: "../data/processed/finals/merged_nodes.tsv", "../data/processed/finals/merged_nodes.tsv", "../data/processed/db_versions.yaml"
 
 rule gather_data:
     input: databases.get_input_files()
-    output: "../data/processed/merged_nodes.tsv", "../data/processed/merged_edges.tsv"
+    output: "../data/processed/finals/merged_nodes.tsv", "../data/processed/finals/merged_edges.tsv"
     shell: "kgx merge --merge-config ../config/merge_config.yaml -p 2"
 
 

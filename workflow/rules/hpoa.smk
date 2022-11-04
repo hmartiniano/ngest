@@ -6,5 +6,5 @@ rule download_hpoa:
 
 rule process_hpoa:
   input: hpoa ="../data/raw/hpoa.hpoa", mondo_map = "../data/raw/mondo_mapping.tsv"
-  output: "../data/processed/hpoa_nodes.tsv","../data/processed/hpoa_edges.tsv"
+  output: "../data/processed/finals/hpoa_nodes.tsv","../data/processed/finals/hpoa_edges.tsv"
   shell: "python scripts/hpoa_to_kgx.py -i {input.hpoa} -m {input.mondo_map} -o {output}"

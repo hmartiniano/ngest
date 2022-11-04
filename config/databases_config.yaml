@@ -2,8 +2,8 @@
 databases:
   - source: gene_ontology
     name: GO
-    nodes: "../data/processed/go_nodes.tsv"
-    edges: "../data/processed/go_edges.tsv"
+    nodes: "../data/processed/finals/go_nodes.tsv"
+    edges: "../data/processed/finals/go_edges.tsv"
     filters:
       node_filters:
         category:
@@ -23,8 +23,8 @@ databases:
             - biolink:subclass_of
   - source: human_phenotype_ontology
     name: HP
-    nodes: "../data/processed/hpo_nodes.tsv"
-    edges: "../data/processed/hpo_edges.tsv"
+    nodes: "../data/processed/finals/hpo_nodes.tsv"
+    edges: "../data/processed/finals/hpo_edges.tsv"
     filters:
       node_filters:
         category:
@@ -36,8 +36,8 @@ databases:
           - biolink:subclass_of
   - source: mondo
     name: MONDO
-    nodes: "../data/processed/mondo_nodes.tsv"
-    edges: "../data/processed/mondo_edges.tsv"
+    nodes: "../data/processed/finals/mondo_nodes.tsv"
+    edges: "../data/processed/finals/mondo_edges.tsv"
     filters:
       node_filters:
         category:
@@ -108,8 +108,8 @@ databases:
 #          - biolink:type
   - source: ensembl
     name: ENSEMBL
-    nodes: "../data/processed/ensembl_nodes.tsv"
-    edges: "../data/processed/ensembl_edges.tsv"
+    nodes: "../data/processed/finals/ensembl_nodes.tsv"
+    edges: "../data/processed/finals/ensembl_edges.tsv"
     filters:
       node_filters:
         category:
@@ -120,8 +120,8 @@ databases:
           - biolink:has_gene_product
   - source: gene_ontology_annotation
     name: GOA
-    nodes: "../data/processed/goa_nodes.tsv"
-    edges: "../data/processed/goa_edges.tsv"
+    nodes: "../data/processed/finals/goa_nodes.tsv"
+    edges: "../data/processed/finals/goa_edges.tsv"
     filters:
       node_filters:
         category:
@@ -145,8 +145,8 @@ databases:
 #          - biolink:part_of
   - source: human_phenotype_ontology_annotation
     name: HPOA
-    nodes: "../data/processed/hpoa_nodes.tsv"
-    edges: "../data/processed/hpoa_edges.tsv"
+    nodes: "../data/processed/finals/hpoa_nodes.tsv"
+    edges: "../data/processed/finals/hpoa_edges.tsv"
     filters:
       node_filters:
         category:
@@ -156,8 +156,8 @@ databases:
           - biolink:has_phenotype
   - source: disgenet
     name: Disgenet
-    nodes: "../data/processed/disgenet_nodes.tsv"
-    edges: "../data/processed/disgenet_edges.tsv"
+    nodes: "../data/processed/finals/disgenet_nodes.tsv"
+    edges: "../data/processed/finals/disgenet_edges.tsv"
     filters:
       node_filters:
         category:
@@ -168,8 +168,8 @@ databases:
           - biolink:active_in
   - source: uberon
     name: Uberon
-    nodes: "../data/processed/uberon_nodes.tsv"
-    edges: "../data/processed/uberon_edges.tsv"
+    nodes: "../data/processed/finals/uberon_nodes.tsv"
+    edges: "../data/processed/finals/uberon_edges.tsv"
     filters:
       node_filters:
         category:
@@ -198,8 +198,8 @@ databases:
           - biolink:homologous_to
   - source: cell_ontology
     name: CL
-    nodes: "../data/processed/cl_nodes.tsv"
-    edges: "../data/processed/cl_edges.tsv"
+    nodes: "../data/processed/finals/cl_nodes.tsv"
+    edges: "../data/processed/finals/cl_edges.tsv"
     filters:
       node_filters:
         category:
@@ -253,8 +253,8 @@ databases:
           - biolink:derives_from
   - source: bgee
     name: Bgee
-    nodes: "../data/processed/bgee_nodes.tsv"
-    edges: "../data/processed/bgee_edges.tsv"
+    nodes: "../data/processed/finals/bgee_nodes.tsv"
+    edges: "../data/processed/finals/bgee_edges.tsv"
     filters:
       node_filters:
         category:
@@ -266,8 +266,8 @@ databases:
           - biolink:expressed_in
   - source: rnacentral
     name: RNACentral
-    nodes: "../data/processed/rnacentral_nodes.tsv"
-    edges: "../data/processed/rnacentral_edges.tsv"
+    nodes: "../data/processed/finals/rnacentral_nodes.tsv"
+    edges: "../data/processed/finals/rnacentral_edges.tsv"
     filters:
       node_filters:
         category:

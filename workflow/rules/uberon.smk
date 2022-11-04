@@ -7,5 +7,5 @@ rule download_uberon:
 
 rule process_uberon:
   input: "../data/raw/uberon.json"
-  output: "../data/processed/uberon_nodes.tsv", "../data/processed/uberon_edges.tsv"
-  shell: "kgx transform -i obojson -o ../data/processed/uberon -f tsv {input} "
+  output: "../data/processed/finals/uberon_nodes.tsv", "../data/processed/finals/uberon_edges.tsv"
+  shell: "kgx transform -i obojson -o ../data/processed/finals/uberon -f tsv {input} "

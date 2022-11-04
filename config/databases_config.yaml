@@ -276,3 +276,15 @@ databases:
       edge_filters:
         predicate:
           - biolink:has_gene_product
+  - source: mirtarbase
+    name: Mirtarbase
+    nodes: "../data/processed/finals/mirtarbase_nodes.tsv"
+    edges: "../data/processed/finals/mirtarbase_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:RNA
+          - biolink:Gene
+      edge_filters:
+        predicate:
+          - biolink:interacts_with

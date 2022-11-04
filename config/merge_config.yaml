@@ -192,6 +192,21 @@ merged_graph:
               - biolink:Disease
         format: tsv
         name: HPOA
+    mirtarbase:
+      input:
+        filename:
+          - ../data/processed/finals/mirtarbase_nodes.tsv
+          - ../data/processed/finals/mirtarbase_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:interacts_with
+          node_filters:
+            category:
+              - biolink:RNA
+              - biolink:Gene
+        format: tsv
+        name: Mirtarbase
     mondo:
       input:
         filename:

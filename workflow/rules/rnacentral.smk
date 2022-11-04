@@ -3,13 +3,22 @@
 
 #Ensembl Mappings
 
-RNACENTRALMAPPING = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/id_mapping/database_mappings/ensembl.tsv"
+RNACENTRALENSEMBLMAPPING = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/id_mapping/database_mappings/ensembl.tsv"
 RNACENTRAL = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/gpi/rnacentral.gpi.gz"
 RNAVERSION = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/release_notes.txt"
+RNACENTRALTARBASEMAPPING = "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/id_mapping/database_mappings/tarbase.tsv"
 
-rule download_rnacentral_mapping:
-  output: "../data/raw/rnacentralmapping.tsv"
-  shell: "curl -L {RNACENTRALMAPPING} -o {output}"
+
+
+rule download_rnacentral_ensembl_mapping:
+  output: "../data/raw/rnacentralensemblmapping.tsv"
+  shell: "curl -L {RNACENTRALENSEMBLMAPPING} -o {output}"
+
+
+rule download_rnacentral_tarbase_mapping:
+  output: "../data/raw/rnacentraltarbasemapping.tsv"
+  shell: "curl -L {RNACENTRALTARBASEMAPPING} -o {output}"
+
 
 rule download_rnacentral:
   output: "../data/raw/rnacentral.gpi.gz"
@@ -20,8 +29,8 @@ rule download_rnacentral_version:
   output: "../data/raw/rnacentral_release_notes.txt"
   shell: "curl -L {RNAVERSION} -o {output}"
 
-rule filter_rnacentral_mapping:
-  input: "../data/raw/rnacentralmapping.tsv"
+rule filter_rnacentral_ensembl__mapping:
+  input: "../data/raw/rnacentralensemblmapping.tsv"
   output: "../data/processed/mappings/rnacentral_ensembl_human_mapping.tsv"
   shell: "awk 'BEGIN {{OFS=\"\t\"}} {{ if ($4 == 9606) print $0}}' {input} > {output}"
 

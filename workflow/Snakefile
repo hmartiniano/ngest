@@ -36,7 +36,8 @@ include: "rules/uberon.smk"
 include: "rules/cl.smk"
 #Bgee
 include: "rules/bgee.smk"
-
+#Mirtarbase
+include: "rules/mirtarbase.smk"
 
 rule all:
     input: "../data/processed/finals/merged_nodes.tsv", "../data/processed/finals/merged_nodes.tsv", "../data/processed/db_versions.yaml"

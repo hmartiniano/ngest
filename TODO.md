@@ -26,6 +26,7 @@
 - [x] CL Uniprot IDs
 - [x] Unique node values on notebooks
 - [x] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.) - by category and predicate
+- [x] Added Mirtarbase with RNACentral and Ensembl prefixes
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Add conda environment file
 - [ ] Add Docker file

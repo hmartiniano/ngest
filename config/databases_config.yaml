@@ -288,3 +288,19 @@ databases:
       edge_filters:
         predicate:
           - biolink:interacts_with
+  - source: npinter
+    name: NPInter
+    nodes: "../data/processed/finals/npinter_nodes.tsv"
+    edges: "../data/processed/finals/npinter_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:RNA
+          - biolink:Gene
+          - biolink:Protein
+      edge_filters:
+        predicate:
+          - biolink:binds
+          - biolink:regulates
+          - biolink:correlates
+          - biolink:coexpressed_with

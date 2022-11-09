@@ -271,6 +271,25 @@ merged_graph:
               - biolink:PhenotypicFeature
         format: tsv
         name: MONDO
+    npinter:
+      input:
+        filename:
+          - ../data/processed/finals/npinter_nodes.tsv
+          - ../data/processed/finals/npinter_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:binds
+              - biolink:regulates
+              - biolink:correlates
+              - biolink:coexpressed_with
+          node_filters:
+            category:
+              - biolink:RNA
+              - biolink:Gene
+              - biolink:Protein
+        format: tsv
+        name: NPInter
     rnacentral:
       input:
         filename:

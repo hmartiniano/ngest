@@ -1,7 +1,6 @@
 import argparse
 import pandas as pd
 import uuid
-import numpy as np
 
 def read_files(fname):
     df = pd.read_csv(fname, sep="\t", low_memory=False)

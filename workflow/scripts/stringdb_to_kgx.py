@@ -12,11 +12,11 @@ def read_id_mapping_uniprot(fname, id, type):
     return df
 
 def get_parser():
-    parser = argparse.ArgumentParser(prog="bgee_to_kgx.py",
-                                     description='bgee_to_csv: convert an bgee file to CSVs with nodes and edges.')
+    parser = argparse.ArgumentParser(prog="stringdb_to_kgx.py",
+                                     description='string_to_csv: convert an string file to CSVs with nodes and edges.')
     parser.add_argument('-i', '--input', help="Input files")
     parser.add_argument('-p', '--proteins', help="Input files")
-    parser.add_argument('-o', '--output', nargs="+", default="bgee", help="Output prefix. Default: out")
+    parser.add_argument('-o', '--output', nargs="+", default="string", help="Output prefix. Default: out")
     return parser
 
 def main():

@@ -40,6 +40,8 @@ include: "rules/bgee.smk"
 include: "rules/mirtarbase.smk"
 #NPInter
 include: "rules/npinter.smk"
+#String
+include: "rules/stringdb.smk"
 
 
 rule all:

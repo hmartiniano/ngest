@@ -304,3 +304,14 @@ databases:
           - biolink:regulates
           - biolink:correlates
           - biolink:coexpressed_with
+  - source: string
+    name: String
+    nodes: "../data/processed/finals/string_nodes.tsv"
+    edges: "../data/processed/finals/string_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:Protein
+      edge_filters:
+        predicate:
+          - biolink:directly_physically_interacts_with

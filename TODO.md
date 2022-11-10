@@ -27,9 +27,11 @@
 - [x] Unique node values on notebooks
 - [x] Add config options to remove certain nodes/edges of specific types (BFO, CARO, owl, etc.) - by category and predicate
 - [x] Added Mirtarbase with RNACentral and Ensembl prefixes
+- [x] Add NPInter
+- [x] Add StringDB
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Add conda environment file
 - [ ] Add Docker file
-- [ ] Add BGEE version
-- [x] Add NPInter
+- [ ] Add BGEE, NPINter, Mirtarbase, STRING version
+
 

@@ -33,11 +33,14 @@ def main():
 
     mirtarbase["object"] = mirtarbase["Target Gene (Entrez ID)"].map(str).map(genemapping)
     mirtarbase["subject"] = mirtarbase["miRNA"].map(rnamapping)
+    mirtarbase = mirtarbase.dropna(subset=["object", "subject"])
+
+    mirtarbase["object"] = "ENSEMBL:" + mirtarbase["object"]
+    mirtarbase["subject"] = "RNACENTRAL:" + mirtarbase["subject"]
     mirtarbase ["provided_by"] = "Mirtarbase"
     mirtarbase["knowledge_source"] = "Mirtarbase"
     mirtarbase["predicate"] = "biolink:interacts_with"
     mirtarbase["relation"] = "RO:0002434"
-    mirtarbase = mirtarbase.dropna(subset=["object", "subject"])
     edges = mirtarbase[["object", "subject", "predicate", "knowledge_source", "relation"]].drop_duplicates()
     edges["id"] = mirtarbase['subject'].apply(lambda x: uuid.uuid4())
 

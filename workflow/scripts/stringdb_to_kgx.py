@@ -32,11 +32,12 @@ def main():
     stringdbf = stringdbf.dropna(subset=["protein1 id", "protein2 id"])
     stringdbf["subject"] = "UNIPROTKB:" + stringdbf["protein1 id"]
     stringdbf["object"] = "UNIPROTKB:" + stringdbf["protein2 id"]
-    stringdbf["provided_by"] = "String"
-    stringdbf["knowledge_source"] = "String"
-    stringdbf["predicate"] = "biolink:directly_physically_interacts_with"
+    stringdbf["provided_by"] = "STRING"
+    stringdbf["knowledge_source"] = "STRING"
+    stringdbf["predicate"] = "biolink:interacts_with"
     stringdbf["relation"] = "RO:0002436"
     stringdbf["category"] = "biolink:Protein"
+    stringdbf["has_confidence_level"] = stringdbf["combined_score"]
 
     protein1 = stringdbf[["protein1", "protein1 id", "subject", "provided_by", "category"]]
     protein1["id"] = protein1["subject"]
@@ -51,7 +52,7 @@ def main():
 
     nodes = pd.concat([protein1, protein2]).drop_duplicates()
 
-    edges = stringdbf[["subject", "object", "knowledge_source", "predicate"]].drop_duplicates()
+    edges = stringdbf[["subject", "object", "knowledge_source", "predicate", "has_confidence_level"]].drop_duplicates()
     edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
 
     nodes.to_csv(f"{args.output[0]}", sep="\t", index=False)

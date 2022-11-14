@@ -314,4 +314,4 @@ databases:
           - biolink:Protein
       edge_filters:
         predicate:
-          - biolink:directly_physically_interacts_with
+          - biolink:interacts_with

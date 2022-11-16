@@ -113,8 +113,8 @@ def main():
     rna["name"] = rna["ncName"]
     rna["category"] = "biolink:RNA"
     rna["xref"] = rna["ncID"]
-    rna["type"] = rna["ncType"]
-    rna = rna[["id", "name", "provided_by", "category", "xref", "type"]].drop_duplicates()
+    rna["node_property"] = rna["ncType"]
+    rna = rna[["id", "name", "provided_by", "category", "xref", "node_property"]].drop_duplicates()
 
     nodes = pd.concat([proteins, genes, rna]).drop_duplicates()
     edges = pd.concat([npintergenes[["subject", "object", "knowledge_source", "predicate"]], npinterproteins[["subject", "object", "knowledge_source", "predicate"]]])

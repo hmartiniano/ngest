@@ -108,12 +108,13 @@ def main():
     genes["category"] = "biolink:Gene"
     genes = genes[["id", "name", "provided_by", "category"]].drop_duplicates()
 
-    rna = npinterf [["subject", "ncID", "provided_by", "ncName"]]
+    rna = npinterf[["subject", "ncID", "provided_by", "ncType", "ncName"]]
     rna["id"] = rna["subject"]
     rna["name"] = rna["ncName"]
     rna["category"] = "biolink:RNA"
     rna["xref"] = rna["ncID"]
-    rna = rna[["id", "name", "provided_by", "category", "xref"]].drop_duplicates()
+    rna["type"] = rna["ncType"]
+    rna = rna[["id", "name", "provided_by", "category", "xref", "type"]].drop_duplicates()
 
     nodes = pd.concat([proteins, genes, rna]).drop_duplicates()
     edges = pd.concat([npintergenes[["subject", "object", "knowledge_source", "predicate"]], npinterproteins[["subject", "object", "knowledge_source", "predicate"]]])

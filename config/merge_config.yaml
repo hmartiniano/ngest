@@ -305,20 +305,6 @@ merged_graph:
               - biolink:RNA
         format: tsv
         name: RNACentral
-    string:
-      input:
-        filename:
-          - ../data/processed/finals/string_nodes.tsv
-          - ../data/processed/finals/string_edges.tsv
-        filters:
-          edge_filters:
-            predicate:
-              - biolink:interacts_with
-          node_filters:
-            category:
-              - biolink:Protein
-        format: tsv
-        name: String
     uberon:
       input:
         filename:

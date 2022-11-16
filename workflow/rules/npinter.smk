@@ -1,11 +1,11 @@
-NPINTER = "http://bigdata.ibp.ac.cn/npinter4/download/file/interaction_NPInterv4.txt.gz"
+NPINTER = "http://bigdata.ibp.ac.cn/npinter5/download/file/interaction_NPInterv5.txt.gz"
 
 rule download_npinter:
-    output: "../data/raw/interaction_NPInterv4.txt.gz"
+    output: "../data/raw/interaction_NPInterv5.txt.gz"
     shell: "curl -L {NPINTER} -o {output}"
 
 rule filter_npinter:
-  input:  "../data/raw/interaction_NPInterv4.txt.gz"
+  input:  "../data/raw/interaction_NPInterv5.txt.gz"
   output: "../data/processed/intermediary/npinter_human.tsv"
   shell: "zcat {input} | awk -F \"\t\"  'BEGIN {{OFS=\"\t\"}} {{ if ($1 == \"interID\" || $11 == \"Homo sapiens\") print $0}}' > {output}"
 

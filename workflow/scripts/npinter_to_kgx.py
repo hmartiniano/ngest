@@ -26,13 +26,16 @@ def add_predicates(df):
     df["predicate"] = df["class"].map(predicatef)
     return df
 
-def read_rna(fname, type):
-    df = pd.read_csv(fname, sep="\t", low_memory=False, header=None)
-    df.columns = RNACENTRALMAPPING
-    df["ID"] = df[type].str.split(".").str[0]
-    df = df[["ID", "RNACentral ID"]].drop_duplicates().set_index("ID")
-    df = df[~df.index.duplicated(keep='first')].iloc[:, 0]
-    return df
+def read_rna(fnames, type):
+    rnamapping = pd.DataFrame()
+    for f in fnames:
+        df = pd.read_csv(f, sep="\t", low_memory=False, header=None)
+        df.columns = RNACENTRALMAPPING
+        rnamapping = pd.concat([rnamapping, df])
+    rnamapping["ID"] = rnamapping[type].str.split(".").str[0]
+    rnamapping = rnamapping[["ID", "RNACentral ID"]].drop_duplicates().set_index("ID")
+    rnamapping = rnamapping[~rnamapping.index.duplicated(keep='first')].iloc[:, 0]
+    return rnamapping
 
 
 def read_genes(fname):
@@ -60,7 +63,7 @@ def get_parser():
     parser.add_argument('-i', '--input', help="Input files")
     parser.add_argument('-p', '--proteins', help="Input files")
     parser.add_argument('-g', '--genes', help="Input files")
-    parser.add_argument('-r', '--rna', help="Input files")
+    parser.add_argument('-r', '--rna', nargs="+", help="Input files")
     parser.add_argument('-o', '--output', nargs="+", default="bgee", help="Output prefix. Default: out")
     return parser
 

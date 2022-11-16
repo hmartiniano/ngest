@@ -36,6 +36,16 @@ rule filter_rnacentral_ensembl_mapping:
   output: "../data/processed/mappings/rnacentral_ensembl_human_mapping.tsv"
   shell: "awk 'BEGIN {{OFS=\"\t\"}} {{ if ($4 == 9606) print $0}}' {input} > {output}"
 
+rule filter_rnacentral_noncode_mapping:
+  input: "../data/raw/rnacentralnoncodingmapping.tsv"
+  output: "../data/processed/mappings/rnacentral_noncode_human_mapping.tsv"
+  shell: "awk 'BEGIN {{OFS=\"\t\"}} {{ if ($4 == 9606) print $0}}' {input} > {output}"
+
+rule filter_rnacentral_tarbase_mapping:
+  input: "../data/raw/rnacentraltarbasemapping.tsv"
+  output: "../data/processed/mappings/rnacentral_tarbase_human_mapping.tsv"
+  shell: "awk 'BEGIN {{OFS=\"\t\"}} {{ if ($4 == 9606) print $0}}' {input} > {output}"
+
 rule filter_rnacentral:
   input:  "../data/raw/rnacentral.gpi.gz"
   output: "../data/processed/intermediary/rnacentral_human.tsv"

@@ -11,7 +11,7 @@ rule filter_npinter:
 
 
 rule process_npinter:
-    input: npinter = "../data/processed/intermediary/npinter_human.tsv", rnamapping="../data/raw/rnacentralnoncodingmapping.tsv", proteinmapping = "../data/raw/uniprot.tsv.gz", genemapping = "../data/processed/intermediary/ensembl_genes.csv"
+    input: npinter = "../data/processed/intermediary/npinter_human.tsv", noncoddingmapping="../data/processed/mappings/rnacentral_noncode_human_mapping.tsv", tarbasemapping= "../data/processed/mappings/rnacentral_tarbase_human_mapping.tsv", ensemblmapping = "../data/processed/mappings/rnacentral_ensembl_human_mapping.tsv", proteinmapping = "../data/raw/uniprot.tsv.gz", genemapping = "../data/processed/intermediary/ensembl_genes.csv"
     output: "../data/processed/finals/npinter_nodes.tsv", "../data/processed/finals/npinter_edges.tsv"
-    shell: "python scripts/npinter_to_kgx.py -i {input.npinter} -r {input.rnamapping} -p {input.proteinmapping} -g {input.genemapping} -o {output}"
+    shell: "python scripts/npinter_to_kgx.py -i {input.npinter} -r {input.noncoddingmapping} {input.tarbasemapping} {input.ensemblmapping} -p {input.proteinmapping} -g {input.genemapping} -o {output}"
 

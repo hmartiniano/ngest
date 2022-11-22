@@ -88,7 +88,7 @@ def main():
     gaf["relation"] = gaf.Qualifier.map(predicate_to_relation)
     gaf["knowledge_source"] = "GOA"
     gaf = gaf[["subject", "predicate", "object", "category", "negated", "relation", "knowledge_source"]].drop_duplicates()
-    gaf["id"] = gaf.id.apply(lambda x: uuid.uuid4())
+    gaf["id"] = gaf.subject.apply(lambda x: uuid.uuid4())
     gaf.to_csv(f"{args.output[1]}", sep="\t", index=False)
     
 

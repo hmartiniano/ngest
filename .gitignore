@@ -20,3 +20,5 @@ data/*/*yaml
 .idea
 
 .pybiomart.sqlite
+
+.ipynb_checkpoints

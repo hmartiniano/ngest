@@ -36,8 +36,9 @@ def main():
  #  to include negated field for absent relations
  #   gene_to_ae["negated"] = gene_to_ae.Expression.str.startswith("absent")
 
-    gene_to_ae[["id", "subject", "predicate", "object", "category", "relation", "knowledge_source"]].drop_duplicates().to_csv(
-         f"{args.output[1]}", sep="\t", index=False)
+    gene_to_ae = gene_to_ae[["subject", "predicate", "object", "category", "relation", "knowledge_source"]].drop_duplicates()
+    gene_to_ae['id'] = gene_to_ae['subject'].apply(lambda x: uuid.uuid4())
+    gene_to_ae.to_csv(f"{args.output[1]}", sep="\t", index=False)
 
     ae = gene_to_ae[["object", "Anatomical entity name", "provided_by"]]
     ae["id"] = ae["object"]

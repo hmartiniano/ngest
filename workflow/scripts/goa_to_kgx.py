@@ -87,7 +87,9 @@ def main():
     gaf["predicate"] = "biolink:" + gaf.Qualifier.str.replace("NOT|", "", regex=False)
     gaf["relation"] = gaf.Qualifier.map(predicate_to_relation)
     gaf["knowledge_source"] = "GOA"
-    gaf[["id", "subject", "predicate", "object", "category", "negated", "relation", "knowledge_source"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
+    gaf = gaf[["subject", "predicate", "object", "category", "negated", "relation", "knowledge_source"]].drop_duplicates()
+    gaf["id"] = gaf.id.apply(lambda x: uuid.uuid4())
+    gaf.to_csv(f"{args.output[1]}", sep="\t", index=False)
     
 
 if __name__ == '__main__':

@@ -39,21 +39,21 @@ def main():
 
     gene_to_phenotype = disgenet[disgenet.object.str.startswith("HP")]
     gene_to_phenotype["category"] = "biolink:GeneToPhenotypicFeatureAssociation"
-    gene_to_phenotype['id'] = gene_to_phenotype['subject'].apply(lambda x: uuid.uuid4())
     gene_to_phenotype["predicate"] = "biolink:associated_with"
     gene_to_phenotype["relation"] = "RO:0016001"
     gene_to_phenotype["knowledge_source"] = "Disgenet"
 
-    gene_to_phenotype = gene_to_phenotype[['id', "subject", "predicate", "object", "category", "relation", "knowledge_source", "provided_by", "diseaseName"]]
+    gene_to_phenotype = gene_to_phenotype[["subject", "predicate", "object", "category", "relation", "knowledge_source", "provided_by", "diseaseName"]].drop_duplicates()
+    gene_to_phenotype['id'] = gene_to_phenotype['subject'].apply(lambda x: uuid.uuid4())
 
 
     gene_to_disease = disgenet[disgenet.object.str.startswith("MONDO")]
     gene_to_disease["category"] = "biolink:GeneToDiseaseAssociation"
-    gene_to_disease['id'] = gene_to_disease['subject'].apply(lambda x: uuid.uuid4())
     gene_to_disease["predicate"] = "biolink:associated_with"
     gene_to_disease["relation"] = "RO:0016001"
     gene_to_disease["knowledge_source"] = "Disgenet"
-    gene_to_disease = gene_to_disease[["id", "subject", "predicate", "object", "category", "relation", "knowledge_source", "provided_by", "diseaseName"]]
+    gene_to_disease = gene_to_disease[["subject", "predicate", "object", "category", "relation", "knowledge_source", "provided_by", "diseaseName"]].drop_duplicates()
+    gene_to_disease['id'] = gene_to_disease['subject'].apply(lambda x: uuid.uuid4())
 
     edges = pd.concat([gene_to_phenotype, gene_to_disease])
     edges[["id", "subject", "predicate", "object", "category", "relation", "knowledge_source"]].drop_duplicates().to_csv(

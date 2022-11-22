@@ -60,7 +60,7 @@ def main():
     hpoa["predicate"] = "biolink:has_phenotype"
     hpoa["relation"] = "RO:0002200"
     hpoa = hpoa[["subject", "predicate", "object","negated", "category", "relation", "knowledge_source"]].dropna().drop_duplicates()
-    hpoa["id"] = hpoa.id.apply(lambda x: uuid.uuid4())
+    hpoa["id"] = hpoa.subject.apply(lambda x: uuid.uuid4())
     hpoa.to_csv(f"{args.output[1]}",sep="\t", index=False)
 
 

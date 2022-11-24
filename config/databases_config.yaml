@@ -258,7 +258,7 @@ databases:
     filters:
       node_filters:
         category:
-          - biolink:AnatomicalEntity
+#          - biolink:AnatomicalEntity
           - biolink:Cell
           - biolink:Gene
       edge_filters:
@@ -304,14 +304,14 @@ databases:
           - biolink:regulates
           - biolink:correlates
           - biolink:coexpressed_with
-  - source: string
-    name: STRING
-    nodes: "../data/processed/finals/string_nodes.tsv"
-    edges: "../data/processed/finals/string_edges.tsv"
-    filters:
-      node_filters:
-        category:
-          - biolink:Protein
-      edge_filters:
-        predicate:
-          - biolink:interacts_with
+#  - source: string
+#    name: STRING
+#    nodes: "../data/processed/finals/string_nodes.tsv"
+#    edges: "../data/processed/finals/string_edges.tsv"
+#    filters:
+#      node_filters:
+#        category:
+#          - biolink:Protein
+#      edge_filters:
+#        predicate:
+#          - biolink:interacts_with

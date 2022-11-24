@@ -29,9 +29,10 @@
 - [x] Added Mirtarbase with RNACentral and Ensembl prefixes
 - [x] Add NPInter
 - [x] Add StringDB
+- [x] Add BGEE, NPINter, Mirtarbase, STRING version
+- [x] Add conda environment file (requirements.txt)
 - [ ] Verify KGX automatic annotations for edges and nodes
-- [ ] Add conda environment file
 - [ ] Add Docker file
-- [ ] Add BGEE, NPINter, Mirtarbase, STRING version
+
 
 

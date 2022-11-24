@@ -1,12 +1,12 @@
 MIRTARBASE = "https://mirtarbase.cuhk.edu.cn/~miRTarBase/miRTarBase_2022/cache/download/9.0/hsa_MTI.xlsx"
 
 rule download_mirtarbase:
-    output: "../data/raw/hsa_MTI.xlsx"
+    output: "../data/raw/9.0_hsa_MTI.xlsx"
     shell: "curl -L {MIRTARBASE} -o {output}"
 
 
 rule mirtarbase_to_csv:
-    input: "../data/raw/hsa_MTI.xlsx"
+    input: "../data/raw/9.0_hsa_MTI.xlsx"
     output: "../data/processed/intermediary/hsa_MTI.tsv"
     shell: "python scripts/mirtarbase_to_csv.py -i {input} -o {output}"
 

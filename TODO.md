@@ -33,6 +33,9 @@
 - [x] Add conda environment file (requirements.txt)
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Add Docker file
-
+- [ ] Add code to import final dataset into neo4j
+- [ ] Fix STRING protein names 
+- [ ] Add versioning and deployment tools
+- [ ] Add Reactome (and/or KEGG?, Rhea) pathways
 
 

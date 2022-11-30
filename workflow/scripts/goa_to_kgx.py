@@ -77,7 +77,7 @@ def main():
     gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"]
     gaf["category"] = gaf['Biolink Category']
     gaf["name"] = gaf["DB Object Symbol"]
-    gaf[["id", "name", "category", "provided_by"]].to_csv(f"{args.output[0]}", sep="\t", index=False)
+    gaf[["id", "name", "category", "provided_by"]].drop_duplicates().to_csv(f"{args.output[0]}", sep="\t", index=False)
     # Now edges
     gaf["object"] = gaf["GO ID"]
     gaf["subject"] = gaf.DB + ":" + gaf["DB Object ID"]

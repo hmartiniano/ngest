@@ -42,7 +42,7 @@ def main():
     protein1 = stringdbf[["protein1", "protein1 id", "subject", "provided_by", "category"]]
     protein1["id"] = protein1["subject"]
     protein1["name"] = protein1["protein1 id"].map(namemapping)
-    protein1["xref"] = protein1["protein1"]
+    protein1["xref"] = protein1["protein1"].str.split(".").str[-1]
     protein1 = protein1[["id", "name", "provided_by", "category", "xref"]]
     protein2 = stringdbf[["protein2", "protein2 id", "object", "provided_by", "category"]]
     protein2["id"] = protein2["object"]

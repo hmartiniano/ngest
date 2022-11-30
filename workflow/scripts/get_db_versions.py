@@ -19,6 +19,10 @@ def get_parser():
     parser.add_argument('-a', '--goa', help="GOA version file")
     parser.add_argument('-hp', '--hpoa', help="HPOA version file")
     parser.add_argument('-d', '--disgenet', help="Disgenet version file")
+    parser.add_argument('-m', '--mirtarbase', help="Mirtarbase version file")
+    parser.add_argument('-n', '--npinter', help="NPINTER version file")
+    parser.add_argument('-s', '--string', help="String version file")
+    parser.add_argument('-b', '--bgee', help="Bgee version file")
     parser.add_argument('-o', '--output', default="db_versions", help="Output prefix. Default: out")
     return parser
 
@@ -29,10 +33,33 @@ def main():
     args = parser.parse_args()
 
     #ENSEMBL
-    #ensembl = args.ensembl
-    ensembl = "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
+    ensembl = args.ensembl
     version = ensembl.split(".")
     versions["ENSEMBL"] = version[3] + " " + version[4]
+
+    #Mirtarbase
+    mirtarbase = args.mirtarbase
+    version = mirtarbase.split("/")[-1]
+    version = version.split("_")[0]
+    versions["Mirtarbase"] = version
+
+    #BGEE
+    bgee = args.bgee
+    version = bgee.split("/")[-1]
+    version = version.split("_")[1] + "_" + version.split("_")[2]
+    versions["BGEE"] = version
+
+    #NPInter
+    npinter = args.npinter
+    version = npinter.split("/")[-1]
+    version = version.split(".")[0].split("_")[1]
+    versions["NPInter"] = version
+
+    #STRING
+    string = args.string
+    version = string.split("/")[-1]
+    version = version.split(".")[3]
+    versions["String"] = version
 
     #UNIPROT
     filef = pd.read_xml(args.uniprot)

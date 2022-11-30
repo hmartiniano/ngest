@@ -29,13 +29,21 @@
 - [x] Added Mirtarbase with RNACentral and Ensembl prefixes
 - [x] Add NPInter
 - [x] Add StringDB
+- [x] Add BGEE, NPINter, Mirtarbase, STRING version
+- [x] Add conda environment file (requirements.txt)
+- [x] Fix GOA Duplicates and RNACentral IDs
 - [ ] Verify KGX automatic annotations for edges and nodes
-- [ ] Add conda environment file
 - [ ] Add Docker file
 - [ ] Add BGEE, NPINter, Mirtarbase, STRING version
-- [ ]  Add code to standardize and clean the KG:
+- [ ] Add code to standardize and clean the KG:
           * remove isolated groups of nodes (if any exist)
           * clean relationships (merge, trim, etc)
           * Clean nodes (group similar/duplicated nodes?) 
+=======
+- [ ] Add code to import final dataset into neo4j
+- [ ] Fix STRING protein names 
+- [ ] Add versioning and deployment tools
+- [ ] Add Reactome (and/or KEGG?, Rhea) pathways
+>>>>>>> dc8b57b8604370e1830d4444984aaa55b1b88f89
 
 

@@ -50,11 +50,10 @@ def main():
     gene_to_protein = ensemblf.dropna(subset=["xref"])
     gene_to_protein['subject'] = "ENSEMBL:" + gene_to_protein["gene_stable_id"]
     gene_to_protein['object'] = "UNIPROTKB:" + gene_to_protein["xref"]
-    gene_to_protein['id'] = gene_to_protein["gene_stable_id"].apply(lambda x: uuid.uuid4())
     gene_to_protein["predicate"] = "biolink:has_gene_product"
     gene_to_protein["relation"] = "RO:0002205"
-    gene_to_protein = gene_to_protein[
-        ["id", "subject", "predicate", "object", "relation", "knowledge_source"]]
+    gene_to_protein = gene_to_protein[["subject", "predicate", "object", "relation", "knowledge_source"]].drop_duplicates()
+    gene_to_protein['id'] = gene_to_protein["subject"].apply(lambda x: uuid.uuid4())
 
     protein = ensemblf.dropna(subset=["xref"])
 

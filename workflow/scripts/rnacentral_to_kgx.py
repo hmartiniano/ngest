@@ -68,12 +68,12 @@ def main():
 
     rnacentral['subject'] = "ENSEMBL:" + rnacentral["Ensembl Gene ID"]
     rnacentral['object'] = "RNACENTRAL:" + rnacentral["RNACentral ID"]
-    rnacentral['id'] = rnacentral["RNACentral ID"].apply(lambda x: uuid.uuid4())
     rnacentral["predicate"] = "biolink:has_gene_product"
     rnacentral["relation"] = "RO:0002205"
     rnacentral = rnacentral.dropna(subset=["object", "subject"])
 
-    edges = rnacentral[["id", "subject", "predicate", "object", "relation", "knowledge_source"]]
+    edges = rnacentral[["subject", "predicate", "object", "relation", "knowledge_source"]].drop_duplicates()
+    edges['id'] = rnacentral["subject"].apply(lambda x: uuid.uuid4())
 
     rna = rnacentral[["object", "Type", "provided_by", "Name", "Ensembl Transcript ID"]]
     rna["id"] = rna["object"]

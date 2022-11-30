@@ -74,10 +74,10 @@ def main():
     predicate_to_relation = get_predicate_map(args.ro)
     gaf = read_gaf(args.input, biolinkclasses)
     gaf["provided_by"] = "GOA"
-    gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"]
+    gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"].str.split("_").str[0]
     gaf["category"] = gaf['Biolink Category']
     gaf["name"] = gaf["DB Object Symbol"]
-    gaf[["id", "name", "category", "provided_by"]].to_csv(f"{args.output[0]}", sep="\t", index=False)
+    gaf[["id", "name", "category", "provided_by"]].drop_duplicates().to_csv(f"{args.output[0]}", sep="\t", index=False)
     # Now edges
     gaf["object"] = gaf["GO ID"]
     gaf["subject"] = gaf.DB + ":" + gaf["DB Object ID"]
@@ -87,7 +87,9 @@ def main():
     gaf["predicate"] = "biolink:" + gaf.Qualifier.str.replace("NOT|", "", regex=False)
     gaf["relation"] = gaf.Qualifier.map(predicate_to_relation)
     gaf["knowledge_source"] = "GOA"
-    gaf[["id", "subject", "predicate", "object", "category", "negated", "relation", "knowledge_source"]].to_csv(f"{args.output[1]}", sep="\t", index=False)
+    gaf = gaf[["subject", "predicate", "object", "category", "negated", "relation", "knowledge_source"]].drop_duplicates()
+    gaf["id"] = gaf.subject.apply(lambda x: uuid.uuid4())
+    gaf.to_csv(f"{args.output[1]}", sep="\t", index=False)
     
 
 if __name__ == '__main__':

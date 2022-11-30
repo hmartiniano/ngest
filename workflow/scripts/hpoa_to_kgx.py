@@ -59,8 +59,9 @@ def main():
     hpoa["negated"] = hpoa.Qualifier.str.startswith("NOT")
     hpoa["predicate"] = "biolink:has_phenotype"
     hpoa["relation"] = "RO:0002200"
-    hpoa[["id", "subject", "predicate", "object","negated", "category", "relation", "knowledge_source"]].dropna().drop_duplicates().to_csv(f"{args.output[1]}",
-                                                                                                sep="\t", index=False)
+    hpoa = hpoa[["subject", "predicate", "object","negated", "category", "relation", "knowledge_source"]].dropna().drop_duplicates()
+    hpoa["id"] = hpoa.subject.apply(lambda x: uuid.uuid4())
+    hpoa.to_csv(f"{args.output[1]}",sep="\t", index=False)
 
 
 if __name__ == '__main__':

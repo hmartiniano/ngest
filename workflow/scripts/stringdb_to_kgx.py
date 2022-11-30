@@ -47,7 +47,7 @@ def main():
     protein2 = stringdbf[["protein2", "protein2 id", "object", "provided_by", "category"]]
     protein2["id"] = protein2["object"]
     protein2["name"] = protein2["protein2 id"].map(namemapping)
-    protein2["xref"] = protein2["protein2"]
+    protein2["xref"] = protein2["protein2"].str.split(".").str[-1]
     protein2=protein2[["id", "name", "provided_by", "category", "xref"]]
 
     nodes = pd.concat([protein1, protein2]).drop_duplicates()

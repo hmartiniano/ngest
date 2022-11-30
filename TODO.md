@@ -31,6 +31,7 @@
 - [x] Add StringDB
 - [x] Add BGEE, NPINter, Mirtarbase, STRING version
 - [x] Add conda environment file (requirements.txt)
+- [x] Fix GOA Duplicates and RNACentral IDs
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Add Docker file
 - [ ] Add code to import final dataset into neo4j

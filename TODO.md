@@ -39,11 +39,9 @@
           * remove isolated groups of nodes (if any exist)
           * clean relationships (merge, trim, etc)
           * Clean nodes (group similar/duplicated nodes?) 
-=======
 - [ ] Add code to import final dataset into neo4j
 - [ ] Fix STRING protein names 
 - [ ] Add versioning and deployment tools
 - [ ] Add Reactome (and/or KEGG?, Rhea) pathways
->>>>>>> dc8b57b8604370e1830d4444984aaa55b1b88f89
-
+- [ ] Remove NCBITaxon nodes?
 

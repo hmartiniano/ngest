@@ -162,10 +162,12 @@ databases:
       node_filters:
         category:
           - biolink:Gene
-          - biolink:Protein
+          - biolink:Disease
+          - biolink:Phenotype
       edge_filters:
         predicate:
-          - biolink:active_in
+          - biolink:GeneToDiseaseAssociation
+          - biolink:GeneToPhenotypicFeatureAssociation
   - source: uberon
     name: Uberon
     nodes: "../data/processed/finals/uberon_nodes.tsv"

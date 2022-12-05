@@ -1,5 +1,5 @@
 all:
-	cd workflow && snakemake -c 4
+	cd workflow && snakemake -c 8
 clean:
 	rm data/processed/*/*
 cleanall: clean

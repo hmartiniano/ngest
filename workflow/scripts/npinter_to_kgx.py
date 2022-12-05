@@ -6,25 +6,26 @@ predicates = {
     "binding": "biolink:binds",
     "regulatory": "biolink:regulates",
     "expression correlation": "biolink:correlates",
-    "coexpression": "biolink:coexpressed_with"
+    "coexpression": "biolink:coexpressed_with",
 }
 
-GENES = ["Gene Id",
-         "Gene Version",
-         "Gene Name"]
+GENES = ["Gene Id", "Gene Version", "Gene Name"]
 
-RNACENTRALMAPPING = ["RNACentral ID",
-            "DB",
-            "Transcript ID",
-            "Species",
-            "RNA Type",
-            "Gene ID"]
+RNACENTRALMAPPING = [
+    "RNACentral ID",
+    "DB",
+    "Transcript ID",
+    "Species",
+    "RNA Type",
+    "Gene ID",
+]
 
 
 def add_predicates(df):
     predicatef = pd.Series(predicates).drop_duplicates()
     df["predicate"] = df["class"].map(predicatef)
     return df
+
 
 def read_rna(fnames, type):
     rnamapping = pd.DataFrame()
@@ -34,7 +35,7 @@ def read_rna(fnames, type):
         rnamapping = pd.concat([rnamapping, df])
     rnamapping["ID"] = rnamapping[type].str.split(".").str[0]
     rnamapping = rnamapping[["ID", "RNACentral ID"]].drop_duplicates().set_index("ID")
-    rnamapping = rnamapping[~rnamapping.index.duplicated(keep='first')].iloc[:, 0]
+    rnamapping = rnamapping[~rnamapping.index.duplicated(keep="first")].iloc[:, 0]
     return rnamapping
 
 
@@ -43,29 +44,38 @@ def read_genes(fname):
     df = df.iloc[:, :3]
     df.columns = GENES
     df = df[df["Gene Name"].str.contains("gene_name")]
-    df["Gene Id"] = "ENSEMBL:" + df["Gene Id"].str.split(" ").str[-1].str.replace("\"", "")
-    df["Gene Name"] = df["Gene Name"].str.split(" ").str[-1].str.replace("\"", "")
+    df["Gene Id"] = "ENSEMBL:" + df["Gene Id"].str.split(" ").str[-1].str.replace(
+        '"', ""
+    )
+    df["Gene Name"] = df["Gene Name"].str.split(" ").str[-1].str.replace('"', "")
     df = df[["Gene Id", "Gene Name"]].drop_duplicates().set_index("Gene Name")
-    df = df[~df.index.duplicated(keep='first')].iloc[:, 0]
+    df = df[~df.index.duplicated(keep="first")].iloc[:, 0]
     return df
+
 
 def read_id_mapping_uniprot(fname):
     df = pd.read_csv(fname, sep="\t", header=None, low_memory=False)
     df.columns = ["ID", "Database", "Database ID"]
-    df = df[df['Database'] == 'UniProtKB-ID']
+    df = df[df["Database"] == "UniProtKB-ID"]
     df = df[["ID", "Database ID"]].drop_duplicates().set_index("ID")
-    df = df[~df.index.duplicated(keep='first')].iloc[:, 0]
+    df = df[~df.index.duplicated(keep="first")].iloc[:, 0]
     return df
 
+
 def get_parser():
-    parser = argparse.ArgumentParser(prog="bgee_to_kgx.py",
-                                     description='bgee_to_csv: convert an bgee file to CSVs with nodes and edges.')
-    parser.add_argument('-i', '--input', help="Input files")
-    parser.add_argument('-p', '--proteins', help="Input files")
-    parser.add_argument('-g', '--genes', help="Input files")
-    parser.add_argument('-r', '--rna', nargs="+", help="Input files")
-    parser.add_argument('-o', '--output', nargs="+", default="bgee", help="Output prefix. Default: out")
+    parser = argparse.ArgumentParser(
+        prog="bgee_to_kgx.py",
+        description="bgee_to_csv: convert an bgee file to CSVs with nodes and edges.",
+    )
+    parser.add_argument("-i", "--input", help="Input files")
+    parser.add_argument("-p", "--proteins", help="Input files")
+    parser.add_argument("-g", "--genes", help="Input files")
+    parser.add_argument("-r", "--rna", nargs="+", help="Input files")
+    parser.add_argument(
+        "-o", "--output", nargs="+", default="bgee", help="Output prefix. Default: out"
+    )
     return parser
+
 
 def main():
     parser = get_parser()
@@ -80,7 +90,9 @@ def main():
 
     npinterf["RNACentral Transcript"] = npinterf["ncID"].map(rnacentraltf)
     npinterf["RNACentral Gene"] = npinterf["ncID"].map(rnacentralgf)
-    npinterf["subject"] = npinterf[["RNACentral Transcript", "RNACentral Gene"]].bfill(axis=1).iloc[:, 0]
+    npinterf["subject"] = (
+        npinterf[["RNACentral Transcript", "RNACentral Gene"]].bfill(axis=1).iloc[:, 0]
+    )
     npinterf = npinterf.dropna(subset=["subject"])
     npinterf["subject"] = "RNACENTRAL:" + npinterf["subject"]
     npinterf["provided_by"] = "NPInter"
@@ -114,14 +126,22 @@ def main():
     rna["category"] = "biolink:RNA"
     rna["xref"] = rna["ncID"]
     rna["node_property"] = rna["ncType"]
-    rna = rna[["id", "name", "provided_by", "category", "xref", "node_property"]].drop_duplicates()
+    rna = rna[
+        ["id", "name", "provided_by", "category", "xref", "node_property"]
+    ].drop_duplicates()
 
     nodes = pd.concat([proteins, genes, rna]).drop_duplicates()
-    edges = pd.concat([npintergenes[["subject", "object", "knowledge_source", "predicate"]], npinterproteins[["subject", "object", "knowledge_source", "predicate"]]])
+    edges = pd.concat(
+        [
+            npintergenes[["subject", "object", "knowledge_source", "predicate"]],
+            npinterproteins[["subject", "object", "knowledge_source", "predicate"]],
+        ]
+    )
     edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
 
     nodes.to_csv(f"{args.output[0]}", sep="\t", index=False)
     edges.to_csv(f"{args.output[1]}", sep="\t", index=False)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

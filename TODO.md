@@ -34,7 +34,7 @@
 - [x] Fix GOA Duplicates and RNACentral IDs
 - [ ] Verify KGX automatic annotations for edges and nodes
 - [ ] Add Docker file
-- [ ] Add BGEE, NPINter, Mirtarbase, STRING version
+- [x] Add BGEE, NPINter, Mirtarbase, STRING version
 - [ ] Add code to standardize and clean the KG:
           * remove isolated groups of nodes (if any exist)
           * clean relationships (merge, trim, etc)

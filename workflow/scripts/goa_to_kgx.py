@@ -92,7 +92,6 @@ def main():
     # Now edges
     gaf["object"] = gaf["GO ID"]
     gaf["subject"] = gaf.DB + ":" + gaf["DB Object ID"]
-    gaf["id"] = gaf.id.apply(lambda x: uuid.uuid4())
     gaf["category"] = "biolink:FunctionalAssociation"
     gaf["negated"] = gaf.Qualifier.str.startswith("NOT|")
     gaf["predicate"] = "biolink:" + gaf.Qualifier.str.replace("NOT|", "", regex=False)

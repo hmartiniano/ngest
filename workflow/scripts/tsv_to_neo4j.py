@@ -12,8 +12,9 @@ def process_nodes(fname):
         "category": ":LABEL",
         "id": ":ID",
         })
+    df["xref"] = df["xref"].str.replace("|", ";", regex=False)
     print(df.columns)
-    df[":LABEL"] = df[":LABEL"] + "|biolink:NamedThing"
+    df[":LABEL"] = df[":LABEL"] + ";biolink:NamedThing"
     df.to_csv("nodes.csv.gz", index=False)
 
 
@@ -26,8 +27,11 @@ def process_edges(fname):
         "object": ":END_ID",
         })
     print(df.columns)
-    df[":TYPE"] = df[":TYPE"] + "|" + df["category"] 
-    df = df.drop(columns=["category"]
+    print(df.head())
+    #df[":TYPE"] = df[":TYPE"] + ";" + df["category"]
+    #df[":TYPE"] = df[":TYPE"].str.replace(";$", "", regex=True) 
+    print(df.head())
+    #df = df.drop(columns=["category"])
     df.to_csv("edges.csv.gz", index=False)
 
 

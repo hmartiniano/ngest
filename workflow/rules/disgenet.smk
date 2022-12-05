@@ -1,6 +1,6 @@
 DISGENET = "https://www.disgenet.org/static/disgenet_ap1/files/downloads/all_gene_disease_pmid_associations.tsv.gz"
 MAPPING = "https://www.disgenet.org/static/disgenet_ap1/files/downloads/disease_mappings.tsv.gz"
-DISGENETVERSION = "https://www.disgenet.org/static/disgenet_ap1/files/downloads/readme.txt"
+DISGENET_VERSION = "https://www.disgenet.org/static/disgenet_ap1/files/downloads/readme.txt"
 
 rule download_disgenet:
   output: "../data/raw/all_gene_disease_pmid_associations.tsv.gz"
@@ -12,7 +12,7 @@ rule download_disease_mappings:
 
 rule download_disgenet_version:
     output: "../data/raw/disgenet_readme.txt"
-    shell: "curl -L {DISGENETVERSION} -o {output}"
+    shell: "curl -L {DISGENET_VERSION} -o {output}"
 
 rule process_disgenet:
     input: "../data/raw/all_gene_disease_pmid_associations.tsv.gz", "../data/raw/disease_mappings.tsv.gz", "../data/processed/mappings/ensembl_to_entrez.tsv"

@@ -166,8 +166,7 @@ databases:
           - biolink:Phenotype
       edge_filters:
         predicate:
-          - biolink:GeneToDiseaseAssociation
-          - biolink:GeneToPhenotypicFeatureAssociation
+          - biolink:associated_with
   - source: uberon
     name: Uberon
     nodes: "../data/processed/finals/uberon_nodes.tsv"

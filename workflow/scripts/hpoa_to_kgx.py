@@ -38,6 +38,7 @@ def get_parser():
     )
     parser.add_argument("-i", "--input", help="Input hpoa files")
     parser.add_argument("-m", "--mapping", help="Input mondo mapping files")
+    parser.add_argument("-n", "--hpo", help="Input hpo nodes")
     parser.add_argument(
         "-o", "--output", nargs="+", default="goa", help="Output prefix. Default: out"
     )
@@ -55,7 +56,25 @@ def main():
     hpoa["id"] = hpoa["DatabaseId"].map(mondo_mapping)
     hpoa["category"] = "biolink:Disease"
     hpoa["name"] = hpoa["DB Name"]
-    hpoa[["id", "name", "category", "provided_by"]].dropna().drop_duplicates().to_csv(
+    hpf = pd.read_csv(args.hpo, sep="\t")[
+        [
+            "id",
+            "name",
+            "category",
+            "provided_by",
+            "xref"
+        ]
+    ]
+    hpf = hpf[hpf.id.str.startswith("HP")]
+    nodes = pd.concat([
+        hpoa[
+                [
+                    "id",
+                    "name",
+                    "category",
+                    "provided_by"
+                ]
+        ].dropna(subset=["id"]), hpf]).drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False
     )
     # Now edges

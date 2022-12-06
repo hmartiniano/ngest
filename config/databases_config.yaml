@@ -10,7 +10,7 @@ databases:
           - biolink:BiologicalProcess
           - biolink:CellularComponent
           - biolink:MolecularActivity
-#          - biolink:OntologyClass
+          - biolink:OntologyClass
       edge_filters:
         predicate:
             - biolink:has_part
@@ -128,6 +128,7 @@ databases:
           - biolink:RNA
           - biolink:Protein
           - biolink:MacromolecularComplexMixin
+          - ""
       edge_filters:
         predicate:
           - biolink:active_in
@@ -163,7 +164,7 @@ databases:
         category:
           - biolink:Gene
           - biolink:Disease
-          - biolink:Phenotype
+          - biolink:PhenotypicFeature
       edge_filters:
         predicate:
           - biolink:associated_with

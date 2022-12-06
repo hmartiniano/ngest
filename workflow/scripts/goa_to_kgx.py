@@ -69,6 +69,7 @@ def get_parser():
     )
     parser.add_argument("-i", "--input", nargs="+", help="Input GAF files")
     parser.add_argument("-r", "--ro", help="Input RO json file")
+    parser.add_argument("-g", "--go", help="Input GO nodes file")
     parser.add_argument("-c", "--cfg", help="Input config.yaml file")
     parser.add_argument(
         "-o", "--output", nargs="+", default="goa", help="Output prefix. Default: out"
@@ -81,12 +82,14 @@ def main():
     args = parser.parse_args()
     biolinkclasses = yaml_loader(args.cfg)
     predicate_to_relation = get_predicate_map(args.ro)
+    gof = pd.read_csv(args.go, sep="\t")[["id", "category", "name", "provided_by", "xref"]]
     gaf = read_gaf(args.input, biolinkclasses)
     gaf["provided_by"] = "GOA"
     gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"].str.split("_").str[0]
     gaf["category"] = gaf["Biolink Category"]
     gaf["name"] = gaf["DB Object Symbol"]
-    gaf[["id", "name", "category", "provided_by"]].drop_duplicates().to_csv(
+    nodes=pd.concat([gaf[["id", "name", "category", "provided_by"]], gof])
+    nodes.drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False
     )
     # Now edges

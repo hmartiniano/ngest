@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  neo4j:
+    image: neo4j:latest
+    restart: unless-stopped
+    secrets:
+      - neo4j_auth
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./conf:/conf
+      - ./data:/data
+      - ./import:/import
+      - ./logs:/logs
+      - ./plugins:/plugins
+      - ./export:/export
+    env_file: 
+      - env

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import numpy as np
 import pandas as pd
 """
 This script processes tsv files from kgx for import into neo4j using the neo4j-admin tool.
@@ -9,12 +10,13 @@ def process_nodes(fname):
     df = pd.read_csv(fname, sep="\t", low_memory=False)
     print(df.columns)
     df = df.rename(columns={
-        "category": ":LABEL",
-        "id": ":ID",
+        "category": "category:LABEL",
+        "id": "id:ID",
         })
+    df["name"] = np.where(df["name"].isnull(), df["id:ID"], df["name"])
     df["xref"] = df["xref"].str.replace("|", ";", regex=False)
     print(df.columns)
-    df[":LABEL"] = df[":LABEL"] + ";biolink:NamedThing"
+    df["category:LABEL"] = df["category:LABEL"] + ";biolink:NamedThing"
     df.to_csv("nodes.csv.gz", index=False)
 
 
@@ -22,9 +24,9 @@ def process_edges(fname):
     df = pd.read_csv(fname, sep="\t", low_memory=False)
     print(df.columns)
     df = df.rename(columns={
-        "predicate": ":TYPE",
-        "subject": ":START_ID",
-        "object": ":END_ID",
+        "predicate": "predicate:TYPE",
+        "subject": "subject:START_ID",
+        "object": "object:END_ID",
         })
     print(df.columns)
     print(df.head())

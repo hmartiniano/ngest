@@ -93,13 +93,12 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:GeneToDiseaseAssociation
-              - biolink:GeneToPhenotypicFeatureAssociation
+              - biolink:associated_with
           node_filters:
             category:
               - biolink:Gene
               - biolink:Disease
-              - biolink:Phenotype
+              - biolink:PhenotypicFeature
         format: tsv
         name: Disgenet
     ensembl:
@@ -138,6 +137,7 @@ merged_graph:
               - biolink:BiologicalProcess
               - biolink:CellularComponent
               - biolink:MolecularActivity
+              - biolink:OntologyClass
         format: tsv
         name: GO
     gene_ontology_annotation:
@@ -164,6 +164,10 @@ merged_graph:
               - biolink:RNA
               - biolink:Protein
               - biolink:MacromolecularComplexMixin
+              - biolink:BiologicalProcess
+              - biolink:CellularComponent
+              - biolink:MolecularActivity
+              - biolink:OntologyClass
         format: tsv
         name: GOA
     human_phenotype_ontology:
@@ -193,6 +197,7 @@ merged_graph:
           node_filters:
             category:
               - biolink:Disease
+              - biolink:PhenotypicFeature
         format: tsv
         name: HPOA
     mirtarbase:

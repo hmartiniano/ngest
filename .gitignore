@@ -22,3 +22,4 @@ data/*/*yaml
 .pybiomart.sqlite
 
 .ipynb_checkpoints
+neo4j/env

@@ -9,6 +9,7 @@ def read_id_mapping_uniprot(fname):
     df = pd.read_csv(fname, sep="\t", header=None, low_memory=False)
     df.columns = ["ID", "Database", "Database ID"]
     df = df[df["Database"] == "UniProtKB-ID"]
+    df["Database ID"] = df["Database ID"].str.split("_").str[0]
     df = df[["ID", "Database ID"]].drop_duplicates().set_index("ID")
     df = df[~df.index.duplicated(keep="first")].iloc[:, 0]
     return df
@@ -58,6 +59,7 @@ def main():
     ensemblf["protein name"] = ensemblf["xref"].map(uniprotf)
     ensemblf["provided_by"] = "ENSEMBL"
     ensemblf["knowledge_source"] = "ENSEMBL"
+    ensemblf["xref"] = ensemblf["xref"].str.split("-").str[0]
     ensemblf["protein name"] = ensemblf["xref"].map(uniprotf)
 
     gene_to_protein = ensemblf.dropna(subset=["xref"])

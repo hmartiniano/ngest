@@ -8,7 +8,8 @@
 2. clone the repo and create conda env
 ```
 git clone github.com/hmartiniano/ngest.git
-cd ngest conda env create -n ngest -f env.yml
+cd ngest 
+conda env create -n ngest -f env.yml
 conda activate ngest
 ```
 

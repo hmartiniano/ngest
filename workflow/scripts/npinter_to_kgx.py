@@ -108,7 +108,28 @@ def main():
     proteins["id"] = proteins["object"]
     proteins["name"] = proteins["Uniprot Name"]
     proteins["category"] = "biolink:Protein"
-    proteins = proteins[["id", "name", "provided_by", "category"]].drop_duplicates()
+    proteins = proteins[["id", "name", "provided_by", "category"]
+    ].drop_duplicates()
+
+    npinterrna = npinterf[npinterf["level"].isin(["RNA-RNA"])]
+    npinterrna["RNACentral Transcript"] = npinterrna["tarID"].map(rnacentraltf)
+    npinterrna["RNACentral Gene"] = npinterrna["tarID"].map(rnacentralgf)
+    npinterrna["object"] = (
+        npinterrna[["RNACentral Transcript", "RNACentral Gene"]].bfill(axis=1).iloc[:, 0]
+    )
+    npinterrna = npinterrna.dropna(subset=["object"])
+    npinterrna["object"] = "RNACENTRAL:" + npinterrna["object"]
+
+
+    rnaobj = npinterrna[["object", "provided_by", "tarName", "tarType", "tarID"]]
+    rnaobj["id"] = rnaobj["object"]
+    rnaobj["name"] = rnaobj["tarName"]
+    rnaobj["category"] = "biolink:RNA"
+    rnaobj["node_property"] = rnaobj["tarType"]
+    rnaobj["xref"] = rnaobj["tarID"]
+    rnaobj = rnaobj[["id", "name", "provided_by", "category", "xref", "node_property"]
+    ].drop_duplicates()
+
 
     npintergenes = npinterf[npinterf["level"].isin(["RNA-DNA"])]
     npintergenes["Ensembl ID"] = npintergenes["tarName"].map(ensemblf)
@@ -131,10 +152,11 @@ def main():
         ["id", "name", "provided_by", "category", "xref", "node_property"]
     ].drop_duplicates()
 
-    nodes = pd.concat([proteins, genes, rna]).drop_duplicates()
+    nodes = pd.concat([proteins, genes, rna, rnaobj]).drop_duplicates()
     edges = pd.concat(
         [
             npintergenes[["subject", "object", "knowledge_source", "predicate"]],
+            npinterrna[["subject", "object", "knowledge_source", "predicate"]],
             npinterproteins[["subject", "object", "knowledge_source", "predicate"]],
         ]
     )

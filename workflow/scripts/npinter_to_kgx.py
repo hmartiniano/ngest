@@ -4,6 +4,7 @@ import uuid
 
 predicates = {
     "binding": "biolink:binds",
+    "binding;regulatory": "biolink:binds",
     "regulatory": "biolink:regulates",
     "expression correlation": "biolink:correlates",
     "coexpression": "biolink:coexpressed_with",

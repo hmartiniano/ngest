@@ -45,13 +45,17 @@ include: "rules/stringdb.smk"
 
 
 rule all:
-    input: "../data/processed/finals/merged_nodes.tsv", "../data/processed/finals/merged_nodes.tsv", "../data/processed/db_versions.yaml"
+    input: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_nodes.tsv", "../data/processed/db_versions.yaml"
 
 rule gather_data:
     input: databases.get_input_files()
     output: "../data/processed/finals/merged_nodes.tsv", "../data/processed/finals/merged_edges.tsv"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"
 
+rule find_lcc:
+    input: nodes="../data/processed/finals/merged_nodes.tsv", edges="../data/processed/finals/merged_edges.tsv"
+    output: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_edges.tsv"
+    shell: "python scripts/lcc.py -n {input.nodes} -e {input.edges} -o ../data/lcc "
 
 rule get_db_versions:
     input: disgenet = "../data/raw/disgenet_readme.txt"

@@ -55,7 +55,7 @@ rule gather_data:
 rule find_lcc:
     input: nodes="../data/processed/finals/merged_nodes.tsv", edges="../data/processed/finals/merged_edges.tsv"
     output: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_edges.tsv"
-    shell: "python scripts/lcc.py -n {input.nodes} -e {input.edges} -o ../data/lcc "
+    shell: "python scripts/lcc.py -n {input.nodes} -e {input.edges} -o ../data/processed/finals/lcc "
 
 rule get_db_versions:
     input: disgenet = "../data/raw/disgenet_readme.txt"

@@ -1,8 +1,7 @@
 import uuid
 import argparse
 import pandas as pd
-from xlsx2csv import Xlsx2csv
-from io import StringIO
+
 
 
 def get_parser():

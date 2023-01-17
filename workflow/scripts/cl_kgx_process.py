@@ -50,9 +50,13 @@ def main():
         cledges[["Subject Uniprot ID", "subject"]].bfill(axis=1).iloc[:, 0]
     )
 
+    clnodes = clnodes[~clnodes.id.str.startswith("PR")]
     clnodes[["id", "category", "name", "provided_by"]].drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False
     )
+    cledges = cledges[~cledges.subject.str.startswith("PR")]
+    cledges = cledges[~cledges.object.str.startswith("PR")]
+
     cledges[
         ["id", "subject", "predicate", "object", "relation", "knowledge_source"]
     ].to_csv(f"{args.output[1]}", sep="\t", index=False)

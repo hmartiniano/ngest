@@ -1,6 +1,8 @@
 import argparse
 import pandas as pd
+import requests
 
+release = "https://api.github.com/repos/obophenotype/cell-ontology/releases/latest"
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -21,6 +23,17 @@ def main():
     clnodes = pd.read_csv(args.input[0], sep="\t", low_memory=False)
     cledges = pd.read_csv(args.input[1], sep="\t", low_memory=False)
     clmapping = pd.read_csv(args.mapping, sep="\t", header=None, low_memory=False)
+
+    response = requests.get(
+        release
+    )
+    version = response.json()["name"]
+
+    clnodes["source"] = "CL"
+    clnodes["source version"] = version
+
+    cledges["source"] = "CL"
+    cledges["source version"] = version
 
     clmapping.columns = ["ID", "xref", "Relation"]
     clmapping = (
@@ -51,14 +64,14 @@ def main():
     )
 
     clnodes = clnodes[~clnodes.id.str.startswith("PR")]
-    clnodes[["id", "category", "name", "provided_by"]].drop_duplicates().to_csv(
+    clnodes[["id", "category", "name", "provided_by", "source", "source version"]].drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False
     )
     cledges = cledges[~cledges.subject.str.startswith("PR")]
     cledges = cledges[~cledges.object.str.startswith("PR")]
 
     cledges[
-        ["id", "subject", "predicate", "object", "relation", "knowledge_source"]
+        ["id", "subject", "predicate", "object", "relation", "knowledge_source", "source", "source version"]
     ].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 

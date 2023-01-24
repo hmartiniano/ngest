@@ -2,7 +2,10 @@ import uuid
 import argparse
 import pandas as pd
 
-
+def get_version (fname):
+    version = fname.split("/")[-1]
+    version = version.split("_")[0]
+    return version
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -27,6 +30,8 @@ def get_parser():
 def main():
     parser = get_parser()
     args = parser.parse_args()
+
+    version = get_version(args.input)
 
     rnamapping = pd.read_csv(args.rna, sep="\t", header=None, low_memory=False).iloc[
         :, :5
@@ -59,18 +64,21 @@ def main():
     mirtarbase["knowledge_source"] = "Mirtarbase"
     mirtarbase["predicate"] = "biolink:interacts_with"
     mirtarbase["relation"] = "RO:0002434"
+    mirtarbase["source"] = "Mirtarbase"
+    mirtarbase["source version"] = version
+
     edges = mirtarbase[
-        ["object", "subject", "predicate", "knowledge_source", "relation"]
+        ["object", "subject", "predicate", "knowledge_source", "relation", "source", "source version"]
     ].drop_duplicates()
     edges["id"] = mirtarbase["subject"].apply(lambda x: uuid.uuid4())
 
-    rna = mirtarbase[["subject", "miRNA", "provided_by"]]
+    rna = mirtarbase[["subject", "miRNA", "provided_by", "source", "source version"]]
     rna["id"] = rna["subject"]
     rna["xref"] = rna["miRNA"]
     rna["category"] = "biolink:RNA"
 
     dna = mirtarbase[
-        ["object", "Target Gene", "provided_by", "Target Gene (Entrez ID)"]
+        ["object", "Target Gene", "provided_by", "Target Gene (Entrez ID)", "source", "source version"]
     ]
     dna["xref"] = dna["Target Gene (Entrez ID)"]
     dna["name"] = dna["Target Gene"]
@@ -79,7 +87,7 @@ def main():
 
     nodes = pd.concat([dna, rna]).drop_duplicates()
 
-    nodes[["id", "name", "category", "provided_by", "xref"]].to_csv(
+    nodes[["id", "name", "category", "provided_by", "xref", "source", "source version"]].to_csv(
         f"{args.output [0]}", sep="\t", index=False
     )
     edges.to_csv(f"{args.output[1]}", sep="\t", index=False)

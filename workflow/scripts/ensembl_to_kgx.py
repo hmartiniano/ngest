@@ -61,6 +61,9 @@ def main():
     ensemblf["knowledge_source"] = "ENSEMBL"
     ensemblf["xref"] = ensemblf["xref"].str.split("-").str[0]
     ensemblf["protein name"] = ensemblf["xref"].map(uniprotf)
+    ensemblf["source"] = "ENSEMBL"
+    version = args.input.split(".")
+    ensemblf["source version"] = version[3] + " " + version[4]
 
     gene_to_protein = ensemblf.dropna(subset=["xref"])
     gene_to_protein["subject"] = "ENSEMBL:" + gene_to_protein["gene_stable_id"]
@@ -68,7 +71,7 @@ def main():
     gene_to_protein["predicate"] = "biolink:has_gene_product"
     gene_to_protein["relation"] = "RO:0002205"
     gene_to_protein = gene_to_protein[
-        ["subject", "predicate", "object", "relation", "knowledge_source"]
+        ["subject", "predicate", "object", "relation", "knowledge_source", "source", "source version"]
     ].drop_duplicates()
     gene_to_protein["id"] = gene_to_protein["subject"].apply(lambda x: uuid.uuid4())
 
@@ -78,7 +81,7 @@ def main():
     protein["category"] = "biolink:Protein"
     protein["name"] = protein["protein name"]
     protein["xref"] = "ENSEMBL:" + ensemblf["protein_stable_id"]
-    protein = protein[["id", "category", "name", "xref", "provided_by"]]
+    protein = protein[["id", "category", "name", "xref", "provided_by", "source", "source version"]]
 
     edges = gene_to_protein
 
@@ -86,15 +89,15 @@ def main():
     genes["id"] = "ENSEMBL:" + ensemblf["gene_stable_id"]
     genes["category"] = "biolink:Gene"
     genes["name"] = genes["id"].map(genesf)
-    genes = genes[["id", "category", "name", "provided_by"]]
+    genes = genes[["id", "category", "name", "provided_by", "source", "source version"]]
 
     nodes = pd.concat([genes, protein]).drop_duplicates()
 
-    nodes[["id", "name", "category", "provided_by", "xref"]].to_csv(
+    nodes[["id", "name", "category", "provided_by", "xref", "source", "source version"]].to_csv(
         f"{args.output [0]}", sep="\t", index=False
     )
     edges[
-        ["object", "subject", "id", "predicate", "knowledge_source", "relation"]
+        ["object", "subject", "id", "predicate", "knowledge_source", "relation", "source", "source version"]
     ].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 

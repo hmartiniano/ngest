@@ -33,12 +33,24 @@ def get_parser():
 
 
 def main():
-    parser = get_parser()
-    args = parser.parse_args()
+    # parser = get_parser()
+    # args = parser.parse_args()
+    input = "/home/ana/PycharmProjects/ngest/data/raw/9606.protein.links.v11.5.txt.gz"
+    proteins = "/home/ana/PycharmProjects/ngest/data/raw/uniprot.tsv.gz"
 
-    stringdbf = pd.read_csv(args.input, sep=" ", low_memory=False)
-    idmapping = read_id_mapping_uniprot(args.proteins, "Database ID", "STRING")
-    namemapping = read_id_mapping_uniprot(args.proteins, "ID", "UniProtKB-ID")
+    #version = args.input.split("/")[-1]
+    version = input.split("/")[-1]
+    version = version.split(".")[3]
+
+    #stringdbf = pd.read_csv(args.input, sep=" ", low_memory=False)
+    stringdbf = pd.read_csv(input, sep=" ", low_memory=False)
+
+    #idmapping = read_id_mapping_uniprot(args.proteins, "Database ID", "STRING")
+    #namemapping = read_id_mapping_uniprot(args.proteins, "ID", "UniProtKB-ID")
+
+    idmapping = read_id_mapping_uniprot(proteins, "Database ID", "STRING")
+    namemapping = read_id_mapping_uniprot(proteins, "ID", "UniProtKB-ID")
+
     stringdbf["protein1 id"] = stringdbf["protein1"].map(idmapping)
     stringdbf["protein2 id"] = stringdbf["protein2"].map(idmapping)
 
@@ -51,26 +63,28 @@ def main():
     stringdbf["relation"] = "RO:0002436"
     stringdbf["category"] = "biolink:Protein"
     stringdbf["has_confidence_level"] = stringdbf["combined_score"]
+    stringdbf["source"] = "STRING"
+    stringdbf["source version"] = version
 
     protein1 = stringdbf[
-        ["protein1", "protein1 id", "subject", "provided_by", "category"]
+        ["protein1", "protein1 id", "subject", "provided_by", "category", "source", "source version"]
     ]
     protein1["id"] = protein1["subject"]
     protein1["name"] = protein1["protein1 id"].map(namemapping)
     protein1["xref"] = "ENSEMBL:" + protein1["protein1"].str.split(".").str[-1]
-    protein1 = protein1[["id", "name", "provided_by", "category", "xref"]]
+    protein1 = protein1[["id", "name", "provided_by", "category", "xref", "source", "source version"]]
     protein2 = stringdbf[
-        ["protein2", "protein2 id", "object", "provided_by", "category"]
+        ["protein2", "protein2 id", "object", "provided_by", "category", "source", "source version"]
     ]
     protein2["id"] = protein2["object"]
     protein2["name"] = protein2["protein2 id"].map(namemapping)
     protein2["xref"] = "ENSEMBL:" + protein2["protein2"].str.split(".").str[-1]
-    protein2 = protein2[["id", "name", "provided_by", "category", "xref"]]
+    protein2 = protein2[["id", "name", "provided_by", "category", "xref", "source", "source version"]]
 
     nodes = pd.concat([protein1, protein2]).drop_duplicates()
 
     edges = stringdbf[
-        ["subject", "object", "knowledge_source", "predicate", "has_confidence_level"]
+        ["subject", "object", "knowledge_source", "predicate", "has_confidence_level", "source", "source version"]
     ].drop_duplicates()
     edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
 

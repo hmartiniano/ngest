@@ -45,7 +45,7 @@ include: "rules/stringdb.smk"
 
 
 rule all:
-    input: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_nodes.tsv", "../data/processed/db_versions.yaml"
+    input: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_nodes.tsv"
 
 rule gather_data:
     input: databases.get_input_files()
@@ -56,18 +56,3 @@ rule find_lcc:
     input: nodes="../data/processed/finals/merged_nodes.tsv", edges="../data/processed/finals/merged_edges.tsv"
     output: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_edges.tsv"
     shell: "python scripts/lcc.py -n {input.nodes} -e {input.edges} -o ../data/processed/finals/lcc "
-
-rule get_db_versions:
-    input: disgenet = "../data/raw/disgenet_readme.txt"
-            ,go = "../data/raw/go_release-date.json"
-            ,goa ="../data/raw/goa_release-date.json"
-            ,rnacentral ="../data/raw/rnacentral_release_notes.txt"
-            ,uniprot ="../data/raw/uniprot_release.metalink"
-            ,hpoa = "../data/raw/hpoa.hpoa"
-            ,ensembl = "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
-            ,mirtarbase = "../data/raw/9.0_hsa_MTI.xlsx"
-            ,npinter = "../data/raw/interaction_NPInterv5.txt.gz"
-            ,string = "../data/raw/9606.protein.links.v11.5.txt.gz"
-            ,bgee= "../data/raw/bgee_v15_0_Homo_sapiens_expr_simple.tsv.gz"
-    output: "../data/processed/db_versions.yaml"
-    shell: "python scripts/get_db_versions.py -u {input.uniprot} -m {input.mirtarbase} -n {input.npinter} -b {input.bgee} -s {input.string} -d {input.disgenet} -g {input.go} -a {input.goa} -e {input.ensembl} -r {input.rnacentral} -hp {input.hpoa} -o {output}"

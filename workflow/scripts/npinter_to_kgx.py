@@ -27,7 +27,6 @@ def add_predicates(df):
     df["predicate"] = df["class"].map(predicatef)
     return df
 
-
 def read_rna(fnames, type):
     rnamapping = pd.DataFrame()
     for f in fnames:
@@ -90,6 +89,9 @@ def main():
     rnacentraltf = read_rna(args.rna, "Transcript ID")
     rnacentralgf = read_rna(args.rna, "Gene ID")
 
+    version = args.input.split("/")[-1]
+    version = version.split(".")[0].split("_")[1]
+
     npinterf["RNACentral Transcript"] = npinterf["ncID"].map(rnacentraltf)
     npinterf["RNACentral Gene"] = npinterf["ncID"].map(rnacentralgf)
     npinterf["subject"] = (
@@ -99,17 +101,19 @@ def main():
     npinterf["subject"] = "RNACENTRAL:" + npinterf["subject"]
     npinterf["provided_by"] = "NPInter"
     npinterf["knowledge_source"] = "NPInter"
+    npinterf["source"] = "NPInter"
+    npinterf["source version"] = version
 
     npinterproteins = npinterf[npinterf["level"].isin(["RNA-Protein"])]
     npinterproteins["Uniprot Name"] = npinterproteins["tarID"].map(uniprotf)
     npinterproteins = npinterproteins.dropna(subset=["Uniprot Name"])
     npinterproteins["object"] = "UNIPROTKB:" + npinterproteins["tarID"]
 
-    proteins = npinterproteins[["object", "provided_by", "Uniprot Name"]]
+    proteins = npinterproteins[["object", "provided_by", "Uniprot Name", "source", "source version"]]
     proteins["id"] = proteins["object"]
     proteins["name"] = proteins["Uniprot Name"]
     proteins["category"] = "biolink:Protein"
-    proteins = proteins[["id", "name", "provided_by", "category"]
+    proteins = proteins[["id", "name", "provided_by", "category", "source", "source version"]
     ].drop_duplicates()
 
     npinterrna = npinterf[npinterf["level"].isin(["RNA-RNA"])]
@@ -122,13 +126,13 @@ def main():
     npinterrna["object"] = "RNACENTRAL:" + npinterrna["object"]
 
 
-    rnaobj = npinterrna[["object", "provided_by", "tarName", "tarType", "tarID"]]
+    rnaobj = npinterrna[["object", "provided_by", "tarName", "tarType", "tarID","source", "source version"]]
     rnaobj["id"] = rnaobj["object"]
     rnaobj["name"] = rnaobj["tarName"]
     rnaobj["category"] = "biolink:RNA"
     rnaobj["node_property"] = rnaobj["tarType"]
     rnaobj["xref"] = rnaobj["tarID"]
-    rnaobj = rnaobj[["id", "name", "provided_by", "category", "xref", "node_property"]
+    rnaobj = rnaobj[["id", "name", "provided_by", "category", "xref", "node_property", "source", "source version"]
     ].drop_duplicates()
 
 
@@ -137,28 +141,28 @@ def main():
     npintergenes = npintergenes.dropna(subset=["Ensembl ID"])
     npintergenes["object"] = npintergenes["Ensembl ID"]
 
-    genes = npintergenes[["object", "provided_by", "tarName"]]
+    genes = npintergenes[["object", "provided_by", "tarName", "source", "source version"]]
     genes["id"] = genes["object"]
     genes["name"] = genes["tarName"]
     genes["category"] = "biolink:Gene"
-    genes = genes[["id", "name", "provided_by", "category"]].drop_duplicates()
+    genes = genes[["id", "name", "provided_by", "category","source", "source version"]].drop_duplicates()
 
-    rna = npinterf[["subject", "ncID", "provided_by", "ncType", "ncName"]]
+    rna = npinterf[["subject", "ncID", "provided_by", "ncType", "ncName","source", "source version"]]
     rna["id"] = rna["subject"]
     rna["name"] = rna["ncName"]
     rna["category"] = "biolink:RNA"
     rna["xref"] = rna["ncID"]
     rna["node_property"] = rna["ncType"]
     rna = rna[
-        ["id", "name", "provided_by", "category", "xref", "node_property"]
+        ["id", "name", "provided_by", "category", "xref", "node_property", "source", "source version"]
     ].drop_duplicates()
 
     nodes = pd.concat([proteins, genes, rna, rnaobj]).drop_duplicates()
     edges = pd.concat(
         [
-            npintergenes[["subject", "object", "knowledge_source", "predicate"]],
-            npinterrna[["subject", "object", "knowledge_source", "predicate"]],
-            npinterproteins[["subject", "object", "knowledge_source", "predicate"]],
+            npintergenes[["subject", "object", "knowledge_source", "predicate","source", "source version"]],
+            npinterrna[["subject", "object", "knowledge_source", "predicate","source", "source version"]],
+            npinterproteins[["subject", "object", "knowledge_source", "predicate","source", "source version"]],
         ]
     )
     edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())

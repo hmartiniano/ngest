@@ -33,23 +33,16 @@ def get_parser():
 
 
 def main():
-    # parser = get_parser()
-    # args = parser.parse_args()
-    input = "/home/ana/PycharmProjects/ngest/data/raw/9606.protein.links.v11.5.txt.gz"
-    proteins = "/home/ana/PycharmProjects/ngest/data/raw/uniprot.tsv.gz"
+    parser = get_parser()
+    args = parser.parse_args()
 
-    #version = args.input.split("/")[-1]
-    version = input.split("/")[-1]
+    version = args.input.split("/")[-1]
     version = version.split(".")[3]
 
-    #stringdbf = pd.read_csv(args.input, sep=" ", low_memory=False)
-    stringdbf = pd.read_csv(input, sep=" ", low_memory=False)
+    stringdbf = pd.read_csv(args.input, sep=" ", low_memory=False)
 
-    #idmapping = read_id_mapping_uniprot(args.proteins, "Database ID", "STRING")
-    #namemapping = read_id_mapping_uniprot(args.proteins, "ID", "UniProtKB-ID")
-
-    idmapping = read_id_mapping_uniprot(proteins, "Database ID", "STRING")
-    namemapping = read_id_mapping_uniprot(proteins, "ID", "UniProtKB-ID")
+    idmapping = read_id_mapping_uniprot(args.proteins, "Database ID", "STRING")
+    namemapping = read_id_mapping_uniprot(args.proteins, "ID", "UniProtKB-ID")
 
     stringdbf["protein1 id"] = stringdbf["protein1"].map(idmapping)
     stringdbf["protein2 id"] = stringdbf["protein2"].map(idmapping)

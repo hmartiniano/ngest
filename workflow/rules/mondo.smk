@@ -11,5 +11,10 @@ rule mondo_mapping:
 
 rule process_mondo:
   input: "../data/raw/mondo.json"
-  output: "../data/processed/finals/mondo_nodes.tsv", "../data/processed/finals/mondo_edges.tsv"
-  shell: "kgx transform -i obojson -o ../data/processed/finals/mondo -f tsv {input} "
+  output: "../data/processed/intermediary/mondo_nodes.tsv", "../data/processed/intermediary/mondo_edges.tsv"
+  shell: "kgx transform -i obojson -o ../data/processed/intermediary/mondo -f tsv {input} "
+
+rule add_mondo_version:
+  input: "../data/processed/intermediary/mondo_nodes.tsv","../data/processed/intermediary/mondo_edges.tsv"
+  output: "../data/processed/finals/mondo_nodes.tsv","../data/processed/finals/mondo_edges.tsv"
+  shell: "python scripts/mondo_kgx_process.py -i {input} -o {output}"

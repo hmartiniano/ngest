@@ -17,6 +17,12 @@ HPOA_COLUMNS = [
     "Biocuration",
 ]
 
+def get_version (fname):
+    with open(fname) as f:
+        for line in f:
+            if "#date:" in line:
+                version = line.split(":")[1].split("\n")[0].replace(" ", "")
+    return version
 
 def read_hpoa(fname):
     hpoa = pd.read_csv(fname, sep="\t", header=None, low_memory=False, comment="#")
@@ -51,18 +57,24 @@ def main():
     hpoa = read_hpoa(args.input)
     mondo_mapping = read_mondo(args.mapping)
 
+    version = get_version(args.input)
+
     hpoa["provided_by"] = "HPOA"
     hpoa["knowledge_source"] = "HPOA"
     hpoa["id"] = hpoa["DatabaseId"].map(mondo_mapping)
     hpoa["category"] = "biolink:Disease"
     hpoa["name"] = hpoa["DB Name"]
+    hpoa["source"] = "HPOA"
+    hpoa["source version"] = version
     hpf = pd.read_csv(args.hpo, sep="\t")[
         [
             "id",
             "name",
             "category",
             "provided_by",
-            "xref"
+            "xref",
+            "source",
+            "source version"
         ]
     ]
     hpf = hpf[hpf.id.str.startswith("HP")]
@@ -72,7 +84,9 @@ def main():
                     "id",
                     "name",
                     "category",
-                    "provided_by"
+                    "provided_by",
+                    "source",
+                    "source version"
                 ]
         ].dropna(subset=["id"]), hpf]).drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False
@@ -96,6 +110,8 @@ def main():
                 "category",
                 "relation",
                 "knowledge_source",
+                "source",
+                "source version"
             ]
         ]
         .dropna()

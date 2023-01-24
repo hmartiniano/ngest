@@ -25,6 +25,6 @@ rule download_goa_version:
   shell: "curl -L {GOAVERSION} -o {output}"
 
 rule process_goa:
-  input: ro="../data/raw/ro.json", cfg= "../config/config.yaml", go="../data/processed/finals/go_nodes.tsv", protein="../data/raw/goa_human.gaf.gz", rna="../data/raw/goa_human_rna.gaf.gz", complex="../data/raw/goa_human_complex.gaf.gz"  , isoform = "../data/raw/goa_human_isoform.gaf.gz"
+  input: ro="../data/raw/ro.json", cfg= "../config/config.yaml", go="../data/processed/finals/go_nodes.tsv", protein="../data/raw/goa_human.gaf.gz", rna="../data/raw/goa_human_rna.gaf.gz", complex="../data/raw/goa_human_complex.gaf.gz"  , isoform = "../data/raw/goa_human_isoform.gaf.gz", version = "../data/raw/goa_release-date.json"
   output: "../data/processed/finals/goa_nodes.tsv","../data/processed/finals/goa_edges.tsv"
-  shell: "python scripts/goa_to_kgx.py -i {input.rna} {input.protein} {input.complex} {input.isoform} -r {input.ro} -g {input.go}  -c {input.cfg} -o {output}"
+  shell: "python scripts/goa_to_kgx.py -i {input.rna} {input.protein} {input.complex} {input.isoform} -r {input.ro} -g {input.go}  -c {input.cfg} -v {input.version} -o {output}"

@@ -53,9 +53,9 @@ rule filter_rnacentral:
 
 
 rule process_rnacentral:
-  input: rnacentral ="../data/processed/intermediary/rnacentral_human.tsv", mapping = "../data/processed/mappings/rnacentral_ensembl_human_mapping.tsv", genes = "../data/processed/intermediary/ensembl_genes.csv"
+  input: rnacentral ="../data/processed/intermediary/rnacentral_human.tsv", mapping = "../data/processed/mappings/rnacentral_ensembl_human_mapping.tsv", genes = "../data/processed/intermediary/ensembl_genes.csv", version = "../data/raw/rnacentral_release_notes.txt"
   output: "../data/processed/finals/rnacentral_nodes.tsv" , "../data/processed/finals/rnacentral_edges.tsv"
-  shell: "python scripts/rnacentral_to_kgx.py -i {input.rnacentral} -m {input.mapping} -g {input.genes} -o {output}"
+  shell: "python scripts/rnacentral_to_kgx.py -i {input.rnacentral} -m {input.mapping} -g {input.genes} -v {input.version} -o {output}"
 
 
 

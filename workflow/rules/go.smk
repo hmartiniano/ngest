@@ -11,5 +11,10 @@ rule download_go_version:
 
 rule process_go:
   input: "../data/raw/go.json"
-  output: "../data/processed/finals/go_nodes.tsv", "../data/processed/finals/go_edges.tsv"
-  shell: "kgx transform -i obojson -o ../data/processed/finals/go -f tsv {input} "
+  output: "../data/processed/intermediary/go_nodes.tsv", "../data/processed/intermediary/go_edges.tsv"
+  shell: "kgx transform -i obojson -o ../data/processed/intermediary/go -f tsv {input} "
+
+rule add_go_version:
+  input: "../data/processed/intermediary/go_nodes.tsv","../data/processed/intermediary/go_edges.tsv", version = "../data/raw/go_release-date.json"
+  output: "../data/processed/finals/go_nodes.tsv","../data/processed/finals/go_edges.tsv"
+  shell: "python scripts/go_kgx_process.py -i {input} -v {input.version} -o {output}"

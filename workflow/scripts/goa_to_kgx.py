@@ -71,6 +71,7 @@ def get_parser():
     parser.add_argument("-r", "--ro", help="Input RO json file")
     parser.add_argument("-g", "--go", help="Input GO nodes file")
     parser.add_argument("-c", "--cfg", help="Input config.yaml file")
+    parser.add_argument("-v", "--version", help="Input version file")
     parser.add_argument(
         "-o", "--output", nargs="+", default="goa", help="Output prefix. Default: out"
     )
@@ -88,6 +89,9 @@ def main():
     gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"].str.split("_").str[0]
     gaf["category"] = gaf["Biolink Category"]
     gaf["name"] = gaf["DB Object Symbol"]
+
+
+
     nodes=pd.concat([gaf[["id", "name", "category", "provided_by"]], gof])
     nodes.drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False

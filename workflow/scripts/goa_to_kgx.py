@@ -81,18 +81,24 @@ def get_parser():
 def main():
     parser = get_parser()
     args = parser.parse_args()
+
+    with open(args.version, "r") as f:
+        version = json.load(f)["date"]
+
     biolinkclasses = yaml_loader(args.cfg)
     predicate_to_relation = get_predicate_map(args.ro)
-    gof = pd.read_csv(args.go, sep="\t")[["id", "category", "name", "provided_by", "xref"]]
+    gof = pd.read_csv(args.go, sep="\t")[["id", "category", "name", "provided_by", "xref", "source", "source version"]]
     gaf = read_gaf(args.input, biolinkclasses)
     gaf["provided_by"] = "GOA"
     gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"].str.split("_").str[0]
     gaf["category"] = gaf["Biolink Category"]
     gaf["name"] = gaf["DB Object Symbol"]
+    gaf["source"] = "GOA"
+    gaf["source version"] = version
 
 
 
-    nodes=pd.concat([gaf[["id", "name", "category", "provided_by"]], gof])
+    nodes=pd.concat([gaf[["id", "name", "category", "provided_by", "source", "source version"]], gof])
     nodes.drop_duplicates().to_csv(
         f"{args.output[0]}", sep="\t", index=False
     )
@@ -113,6 +119,8 @@ def main():
             "negated",
             "relation",
             "knowledge_source",
+            "source",
+            "source version"
         ]
     ].drop_duplicates()
     gaf["id"] = gaf.subject.apply(lambda x: uuid.uuid4())

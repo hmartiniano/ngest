@@ -7,7 +7,7 @@ rule download_ensembl:
   shell: "curl -L {ENSEMBLPROTEINS} -o {output}"
 
 rule download_ensembl_genes:
-  output: "../data/raw/Homo_sapiens.GRCh38.109.gtf.gz"
+  output: "../data/raw/Homo_sapiens.GRCh38.108.gtf.gz"
   shell: "curl -L {ENSEMBLGENES}  -o {output}"
 
 rule download_ensembl_entrez_mapping:

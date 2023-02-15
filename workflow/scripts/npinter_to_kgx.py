@@ -65,15 +65,15 @@ def read_id_mapping_uniprot(fname):
 
 def get_parser():
     parser = argparse.ArgumentParser(
-        prog="bgee_to_kgx.py",
-        description="bgee_to_csv: convert an bgee file to CSVs with nodes and edges.",
+        prog="npinter_to_kgx.py",
+        description="npinter_to_kgx: convert an npinter file to CSVs with nodes and edges.",
     )
     parser.add_argument("-i", "--input", help="Input files")
     parser.add_argument("-p", "--proteins", help="Input files")
     parser.add_argument("-g", "--genes", help="Input files")
     parser.add_argument("-r", "--rna", nargs="+", help="Input files")
     parser.add_argument(
-        "-o", "--output", nargs="+", default="bgee", help="Output prefix. Default: out"
+        "-o", "--output", nargs="+", default="npinter", help="Output prefix. Default: out"
     )
     return parser
 

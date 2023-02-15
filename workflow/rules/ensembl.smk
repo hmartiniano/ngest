@@ -1,13 +1,13 @@
-ENSEMBLPROTEINS = "https://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
-ENSEMBLGENES = "https://ftp.ensembl.org/pub/current_gtf/homo_sapiens/Homo_sapiens.GRCh38.108.gtf.gz"
-ENSEMBLENTREZ = "https://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.108.entrez.tsv.gz"
+ENSEMBLPROTEINS = "https://ftp.ensembl.org/pub/release-108/tsv/homo_sapiens/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
+ENSEMBLGENES = "https://ftp.ensembl.org/pub/release-108/gtf/homo_sapiens/Homo_sapiens.GRCh38.108.gtf.gz"
+ENSEMBLENTREZ = "https://ftp.ensembl.org/pub/release-108/tsv/homo_sapiens/Homo_sapiens.GRCh38.108.entrez.tsv.gz"
 
 rule download_ensembl:
   output: "../data/raw/Homo_sapiens.GRCh38.108.uniprot.tsv.gz"
   shell: "curl -L {ENSEMBLPROTEINS} -o {output}"
 
 rule download_ensembl_genes:
-  output: "../data/raw/Homo_sapiens.GRCh38.108.gtf.gz"
+  output: "../data/raw/Homo_sapiens.GRCh38.109.gtf.gz"
   shell: "curl -L {ENSEMBLGENES}  -o {output}"
 
 rule download_ensembl_entrez_mapping:

@@ -1,5 +1,5 @@
 #CL = "https://github.com/obophenotype/cell-ontology/raw/master/cl.json"
-CL = "https://github.com/obophenotype/cell-ontology/releases/download/v2023-02-15/cl-base.json"
+CL = "https://github.com/obophenotype/cell-ontology/releases/download/v2023-02-15/cl.json"
 PRMAPPING = "https://proconsortium.org/download/current/promapping.txt"
 
 rule download_cl:

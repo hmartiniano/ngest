@@ -181,7 +181,6 @@ merged_graph:
               - biolink:subclass_of
           node_filters:
             category:
-              - biolink:MolecularActivity
               - biolink:PhenotypicFeature
         format: tsv
         name: HP

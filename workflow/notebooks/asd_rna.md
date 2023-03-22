@@ -144,15 +144,17 @@ rnac
 ```
 
 ```python
-[i for i in xrefs_["results"] if i["taxid"] == 9606]
+#[i for i in xrefs_["results"] if i["taxid"] == 9606]
+xrefs_results = [i["results"] for i in rnac["xrefs_"]]
+xrefs = [j for i in xrefs_results for j in i if j["taxid"] == 9606]
 ```
 
 ```python
-xrefs_
+xrefs
 ```
 
 ```python
-xref = xrefs_["results"][1]
+xref = xrefs[1]
 ```
 
 ```python

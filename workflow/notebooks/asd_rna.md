@@ -150,15 +150,31 @@ xrefs = [j for i in xrefs_results for j in i if j["taxid"] == 9606]
 ```
 
 ```python
-xrefs
+def scores_to_series(l):
+    series=pd.DataFrame(l).iloc[:, -2:]
+    series.columns = ['id', 'score']
+    series["id"] = series["id"].str.split(":").str[1]
+    series = series.drop_duplicates().set_index("id")
+    series = series[~series.index.duplicated(keep="first")].iloc[:, 0]
+    return(series)    
 ```
 
 ```python
-xref = xrefs[1]
+aa_series = scores_to_series(aa)
+jc_series = scores_to_series(jc)
+pa_series = scores_to_series(pa)
 ```
 
 ```python
-xref
+final_table = pd.DataFrame()
+final_table["RNACentral id"] = rnac[["rnacentral_id"]]
+final_table["AA Score"] = final_table["RNACentral id"].map(aa_series)
+final_table["JC Score"] = final_table["RNACentral id"].map(jc_series)
+final_table["PA Score"] = final_table["RNACentral id"].map(pa_series)
+```
+
+```python
+final_table
 ```
 
 ```python

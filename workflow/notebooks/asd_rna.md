@@ -39,6 +39,13 @@ def extract_ids(xrefs):
     ids = process_ids(ids)
     return ids
 
+def extract_description(xrefs):
+    desc = []
+    for xref in xrefs["results"]:
+        if xref["taxid"] == 9606:
+            desc.append(xref["accession"]["description"])
+    return desc
+
 def process_ids(ids):
     result = {}
     for id_ in ids:
@@ -118,7 +125,7 @@ ranked[:100]
 ```
 
 ```python
-rnac = [rnacentral_api(r.split(":")[-1]) for r in ranked[:50]]
+rnac = [rnacentral_api(r.split(":")[-1]) for r in ranked[:20]]
 ```
 
 ```python
@@ -134,6 +141,11 @@ rnac["ids"] = rnac["xrefs_"].apply(extract_ids)
 ```
 
 ```python
+rnac["descriptions"]=rnac["xrefs_"].apply(extract_description)
+rnac["description"]=rnac["descriptions"].str[0]
+```
+
+```python
 rnac
 ```
 
@@ -141,6 +153,10 @@ rnac
 (rnac[["rnacentral_id", "ids"]]
  .set_index("rnacentral_id")["ids"]
  .apply(pd.Series))
+```
+
+```python
+rnac[["rnacentral_id", "description"]]
 ```
 
 ```python
@@ -167,16 +183,13 @@ pa_series = scores_to_series(pa)
 
 ```python
 final_table = pd.DataFrame()
-final_table["RNACentral id"] = rnac[["rnacentral_id"]]
-final_table["AA Score"] = final_table["RNACentral id"].map(aa_series)
-final_table["JC Score"] = final_table["RNACentral id"].map(jc_series)
-final_table["PA Score"] = final_table["RNACentral id"].map(pa_series)
+final_table["RNACentral ID"] = rnac[["rnacentral_id"]]
+final_table["Description"] = rnac[["description"]]
+final_table["AA Score"] = final_table["RNACentral ID"].map(aa_series)
+final_table["JC Score"] = final_table["RNACentral ID"].map(jc_series)
+final_table["PA Score"] = final_table["RNACentral ID"].map(pa_series)
 ```
 
 ```python
 final_table
-```
-
-```python
-
 ```

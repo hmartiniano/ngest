@@ -1,8 +1,8 @@
-HPO = "https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.json"
+HPO = "http://purl.obolibrary.org/obo/hp.json"
 
 rule download_hpo:
   output: "../data/raw/hpo.json"
-  shell: "curl {HPO} -o {output}"
+  shell: "curl -L {HPO} -o {output}"
 
 rule process_hpo:
   input: "../data/raw/hpo.json"

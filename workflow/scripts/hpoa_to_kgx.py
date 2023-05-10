@@ -20,7 +20,7 @@ HPOA_COLUMNS = [
 def get_version (fname):
     with open(fname) as f:
         for line in f:
-            if "#date:" in line:
+            if "#version:" in line:
                 version = line.split(":")[1].split("\n")[0].replace(" ", "")
     return version
 

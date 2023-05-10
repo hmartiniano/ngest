@@ -8,7 +8,7 @@ rule download_uberon:
 rule process_uberon:
   input: "../data/raw/uberon.json"
   output: "../data/processed/intermediary/uberon_nodes.tsv", "../data/processed/intermediary/uberon_edges.tsv"
-  shell: "kgx transform -i obojson -o ../data/processed/intermediary/uberon -f tsv {input} "
+  shell: "kgx transform -i obojson -o ../data/processed/intermediary/uberon -f tsv {input}"
 
 rule add_uberon_version:
   input: "../data/processed/intermediary/uberon_nodes.tsv","../data/processed/intermediary/uberon_edges.tsv"

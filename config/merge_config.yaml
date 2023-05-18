@@ -42,39 +42,10 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:related_to
-              - biolink:has_part
-              - biolink:has_output
-              - biolink:regulates
-              - biolink:develops_from
-              - biolink:negatively_regulates
-              - biolink:positively_regulates
-              - biolink:overlaps
-              - biolink:has_input
-              - biolink:coexists_with
-              - biolink:capable_of
-              - biolink:causes
-              - biolink:subPropertyOf
-              - biolink:located_in
-              - biolink:has_attribute
-              - biolink:occurs_in
-              - biolink:affects
-              - biolink:participates_in
-              - biolink:has_participant
-              - biolink:temporally_related_to
+              - biolink:subclass_of
               - biolink:inverseOf
-              - biolink:expresses
-              - biolink:produces
-              - biolink:caused_by
-              - biolink:produced_by
-              - biolink:interacts_with
-              - biolink:preceded_by
-              - biolink:location_of
-              - biolink:increases_degradation_of
-              - biolink:precedes
-              - biolink:homologous_to
-              - biolink:affects_localization_of
-              - biolink:derives_from
+              - biolink:subPropertyOf
+              - biolink:related_to
           node_filters:
             category:
               - biolink:BiologicalProcess
@@ -124,14 +95,10 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:has_part
-              - biolink:negatively_regulates
-              - biolink:occurs_in
-              - biolink:part_of
-              - biolink:positively_regulates
-              - biolink:regulates
-              - biolink:related_to
               - biolink:subclass_of
+              - biolink:related_to
+              - biolink:inverseOf
+              - biolink:subPropertyOf
           node_filters:
             category:
               - biolink:BiologicalProcess
@@ -155,10 +122,12 @@ merged_graph:
               - biolink:acts_upstream_of_or_within_negative_effect
               - biolink:acts_upstream_of_or_within_positive_effect
               - biolink:acts_upstream_of_positive_effect
+              - biolink:colocalizes_with
               - biolink:contributes_to
               - biolink:enables
               - biolink:involved_in
               - biolink:located_in
+              - biolink:part_of
           node_filters:
             category:
               - biolink:RNA
@@ -222,50 +191,10 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:actively_involved_in
-              - biolink:acts_upstream_of
-              - biolink:acts_upstream_of_negative_effect
-              - biolink:acts_upstream_of_or_within
-              - biolink:acts_upstream_of_or_within_negative_effect
-              - biolink:acts_upstream_of_or_within_positive_effect
-              - biolink:acts_upstream_of_positive_effect
-              - biolink:affects
-              - biolink:affects_localization_of
-              - biolink:associated_with
-              - biolink:capable_of
-              - biolink:caused_by
-              - biolink:causes
-              - biolink:coexists_with
-              - biolink:colocalizes_with
-              - biolink:contributes_to
-              - biolink:derives_from
-              - biolink:develops_from
-              - biolink:disrupts
-              - biolink:enables
-              - biolink:expresses
-              - biolink:has_attribute
-              - biolink:has_gene_product
-              - biolink:has_input
-              - biolink:has_output
-              - biolink:has_part
-              - biolink:has_participant
-              - biolink:has_phenotype
-              - biolink:homologous_to
-              - biolink:increases_degradation_of
-              - biolink:interacts_with
-              - biolink:involved_in
-              - biolink:located_in
-              - biolink:location_of
-              - biolink:negatively_regulates
-              - biolink:occurs_in
-              - biolink:overlaps
-              - biolink:participates_in
-              - biolink:positively_regulates
-              - biolink:preceded_by
-              - biolink:precedes
-              - biolink:produced_by
-              - biolink:produces
-              - biolink:regulates
+              - biolink:type
+              - biolink:subclass_of
+              - biolink:subPropertyOf
+              - biolink:inverseOf
               - biolink:related_to
           node_filters:
             category:
@@ -334,21 +263,10 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:related_to
-              - biolink:has_part
-              - biolink:develops_from
-              - biolink:overlaps
-              - biolink:coexists_with
-              - biolink:causes
-              - biolink:located_in
-              - biolink:temporally_related_to
+              - biolink:subPropertyOf
               - biolink:inverseOf
-              - biolink:produces
-              - biolink:produced_by
-              - biolink:preceded_by
-              - biolink:location_of
-              - biolink:precedes
-              - biolink:homologous_to
+              - biolink:subclass_of
+              - biolink:related_to
           node_filters:
             category:
               - biolink:AnatomicalEntity

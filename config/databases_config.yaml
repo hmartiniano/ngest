@@ -10,7 +10,7 @@ databases:
           - biolink:BiologicalProcess
           - biolink:CellularComponent
           - biolink:MolecularActivity
-          - biolink:OntologyClass
+#          - biolink:OntologyClass
       edge_filters:
         predicate:
             - biolink:subclass_of
@@ -139,7 +139,7 @@ databases:
           - biolink:BiologicalProcess
           - biolink:CellularComponent
           - biolink:MolecularActivity
-          - biolink:OntologyClass
+#          - biolink:OntologyClass
       edge_filters:
         predicate:
           - biolink:active_in

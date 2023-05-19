@@ -104,7 +104,6 @@ merged_graph:
               - biolink:BiologicalProcess
               - biolink:CellularComponent
               - biolink:MolecularActivity
-              - biolink:OntologyClass
         format: tsv
         name: GO
     gene_ontology_annotation:
@@ -136,7 +135,6 @@ merged_graph:
               - biolink:BiologicalProcess
               - biolink:CellularComponent
               - biolink:MolecularActivity
-              - biolink:OntologyClass
         format: tsv
         name: GOA
     human_phenotype_ontology:

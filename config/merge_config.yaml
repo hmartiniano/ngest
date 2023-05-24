@@ -129,7 +129,7 @@ merged_graph:
               - biolink:part_of
           node_filters:
             category:
-              - biolink:RNA
+              - biolink:RNAProduct
               - biolink:Protein
               - biolink:MacromolecularComplexMixin
               - biolink:BiologicalProcess
@@ -177,7 +177,7 @@ merged_graph:
               - biolink:interacts_with
           node_filters:
             category:
-              - biolink:RNA
+              - biolink:RNAProduct
               - biolink:Gene
         format: tsv
         name: Mirtarbase
@@ -219,7 +219,7 @@ merged_graph:
               - biolink:coexpressed_with
           node_filters:
             category:
-              - biolink:RNA
+              - biolink:RNAProduct
               - biolink:Gene
               - biolink:Protein
         format: tsv
@@ -236,7 +236,7 @@ merged_graph:
           node_filters:
             category:
               - biolink:Gene
-              - biolink:RNA
+              - biolink:RNAProduct
         format: tsv
         name: RNACentral
     string:

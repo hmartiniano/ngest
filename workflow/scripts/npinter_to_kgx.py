@@ -129,7 +129,7 @@ def main():
     rnaobj = npinterrna[["object", "provided_by", "tarName", "tarType", "tarID","source", "source version"]]
     rnaobj["id"] = rnaobj["object"]
     rnaobj["name"] = rnaobj["tarName"]
-    rnaobj["category"] = "biolink:RNA"
+    rnaobj["category"] = "biolink:RNAProduct"
     rnaobj["node_property"] = rnaobj["tarType"]
     rnaobj["xref"] = rnaobj["tarID"]
     rnaobj = rnaobj[["id", "name", "provided_by", "category", "xref", "node_property", "source", "source version"]
@@ -150,7 +150,7 @@ def main():
     rna = npinterf[["subject", "ncID", "provided_by", "ncType", "ncName","source", "source version"]]
     rna["id"] = rna["subject"]
     rna["name"] = rna["ncName"]
-    rna["category"] = "biolink:RNA"
+    rna["category"] = "biolink:RNAProduct"
     rna["xref"] = rna["ncID"]
     rna["node_property"] = rna["ncType"]
     rna = rna[

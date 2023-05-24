@@ -119,7 +119,7 @@ def main():
 
     rna = rnacentral[["object", "Type", "provided_by", "Name", "Ensembl Transcript ID","source", "source version"]]
     rna["id"] = rna["object"]
-    rna["category"] = "biolink:RNA"
+    rna["category"] = "biolink:RNAProduct"
     rna["name"] = rna["Name"]
     rna["xref"] = "ENSEMBL:" + rna["Ensembl Transcript ID"]
     rna["node_property"] = rna["Type"]

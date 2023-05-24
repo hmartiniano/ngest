@@ -75,7 +75,7 @@ def main():
     rna = mirtarbase[["subject", "miRNA", "provided_by", "source", "source version"]]
     rna["id"] = rna["subject"]
     rna["xref"] = rna["miRNA"]
-    rna["category"] = "biolink:RNA"
+    rna["category"] = "biolink:RNAProduct"
 
     dna = mirtarbase[
         ["object", "Target Gene", "provided_by", "Target Gene (Entrez ID)", "source", "source version"]

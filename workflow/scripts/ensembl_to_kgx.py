@@ -71,7 +71,15 @@ def main():
     gene_to_protein["predicate"] = "biolink:has_gene_product"
     gene_to_protein["relation"] = "RO:0002205"
     gene_to_protein = gene_to_protein[
-        ["subject", "predicate", "object", "relation", "knowledge_source", "source", "source version"]
+        [
+            "subject",
+            "predicate",
+            "object",
+            "relation",
+            "knowledge_source",
+            "source",
+            "source version",
+        ]
     ].drop_duplicates()
     gene_to_protein["id"] = gene_to_protein["subject"].apply(lambda x: uuid.uuid4())
 
@@ -81,7 +89,9 @@ def main():
     protein["category"] = "biolink:Protein"
     protein["name"] = protein["protein name"]
     protein["xref"] = "ENSEMBL:" + ensemblf["protein_stable_id"]
-    protein = protein[["id", "category", "name", "xref", "provided_by", "source", "source version"]]
+    protein = protein[
+        ["id", "category", "name", "xref", "provided_by", "source", "source version"]
+    ]
 
     edges = gene_to_protein
 
@@ -93,11 +103,20 @@ def main():
 
     nodes = pd.concat([genes, protein]).drop_duplicates()
 
-    nodes[["id", "name", "category", "provided_by", "xref", "source", "source version"]].to_csv(
-        f"{args.output [0]}", sep="\t", index=False
-    )
+    nodes[
+        ["id", "name", "category", "provided_by", "xref", "source", "source version"]
+    ].to_csv(f"{args.output [0]}", sep="\t", index=False)
     edges[
-        ["object", "subject", "id", "predicate", "knowledge_source", "relation", "source", "source version"]
+        [
+            "object",
+            "subject",
+            "id",
+            "predicate",
+            "knowledge_source",
+            "relation",
+            "source",
+            "source version",
+        ]
     ].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 

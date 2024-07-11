@@ -87,7 +87,9 @@ def main():
 
     biolinkclasses = yaml_loader(args.cfg)
     predicate_to_relation = get_predicate_map(args.ro)
-    gof = pd.read_csv(args.go, sep="\t")[["id", "category", "name", "provided_by", "xref", "source", "source version"]]
+    gof = pd.read_csv(args.go, sep="\t")[
+        ["id", "category", "name", "provided_by", "xref", "source", "source version"]
+    ]
     gaf = read_gaf(args.input, biolinkclasses)
     gaf["provided_by"] = "GOA"
     gaf["id"] = gaf.DB + ":" + gaf["DB Object ID"].str.split("_").str[0]
@@ -96,12 +98,13 @@ def main():
     gaf["source"] = "GOA"
     gaf["source version"] = version
 
-
-
-    nodes=pd.concat([gaf[["id", "name", "category", "provided_by", "source", "source version"]], gof])
-    nodes.drop_duplicates().to_csv(
-        f"{args.output[0]}", sep="\t", index=False
+    nodes = pd.concat(
+        [
+            gaf[["id", "name", "category", "provided_by", "source", "source version"]],
+            gof,
+        ]
     )
+    nodes.drop_duplicates().to_csv(f"{args.output[0]}", sep="\t", index=False)
     # Now edges
     gaf["object"] = gaf["GO ID"]
     gaf["subject"] = gaf.DB + ":" + gaf["DB Object ID"]
@@ -120,7 +123,7 @@ def main():
             "relation",
             "knowledge_source",
             "source",
-            "source version"
+            "source version",
         ]
     ].drop_duplicates()
     gaf["id"] = gaf.subject.apply(lambda x: uuid.uuid4())

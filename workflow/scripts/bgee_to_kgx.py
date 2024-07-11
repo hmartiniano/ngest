@@ -4,6 +4,16 @@ import uuid
 
 
 def read_files(fname):
+    """Reads a CSV file into a pandas DataFrame.
+
+    Args:
+        fname (str): The path to the CSV file.
+    Returns:
+        pandas.DataFrame: A pandas DataFrame containing the data from the CSV file.
+
+    Raises:
+        IOError: If the file cannot be read.
+    """
     df = pd.read_csv(fname, sep="\t", low_memory=False)
     return df
 
@@ -47,12 +57,23 @@ def main():
     #   gene_to_ae["negated"] = gene_to_ae.Expression.str.startswith("absent")
 
     gene_to_ae = gene_to_ae[
-        ["subject", "predicate", "object", "category", "relation", "knowledge_source", "source", "source version"]
+        [
+            "subject",
+            "predicate",
+            "object",
+            "category",
+            "relation",
+            "knowledge_source",
+            "source",
+            "source version",
+        ]
     ].drop_duplicates()
     gene_to_ae["id"] = gene_to_ae["subject"].apply(lambda x: uuid.uuid4())
     gene_to_ae.to_csv(f"{args.output[1]}", sep="\t", index=False)
 
-    ae = bgee[["object", "Anatomical entity name", "provided_by", "source", "source version"]]
+    ae = bgee[
+        ["object", "Anatomical entity name", "provided_by", "source", "source version"]
+    ]
     ae["id"] = ae["object"]
     ae["name"] = ae["Anatomical entity name"]
     ae.loc[ae["id"].str.contains("UBERON"), "category"] = "biolink:AnatomicalEntity"
@@ -65,12 +86,14 @@ def main():
 
     nodes = pd.concat(
         [
-            genes[["id", "category", "name", "provided_by", "source", "source version"]],
+            genes[
+                ["id", "category", "name", "provided_by", "source", "source version"]
+            ],
             ae[["id", "category", "name", "provided_by", "source", "source version"]],
         ]
     ).drop_duplicates()
 
-    nodes[["id", "name", "category", "provided_by","source", "source version"]].to_csv(
+    nodes[["id", "name", "category", "provided_by", "source", "source version"]].to_csv(
         f"{args.output[0]}", sep="\t", index=False
     )
 

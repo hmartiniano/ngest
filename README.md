@@ -1,5 +1,5 @@
 # ngest
-
+Ngest is an Automated pipeline for the creation of Biomedical Knowledge Graphs from heterogeneous data sources.
 
 ## Installation
 

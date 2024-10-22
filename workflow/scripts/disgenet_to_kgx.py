@@ -7,12 +7,14 @@ def read_files(fname):
     df = pd.read_csv(fname, sep="\t", low_memory=False)
     return df
 
+
 def get_version(fname):
     with open(fname) as f:
         for line in f:
             if "version" in line:
                 version = line.split("version ")[1].split(").")[0]
     return version
+
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -88,7 +90,7 @@ def main():
             "provided_by",
             "diseaseName",
             "source",
-            "source version"
+            "source version",
         ]
     ].drop_duplicates()
     gene_to_phenotype["id"] = gene_to_phenotype["subject"].apply(lambda x: uuid.uuid4())
@@ -109,7 +111,7 @@ def main():
             "provided_by",
             "diseaseName",
             "source",
-            "source version"
+            "source version",
         ]
     ].drop_duplicates()
     gene_to_disease["id"] = gene_to_disease["subject"].apply(lambda x: uuid.uuid4())
@@ -125,7 +127,7 @@ def main():
             "relation",
             "knowledge_source",
             "source",
-            "source version"
+            "source version",
         ]
     ].drop_duplicates().to_csv(f"{args.output[1]}", sep="\t", index=False)
 
@@ -133,13 +135,17 @@ def main():
     phenotypes["id"] = gene_to_phenotype["object"]
     phenotypes["category"] = "biolink:PhenotypicFeature"
     phenotypes["name"] = gene_to_phenotype["diseaseName"]
-    phenotypes = phenotypes[["id", "category", "name", "provided_by", "source", "source version"]]
+    phenotypes = phenotypes[
+        ["id", "category", "name", "provided_by", "source", "source version"]
+    ]
 
     diseases = gene_to_disease
     diseases["id"] = diseases["object"]
     diseases["category"] = "biolink:Disease"
     diseases["name"] = gene_to_disease["diseaseName"]
-    diseases = diseases[["id", "category", "name", "provided_by", "source", "source version"]]
+    diseases = diseases[
+        ["id", "category", "name", "provided_by", "source", "source version"]
+    ]
 
     nodes = disgenet
     nodes["id"] = disgenet["subject"]

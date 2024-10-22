@@ -17,12 +17,14 @@ HPOA_COLUMNS = [
     "Biocuration",
 ]
 
-def get_version (fname):
+
+def get_version(fname):
     with open(fname) as f:
         for line in f:
             if "#version:" in line:
                 version = line.split(":")[1].split("\n")[0].replace(" ", "")
     return version
+
 
 def read_hpoa(fname):
     hpoa = pd.read_csv(fname, sep="\t", header=None, low_memory=False, comment="#")
@@ -67,29 +69,27 @@ def main():
     hpoa["source"] = "HPOA"
     hpoa["source version"] = version
     hpf = pd.read_csv(args.hpo, sep="\t")[
-        [
-            "id",
-            "name",
-            "category",
-            "provided_by",
-            "xref",
-            "source",
-            "source version"
-        ]
+        ["id", "name", "category", "provided_by", "xref", "source", "source version"]
     ]
     hpf = hpf[hpf.id.str.startswith("HP")]
-    nodes = pd.concat([
-        hpoa[
-                [
-                    "id",
-                    "name",
-                    "category",
-                    "provided_by",
-                    "source",
-                    "source version"
-                ]
-        ].dropna(subset=["id"]), hpf]).drop_duplicates().to_csv(
-        f"{args.output[0]}", sep="\t", index=False
+    nodes = (
+        pd.concat(
+            [
+                hpoa[
+                    [
+                        "id",
+                        "name",
+                        "category",
+                        "provided_by",
+                        "source",
+                        "source version",
+                    ]
+                ].dropna(subset=["id"]),
+                hpf,
+            ]
+        )
+        .drop_duplicates()
+        .to_csv(f"{args.output[0]}", sep="\t", index=False)
     )
     # Now edges
 
@@ -111,7 +111,7 @@ def main():
                 "relation",
                 "knowledge_source",
                 "source",
-                "source version"
+                "source version",
             ]
         ]
         .dropna()

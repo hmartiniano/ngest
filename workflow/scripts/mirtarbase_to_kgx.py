@@ -2,10 +2,12 @@ import uuid
 import argparse
 import pandas as pd
 
-def get_version (fname):
+
+def get_version(fname):
     version = fname.split("/")[-1]
     version = version.split("_")[0]
     return version
+
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -68,7 +70,15 @@ def main():
     mirtarbase["source version"] = version
 
     edges = mirtarbase[
-        ["object", "subject", "predicate", "knowledge_source", "relation", "source", "source version"]
+        [
+            "object",
+            "subject",
+            "predicate",
+            "knowledge_source",
+            "relation",
+            "source",
+            "source version",
+        ]
     ].drop_duplicates()
     edges["id"] = mirtarbase["subject"].apply(lambda x: uuid.uuid4())
 
@@ -78,7 +88,14 @@ def main():
     rna["category"] = "biolink:RNAProduct"
 
     dna = mirtarbase[
-        ["object", "Target Gene", "provided_by", "Target Gene (Entrez ID)", "source", "source version"]
+        [
+            "object",
+            "Target Gene",
+            "provided_by",
+            "Target Gene (Entrez ID)",
+            "source",
+            "source version",
+        ]
     ]
     dna["xref"] = dna["Target Gene (Entrez ID)"]
     dna["name"] = dna["Target Gene"]
@@ -87,9 +104,9 @@ def main():
 
     nodes = pd.concat([dna, rna]).drop_duplicates()
 
-    nodes[["id", "name", "category", "provided_by", "xref", "source", "source version"]].to_csv(
-        f"{args.output [0]}", sep="\t", index=False
-    )
+    nodes[
+        ["id", "name", "category", "provided_by", "xref", "source", "source version"]
+    ].to_csv(f"{args.output [0]}", sep="\t", index=False)
     edges.to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 

@@ -21,10 +21,12 @@ def read_file(fname, columns):
     df.columns = columns
     return df
 
-def get_version (fname):
+
+def get_version(fname):
     with open(fname) as f:
         version = f.readlines()[1].split("\n")[0]
     return version
+
 
 def read_genes(fname):
     df = pd.read_csv(fname, sep=";", low_memory=False, header=None)
@@ -113,31 +115,78 @@ def main():
     rnacentral = rnacentral.dropna(subset=["object", "subject"])
 
     edges = rnacentral[
-        ["subject", "predicate", "object", "relation", "knowledge_source", "source", "source version"]
+        [
+            "subject",
+            "predicate",
+            "object",
+            "relation",
+            "knowledge_source",
+            "source",
+            "source version",
+        ]
     ].drop_duplicates()
     edges["id"] = rnacentral["subject"].apply(lambda x: uuid.uuid4())
 
-    rna = rnacentral[["object", "Type", "provided_by", "Name", "Ensembl Transcript ID","source", "source version"]]
+    rna = rnacentral[
+        [
+            "object",
+            "Type",
+            "provided_by",
+            "Name",
+            "Ensembl Transcript ID",
+            "source",
+            "source version",
+        ]
+    ]
     rna["id"] = rna["object"]
     rna["category"] = "biolink:RNAProduct"
     rna["name"] = rna["Name"]
     rna["xref"] = "ENSEMBL:" + rna["Ensembl Transcript ID"]
     rna["node_property"] = rna["Type"]
-    rna = rna[["id", "category", "name", "xref", "provided_by", "node_property","source", "source version"]]
+    rna = rna[
+        [
+            "id",
+            "category",
+            "name",
+            "xref",
+            "provided_by",
+            "node_property",
+            "source",
+            "source version",
+        ]
+    ]
 
-    genes = rnacentral[["subject", "provided_by","source", "source version"]]
+    genes = rnacentral[["subject", "provided_by", "source", "source version"]]
     genes["id"] = genes["subject"]
     genes["name"] = genes["subject"].map(genenames)
     genes["category"] = "biolink:Gene"
-    genes = genes[["id", "category", "name", "provided_by","source", "source version"]]
+    genes = genes[["id", "category", "name", "provided_by", "source", "source version"]]
 
     nodes = pd.concat([genes, rna]).drop_duplicates()
 
-    nodes[["id", "name", "category", "provided_by", "xref", "node_property","source", "source version"]].to_csv(
-        f"{args.output [0]}", sep="\t", index=False
-    )
+    nodes[
+        [
+            "id",
+            "name",
+            "category",
+            "provided_by",
+            "xref",
+            "node_property",
+            "source",
+            "source version",
+        ]
+    ].to_csv(f"{args.output [0]}", sep="\t", index=False)
     edges[
-        ["object", "subject", "id", "predicate", "knowledge_source", "relation","source", "source version"]
+        [
+            "object",
+            "subject",
+            "id",
+            "predicate",
+            "knowledge_source",
+            "relation",
+            "source",
+            "source version",
+        ]
     ].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 

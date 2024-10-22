@@ -23,3 +23,4 @@ data/*/*yaml
 
 .ipynb_checkpoints
 neo4j/env
+.aider*

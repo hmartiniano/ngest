@@ -3,11 +3,6 @@ import argparse
 import pandas as pd
 
 
-def get_version(fname):
-    version = fname.split("/")[-1]
-    version = version.split("_")[0]
-    return version
-
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -19,6 +14,7 @@ def get_parser():
     parser.add_argument("-i", "--input", help="Input files")
     parser.add_argument("-r", "--rna", help="Input files")
     parser.add_argument("-g", "--genes", help="Input files")
+    parser.add_argument("-v", "--version", help="Database version")
     parser.add_argument(
         "-o",
         "--output",
@@ -33,11 +29,12 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
 
-    version = get_version(args.input)
+    version = args.version
 
     rnamapping = pd.read_csv(args.rna, sep="\t", header=None, low_memory=False).iloc[
         :, :5
     ]
+    print(rnamapping)
     rnamapping.columns = ["RNACentral", "DB", "xref", "Species", "Type"]
     rnamapping = rnamapping[["RNACentral", "xref"]].drop_duplicates().set_index("xref")
     rnamapping = rnamapping[~rnamapping.index.duplicated(keep="first")].iloc[:, 0]
@@ -49,7 +46,8 @@ def main():
     )
     genemapping = genemapping[~genemapping.index.duplicated(keep="first")].iloc[:, 0]
 
-    mirtarbase = pd.read_csv(args.input, sep="\t", low_memory=False)
+    mirtarbase = pd.read_csv(args.input, low_memory=False)
+    print(mirtarbase)
     mirtarbase = mirtarbase[
         ["miRTarBase ID", "miRNA", "Target Gene", "Target Gene (Entrez ID)"]
     ]

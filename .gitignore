@@ -17,6 +17,8 @@ data/*/*txt
 data/*/*/*yaml
 data/*/*yaml
 
+release
+
 .idea
 
 .pybiomart.sqlite

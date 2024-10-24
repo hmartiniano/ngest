@@ -29,7 +29,7 @@ def main():
     args = parser.parse_args()
     path = args.input
     sheet = "Homo sapiens"
-    read_excel(path, sheet).to_csv(f"{args.output}", sep="\t", index=False)
+    pd.read_excel(path, sheet, engine="openpyxl").to_csv(f"{args.output}", sep="\t", index=False)
 
 
 if __name__ == "__main__":

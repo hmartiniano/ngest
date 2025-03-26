@@ -1,7 +1,7 @@
 import uuid
 import argparse
 import pandas as pd
-
+# Define the expected column names for the RNACentral mapping file.
 RNACENTRALMAPPING = [
     "RNACentral ID",
     "DB",
@@ -9,24 +9,34 @@ RNACENTRALMAPPING = [
     "Species",
     "RNA Type",
     "Gene ID",
-]
-
+]  
+# Define the expected column names for the RNACentral file.
 RNACENTRAL = ["DB", "RNACentral ID", "Name", "Type"]
-
+# Define the expected column names for the genes file.
 GENES = ["Gene Id", "Gene Version", "Gene Name"]
 
 
 def read_file(fname, columns):
+    """
+    Reads a tab-separated file into a pandas DataFrame with specified columns.
+    
+    Args:
+        fname (str): The path to the file.
+        columns (list): A list of column names.
+    
+    Returns:
+        pandas.DataFrame: The DataFrame containing the file data.
+    """
     df = pd.read_csv(fname, sep="\t", header=None, comment="!", low_memory=False)
     df.columns = columns
     return df
 
 
 def get_version(fname):
+    """Extracts the version number from the second line of a file."""
     with open(fname) as f:
         version = f.readlines()[1].split("\n")[0]
     return version
-
 
 def read_genes(fname):
     df = pd.read_csv(fname, sep=";", low_memory=False, header=None)
@@ -41,7 +51,14 @@ def read_genes(fname):
     df = df[~df.index.duplicated(keep="first")].iloc[:, 0]
     return df
 
-
+"""
+    Configures the command-line argument parser for the script.
+    
+    Returns:
+        argparse.ArgumentParser: The configured argument parser.
+    """
+    
+    
 def get_parser():
     parser = argparse.ArgumentParser(
         prog="rnacentral_to_kgx.py",
@@ -64,15 +81,18 @@ def get_parser():
     return parser
 
 
-def main():
+def main():    
     parser = get_parser()
     args = parser.parse_args()
 
+    # get the file version
     version = get_version(args.version)
-
+    
+    # create the rnacentral mapping
     rnacentralmapping = read_file(args.mapping, RNACENTRALMAPPING)
     rnacentralmapping["Gene ID"] = rnacentralmapping["Gene ID"].str.split(".").str[0]
-
+    
+    # map the gene id to the rnacentral id
     rnacentralgenemapping = (
         rnacentralmapping[["RNACentral ID", "Gene ID"]]
         .drop_duplicates()
@@ -80,7 +100,8 @@ def main():
     )
     rnacentralgenemapping = rnacentralgenemapping[
         ~rnacentralgenemapping.index.duplicated(keep="first")
-    ].iloc[:, 0]
+    ].iloc[:, 0]    
+    # map the transcript id to the rnacentral id
 
     rnacentralrnamapping = (
         rnacentralmapping[["RNACentral ID", "Transcript ID"]]
@@ -90,9 +111,10 @@ def main():
     rnacentralrnamapping = rnacentralrnamapping[
         ~rnacentralrnamapping.index.duplicated(keep="first")
     ].iloc[:, 0]
-
+    # extract the ensembl gene names
     genenames = read_genes(args.genes)
-
+    
+    # process the rnacentral file
     rnacentral = read_file(args.input, RNACENTRAL)
     rnacentral["RNACentral ID"] = (
         rnacentralmapping["RNACentral ID"].str.split("_").str[0]
@@ -103,6 +125,8 @@ def main():
     rnacentral["Ensembl Transcript ID"] = rnacentral["RNACentral ID"].map(
         rnacentralrnamapping
     )
+    
+    # populate metadata
     rnacentral["provided_by"] = rnacentral["DB"].str.upper()
     rnacentral["knowledge_source"] = rnacentral["DB"].str.upper()
 
@@ -114,7 +138,8 @@ def main():
     rnacentral["source version"] = version
     rnacentral = rnacentral.dropna(subset=["object", "subject"])
 
-    edges = rnacentral[
+    #create edges df
+    edges = rnacentral[ 
         [
             "subject",
             "predicate",
@@ -127,7 +152,7 @@ def main():
     ].drop_duplicates()
     edges["id"] = rnacentral["subject"].apply(lambda x: uuid.uuid4())
 
-    rna = rnacentral[
+    rna = rnacentral[ #create rna df
         [
             "object",
             "Type",
@@ -155,8 +180,8 @@ def main():
             "source version",
         ]
     ]
-
-    genes = rnacentral[["subject", "provided_by", "source", "source version"]]
+    
+    genes = rnacentral[["subject", "provided_by", "source", "source version"]] #create gene df
     genes["id"] = genes["subject"]
     genes["name"] = genes["subject"].map(genenames)
     genes["category"] = "biolink:Gene"
@@ -190,5 +215,6 @@ def main():
     ].to_csv(f"{args.output[1]}", sep="\t", index=False)
 
 
+#Entry point
 if __name__ == "__main__":
     main()

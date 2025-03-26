@@ -10,9 +10,9 @@ clean:
 cleanall: clean
 	rm data/raw/*
 
-create-release-draft: 
+create-release: 
 	git tag ${TAG}
-	git push origin ${TAG}
+	git push origin --follow-tags
 	gh release create ${TAG} --draft
 	rm -rf release/ && mkdir -p release
 	gzip -c data/processed/finals/merged_edges.tsv > release/merged__edges.tsv.gz

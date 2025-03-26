@@ -15,7 +15,7 @@ create-release:
 	git push origin --follow-tags
 	gh release create ${TAG} --draft
 	rm -rf release/ && mkdir -p release
-	gzip -c data/processed/finals/merged_edges.tsv > release/merged__edges.tsv.gz
+	gzip -c data/processed/finals/merged_edges.tsv > release/merged_edges.tsv.gz
 	gzip -c data/processed/finals/merged_nodes.tsv > release/merged_nodes.tsv.gz
 	cp data/processed/db_versions.yaml data/processed/finals/merged_graph_stats.yaml release/
 	#kgx graph-summary data/processed/finals/lcc_edges.tsv data/processed/finals/lcc_edges.tsv -i tsv -o release/lcc_graph_summary.yaml

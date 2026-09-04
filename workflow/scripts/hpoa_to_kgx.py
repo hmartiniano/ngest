@@ -31,6 +31,7 @@ def get_version(fname):
 def read_hpoa(fname):
     hpoa = pd.read_csv(fname, sep="\t", header=None, low_memory=False, comment="#")
     hpoa.columns = HPOA_COLUMNS
+    hpoa = hpoa[hpoa["DatabaseId"] != "database_id"].copy()
     return hpoa
 
 
@@ -101,37 +102,60 @@ def main():
             ]
         )
         .drop_duplicates()
-        .to_csv(f"{args.output[0]}", sep="\t", index=False)
+        .to_csv(f"{args.output[0]}", sep="\t", index=False, lineterminator="\n")
     )    
 
     # process edges
-
     hpoa["subject"] = hpoa["DatabaseId"].map(mondo_mapping)
     hpoa["object"] = hpoa["HPO ID"]
-    hpoa["id"] = hpoa.id.apply(lambda x: uuid.uuid4())
     hpoa["category"] = "biolink:DiseaseToPhenotypicFeatureAssociation"
-    hpoa["negated"] = hpoa.Qualifier.str.startswith("NOT")
+    hpoa["negated"] = hpoa["Qualifier"].fillna("").str.startswith("NOT")
     hpoa["predicate"] = "biolink:has_phenotype"
     hpoa["relation"] = "RO:0002200"
-    hpoa = (
-        hpoa[
-            [
-                "subject",
-                "predicate",
-                "object",
-                "negated",
-                "category",
-                "relation",
-                "knowledge_source",
-                "source",
-                "source version",
-            ]
-        ]
-        .dropna()
-        .drop_duplicates()
+
+    def extract_pmids(ref):
+        if pd.isna(ref):
+            return ""
+        parts = str(ref).split(";")
+        pmids = [p.strip() for p in parts if p.strip().startswith("PMID:") and p.strip()[5:].isdigit()]
+        return "|".join(pmids)
+
+    hpoa["publications"] = hpoa["DB Reference"].apply(extract_pmids)
+
+    hpoa = hpoa.dropna(subset=["subject", "object"])
+
+    edge_cols = [
+        "subject",
+        "predicate",
+        "object",
+        "negated",
+        "category",
+        "relation",
+        "knowledge_source",
+        "source",
+        "source version",
+    ]
+    edges = (
+        hpoa.groupby(edge_cols)["publications"]
+        .apply(lambda s: "|".join(sorted(set(p for item in s for p in item.split("|") if p))[:50]))
+        .reset_index()
     )
-    hpoa["id"] = hpoa.subject.apply(lambda x: uuid.uuid4())
-    hpoa.to_csv(f"{args.output[1]}", sep="\t", index=False)
+    edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
+    edges[
+        [
+            "subject",
+            "predicate",
+            "object",
+            "negated",
+            "category",
+            "relation",
+            "publications",
+            "knowledge_source",
+            "source",
+            "source version",
+            "id",
+        ]
+    ].to_csv(f"{args.output[1]}", sep="\t", index=False, lineterminator="\n")
 
 
 # Run the main function

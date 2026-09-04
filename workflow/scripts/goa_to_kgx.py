@@ -160,43 +160,66 @@ def main():
         ]
     )
     # Remove duplicate nodes and save to a file
-    # Removes duplicate nodes and saves the resulting DataFrame to a file.
-    nodes.drop_duplicates().to_csv(f"{args.output[0]}", sep="\t", index=False)
+    nodes.drop_duplicates().to_csv(
+        f"{args.output[0]}", sep="\t", index=False, lineterminator="\n"
+    )
     
     # Prepare GAF data for edge creation
-    # Prepares GAF data for edge creation by setting subject, object, category, and other attributes.
     gaf["object"] = gaf["GO ID"]
     gaf["subject"] = gaf.DB + ":" + gaf["DB Object ID"]
     gaf["category"] = "biolink:FunctionalAssociation"
     # Check if qualifier is negated
-    gaf["negated"] = gaf.Qualifier.str.startswith("NOT|")
+    gaf["negated"] = gaf.Qualifier.str.startswith("NOT|").fillna(False)
     # Map qualifier to predicate
     gaf["predicate"] = "biolink:" + gaf.Qualifier.str.replace("NOT|", "", regex=False)
     # Map qualifier to relation
     gaf["relation"] = gaf.Qualifier.map(predicate_to_relation)
     # Set knowledge source
     gaf["knowledge_source"] = "GOA"
-    # Select and order the columns for the final edge DataFrame
-    gaf = gaf[
-    # Selects and orders columns to prepare the edge DataFrame
+
+    def extract_pmids(ref):
+        if pd.isna(ref):
+            return ""
+        parts = str(ref).split("|")
+        pmids = [p.strip() for p in parts if p.strip().startswith("PMID:") and p.strip()[5:].isdigit()]
+        return "|".join(pmids)
+
+    gaf["publications"] = gaf["DB:Reference"].apply(extract_pmids)
+
+    edge_group_cols = [
+        "subject",
+        "predicate",
+        "object",
+        "category",
+        "negated",
+        "relation",
+        "knowledge_source",
+        "source",
+        "source version",
+    ]
+    edges = (
+        gaf.groupby(edge_group_cols)["publications"]
+        .apply(lambda s: "|".join(sorted(set(p for item in s for p in item.split("|") if p))[:50]))
+        .reset_index()
+    )
+    # Add unique edge IDs
+    edges["id"] = edges.subject.apply(lambda x: uuid.uuid4())
+    # Save edges to a file
+    edges[
         [
             "subject",
             "predicate",
             "object",
             "category",
-            "negated", 
+            "negated",
             "relation",
+            "publications",
             "knowledge_source",
             "source",
             "source version",
+            "id",
         ]
-    ].drop_duplicates()
-    # Add unique edge IDs
-    # Generates unique identifiers for each edge.
-    gaf["id"] = gaf.subject.apply(lambda x: uuid.uuid4())
-    # Save edges to a file
-    # Saves the edges to a file.
-    gaf.to_csv(f"{args.output[1]}", sep="\t", index=False)
+    ].to_csv(f"{args.output[1]}", sep="\t", index=False, lineterminator="\n")
 
 # Script entry point: ensures the main function is called when the script is executed directly.
 if __name__ == "__main__":

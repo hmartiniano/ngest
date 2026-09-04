@@ -109,60 +109,77 @@ def main():
     disgenet["source version"] = get_version(args.version)
 
     disgenet = disgenet.dropna(subset=["object", "subject"])
+    # Add publication formatting function
+    def format_pmids(p):
+        if pd.notnull(p):
+            s = str(p).strip()
+            if s.replace(".", "").isdigit():
+                val = int(float(s))
+                if val > 0:
+                    return f"PMID:{val}"
+        return ""
+
+    disgenet["publications"] = disgenet["pmid"].apply(format_pmids) if "pmid" in disgenet.columns else ""
+
+    # Generate nodes
+    phenotypes = (
+        disgenet[disgenet.object.str.startswith("HP")][
+            ["object", "diseaseName", "provided_by", "source", "source version"]
+        ]
+        .rename(columns={"object": "id", "diseaseName": "name"})
+        .assign(category="biolink:PhenotypicFeature")
+    )
+    diseases = (
+        disgenet[disgenet.object.str.startswith("MONDO")][
+            ["object", "diseaseName", "provided_by", "source", "source version"]
+        ]
+        .rename(columns={"object": "id", "diseaseName": "name"})
+        .assign(category="biolink:Disease")
+    )
+    genes = (
+        disgenet[["subject", "geneSymbol", "provided_by", "source", "source version"]]
+        .rename(columns={"subject": "id", "geneSymbol": "name"})
+        .assign(category="biolink:Gene")
+    )
+    nodes = pd.concat([genes, phenotypes, diseases], ignore_index=True).drop_duplicates(subset=["id"])
+    nodes[["id", "name", "category", "provided_by", "source", "source version"]].to_csv(
+        f"{args.output[0]}", sep="\t", index=False, lineterminator="\n"
+    )
+
     # Filter the information about the gene to phenotype
-    # Add the biolink information for the edges
-    gene_to_phenotype = disgenet[disgenet.object.str.startswith("HP")]
+    gene_to_phenotype = disgenet[disgenet.object.str.startswith("HP")].copy()
     gene_to_phenotype["category"] = "biolink:GeneToPhenotypicFeatureAssociation"
-    # Adding the predicate and the relation
     gene_to_phenotype["predicate"] = "biolink:associated_with"
     gene_to_phenotype["relation"] = "RO:0016001"
     gene_to_phenotype["knowledge_source"] = "Disgenet"
 
-    gene_to_phenotype = gene_to_phenotype[
-        [
-            "subject",
-            "predicate",
-            "object",
-            "category",
-            "relation",
-            "knowledge_source",
-            "provided_by",
-            "diseaseName",
-            "source",
-            "source version",
-        ]
-    ].drop_duplicates()
-    # Generate a unique id for each edges
-    gene_to_phenotype["id"] = gene_to_phenotype["subject"].apply(lambda x: uuid.uuid4())
-    
     # Filter the information about the gene to disease
-    # Add the biolink information for the edges
-    gene_to_disease = disgenet[disgenet.object.str.startswith("MONDO")]
+    gene_to_disease = disgenet[disgenet.object.str.startswith("MONDO")].copy()
     gene_to_disease["category"] = "biolink:GeneToDiseaseAssociation"
     gene_to_disease["predicate"] = "biolink:associated_with"
     gene_to_disease["relation"] = "RO:0016001"
     gene_to_disease["knowledge_source"] = "Disgenet"
-    gene_to_disease = gene_to_disease[
-        [
-            "subject",
-            "predicate",
-            "object",
-            "category",
-            "relation",
-            "knowledge_source",
-            "provided_by",
-            "diseaseName",
-            "source",
-            "source version",
-        ]
-    ].drop_duplicates()
-    # Generate a unique id for each edges
-    gene_to_disease["id"] = gene_to_disease["subject"].apply(lambda x: uuid.uuid4())
-    # Concatenate the edges
-    edges = pd.concat([gene_to_phenotype, gene_to_disease])
+
+    edges = pd.concat([gene_to_phenotype, gene_to_disease], ignore_index=True)
+    edge_group_cols = [
+        "subject",
+        "predicate",
+        "object",
+        "category",
+        "relation",
+        "knowledge_source",
+        "source",
+        "source version",
+    ]
+    edges = (
+        edges.groupby(edge_group_cols)["publications"]
+        .apply(lambda s: "|".join(sorted(set(x for x in s if x))[:50]))
+        .reset_index()
+    )
+    edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
+
     # Save the edges
     edges[
-        # Columns to keep
         [
             "id",
             "subject",
@@ -170,40 +187,12 @@ def main():
             "object",
             "category",
             "relation",
+            "publications",
             "knowledge_source",
             "source",
             "source version",
         ]
-    ].drop_duplicates().to_csv(f"{args.output[1]}", sep="\t", index=False, lineterminator="\n")
-
-    phenotypes = gene_to_phenotype
-    # Generate the nodes
-    phenotypes["id"] = gene_to_phenotype["object"]
-    phenotypes["category"] = "biolink:PhenotypicFeature"
-    phenotypes["name"] = gene_to_phenotype["diseaseName"]
-    phenotypes = phenotypes[
-        ["id", "category", "name", "provided_by", "source", "source version"]
-    ]
-
-    diseases = gene_to_disease
-    diseases["id"] = diseases["object"]
-    diseases["category"] = "biolink:Disease"
-    diseases["name"] = gene_to_disease["diseaseName"]
-    diseases = diseases[
-        ["id", "category", "name", "provided_by", "source", "source version"]
-    ]
-
-    nodes = disgenet
-    nodes["id"] = disgenet["subject"]
-    nodes["category"] = "biolink:Gene"
-    nodes["name"] = disgenet["geneSymbol"]
-    nodes = nodes[["id", "category", "name", "provided_by", "source", "source version"]]
-
-    nodes = pd.concat([nodes, phenotypes, diseases]).drop_duplicates(subset=["id"])
-
-    nodes[["id", "name", "category", "provided_by", "source", "source version"]].to_csv(
-        f"{args.output[0]}", sep="\t", index=False, lineterminator="\n"
-    )
+    ].to_csv(f"{args.output[1]}", sep="\t", index=False, lineterminator="\n")
 
 # Check the file name
 if __name__ == "__main__":

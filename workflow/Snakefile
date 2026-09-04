@@ -48,6 +48,8 @@ include: "rules/hmdd.smk"
 include: "rules/lncbook.smk"
 #miRTarBase (miRTarBase 10.0 / 2025)
 include: "rules/mirtarbase.smk"
+#RNADisease (RNA-Disease Database v4.0)
+include: "rules/rnadisease.smk"
 
 
 rule all:

@@ -138,3 +138,61 @@ def test_tsv_lineterminator_compliance(tmp_path):
     lines = raw_bytes.decode("utf-8").split("\n")
     header = lines[0].split("\t")
     assert header[-1] == "provided_by", f"Corrupted last column header: {repr(header[-1])}"
+
+
+# ---------------------------------------------------------------------------
+# 5. RNADisease Disease & RNA Resolution Tests
+# ---------------------------------------------------------------------------
+
+from workflow.scripts.rnadisease_to_kgx import (
+    match_disease_to_mondo as rnadisease_match_disease,
+    match_rna_to_rnacentral,
+)
+
+
+def test_rnadisease_disease_resolution():
+    """Verify hierarchical DO ID, MeSH ID, and label resolution for RNADisease."""
+    mock_doid = {"DOID:10534": "MONDO:0001056"}
+    mock_mesh = {"D013274": "MONDO:0001056"}
+    mock_names = {
+        "gastric cancer": "MONDO:0001056",
+        "hepatocellular carcinoma": "MONDO:0005267",
+    }
+
+    # DO ID primary match
+    assert rnadisease_match_disease("DOID:10534", "", "Unknown", mock_doid, mock_mesh, mock_names) == "MONDO:0001056"
+    # MeSH ID secondary match
+    assert rnadisease_match_disease("", "D013274", "Unknown", mock_doid, mock_mesh, mock_names) == "MONDO:0001056"
+    # Name tertiary match
+    assert rnadisease_match_disease("", "", "gastric cancer", mock_doid, mock_mesh, mock_names) == "MONDO:0001056"
+    # Inverted MeSH syntax match
+    assert rnadisease_match_disease("", "", "Carcinoma, Hepatocellular", mock_doid, mock_mesh, mock_names) == "MONDO:0005267"
+    # Direct curated fallback match
+    assert rnadisease_match_disease("", "", "breast neoplasms", {}, {}, {}) == "MONDO:0007254"
+    # Unmapped returns None
+    assert rnadisease_match_disease("", "", "Fictional Disease 999", mock_doid, mock_mesh, mock_names) is None
+
+
+def test_rnadisease_rna_resolution():
+    """Verify miRNA arm stripping, precursor stem, letter normalization, and lncRNA mapping."""
+    mir_index = {
+        "hsa-mir-21": "RNACENTRAL:URS00003719DE",
+        "hsa-let-7a": "RNACENTRAL:URS000004F5D8",
+        "hsa-mir-203a-3p": "RNACENTRAL:URS00004DA9DB",
+    }
+    ensg_index = {"ENSG00000251562": "RNACENTRAL:URS0000761A87"}
+    noncode_index = {"NONHSAT000001": "RNACENTRAL:URS0000000001"}
+    symbol_to_ensg = {"MALAT1": "ENSG00000251562"}
+
+    # miRNA direct and stem match
+    assert match_rna_to_rnacentral("hsa-miR-21-5p", "miRNA", mir_index, ensg_index, noncode_index, symbol_to_ensg) == "RNACENTRAL:URS00003719DE"
+    # miRNA precursor locus stripping: hsa-let-7a-1 -> hsa-let-7a
+    assert match_rna_to_rnacentral("hsa-let-7a-1", "miRNA", mir_index, ensg_index, noncode_index, symbol_to_ensg) == "RNACENTRAL:URS000004F5D8"
+    # miRNA modern miRBase letter suffix normalization: hsa-miR-203 -> hsa-miR-203a-3p
+    assert match_rna_to_rnacentral("hsa-miR-203", "miRNA", mir_index, ensg_index, noncode_index, symbol_to_ensg) == "RNACENTRAL:URS00004DA9DB"
+    # lncRNA gene symbol -> ENSG -> URS
+    assert match_rna_to_rnacentral("MALAT1", "lncRNA", mir_index, ensg_index, noncode_index, symbol_to_ensg) == "RNACENTRAL:URS0000761A87"
+    # lncRNA NONCODE accession
+    assert match_rna_to_rnacentral("NONHSAT000001", "lncRNA", mir_index, ensg_index, noncode_index, symbol_to_ensg) == "RNACENTRAL:URS0000000001"
+    # Unmapped returns None (zero synthetic fallbacks)
+    assert match_rna_to_rnacentral("NON_EXISTENT_RNA", "lncRNA", mir_index, ensg_index, noncode_index, symbol_to_ensg) is None

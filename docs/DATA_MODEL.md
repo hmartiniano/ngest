@@ -6,7 +6,7 @@ This document describes the semantic data model used in `ngest`, its alignment w
 
 ## 1. Overview of Data Sources & Entity Types
 
-The `ngest` knowledge graph integrates 14 biological databases and ontologies into a unified property graph:
+The `ngest` knowledge graph integrates 17 biological databases and ontologies into a unified property graph:
 
 | Source | Role / Type | Primary Node Categories | Primary Predicates / Relations |
 | :--- | :--- | :--- | :--- |
@@ -24,6 +24,10 @@ The `ngest` knowledge graph integrates 14 biological databases and ontologies in
 | **HPO** | Human Phenotype Ontology | `biolink:PhenotypicFeature` | `biolink:subclass_of` |
 | **HPOA** | Disease–Phenotype associations | `biolink:Disease`, `biolink:PhenotypicFeature` | `biolink:has_phenotype` |
 | **DisGeNET** | Gene–Disease associations | `biolink:Gene`, `biolink:Disease`, `biolink:PhenotypicFeature` | `biolink:associated_with` |
+| **HMDD** | Human microRNA–Disease associations (v4.0) | `biolink:RNAProduct`, `biolink:Disease` | `biolink:associated_with` |
+| **LncBook** | Consensus lncRNA–miRNA interactions (v2.0) | `biolink:RNAProduct` | `biolink:interacts_with` |
+| **miRTarBase** | Experimentally validated miRNA–target interactions (10.0) | `biolink:RNAProduct`, `biolink:Gene` | `biolink:interacts_with` |
+| **RNADisease** | Experimentally supported RNA–Disease associations (v4.0) | `biolink:RNAProduct`, `biolink:Disease` | `biolink:associated_with` |
 
 ---
 

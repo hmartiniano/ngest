@@ -371,6 +371,18 @@ databases:
       edge_filters:
         predicate:
           - biolink:interacts_with
+  - source: rnadisease
+    name: RNADisease
+    nodes: "../data/processed/finals/rnadisease_nodes.tsv"
+    edges: "../data/processed/finals/rnadisease_edges.tsv"
+    filters:
+      node_filters:
+        category:
+          - biolink:RNAProduct
+          - biolink:Disease
+      edge_filters:
+        predicate:
+          - biolink:associated_with
 
 
 

@@ -1,0 +1,66 @@
+Bootstrap: docker
+From: condaforge/mambaforge:24.3.0-0
+
+%labels
+    Maintainer Hugo Martiniano <hugomartiniano@gmail.com>
+    Project ngest
+    Description Automated pipeline for building standardized biomedical Knowledge Graphs
+    Version 0.4.0
+
+%help
+    This container encapsulates the complete runtime environment for ngest.
+    
+    Usage Examples:
+    --------------
+    # Run the full pipeline with 8 cores:
+    singularity run --bind /path/to/data:/app/data ngest.sif -c 8 all
+
+    # Perform a dry-run to verify DAG execution:
+    singularity run ngest.sif -n all
+
+    # Open an interactive shell inside the container:
+    singularity shell ngest.sif
+
+    # Execute unit tests:
+    singularity exec ngest.sif pytest /app/tests
+
+%environment
+    export LC_ALL=C
+    export PYTHONUNBUFFERED=1
+    export PATH=/opt/conda/bin:$PATH
+    export PYTHONPATH=/app:$PYTHONPATH
+
+%files
+    env.yml /app/env.yml
+    config/ /app/config/
+    workflow/ /app/workflow/
+    docs/ /app/docs/
+    tests/ /app/tests/
+    Makefile /app/Makefile
+    README.md /app/README.md
+
+%post
+    apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        git \
+        graphviz \
+        libxml2-dev \
+        libxslt1-dev \
+        make \
+        procps \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+
+    mkdir -p /app/data/raw \
+             /app/data/processed/finals \
+             /app/data/processed/intermediary \
+             /app/data/processed/mappings
+
+    mamba env update -n base -f /app/env.yml
+    mamba clean --all -f -y
+    pip install --no-cache-dir pytest flake8
+
+%runscript
+    cd /app/workflow
+    exec snakemake "$@"

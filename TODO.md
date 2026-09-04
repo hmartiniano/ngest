@@ -48,7 +48,8 @@
 - [ ] Add Reactome (and/or KEGG?, Rhea) pathways
 - [ ] Remove NCBITaxon nodes?
 - [x] Verify KGX automatic annotations for edges and nodes
-- [ ] Add Docker file / Singularity recipe for containerized workflow execution
+- [x] Add Dockerfile and Singularity recipe (`Singularity.def`) for containerized workflow execution
+- [x] Add automated CI/CD pipeline (`.github/workflows/ci.yml`) with unit test suite (`tests/`)
 - [x] **Evidence & Quality Control Thresholding (Reviewer Action)**:
   - Added assay categorization and PubMed ID retention in `tarbase_to_kgx.py` (with `--direct-only` and `--assay-type` filtering)
   - Added assay type, interaction level, and PubMed ID formatting in `npinter_to_kgx.py` (confirmed NPInter v5)

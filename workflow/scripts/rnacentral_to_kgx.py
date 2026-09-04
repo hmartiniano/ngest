@@ -1,3 +1,4 @@
+import re
 import uuid
 import argparse
 import pandas as pd
@@ -39,17 +40,18 @@ def get_version(fname):
     return version
 
 def read_genes(fname):
-    df = pd.read_csv(fname, sep=";", low_memory=False, header=None)
-    df = df.iloc[:, :3]
-    df.columns = GENES
-    df = df[df["Gene Name"].str.contains("gene_name")]
-    df["Gene Id"] = "ENSEMBL:" + df["Gene Id"].str.split(" ").str[-1].str.replace(
-        '"', ""
-    )
-    df["Gene Name"] = df["Gene Name"].str.split(" ").str[-1].str.replace('"', "")
-    df = df[["Gene Id", "Gene Name"]].drop_duplicates().set_index("Gene Id")
-    df = df[~df.index.duplicated(keep="first")].iloc[:, 0]
-    return df
+    gene_map = {}
+    with open(fname, "r") as f:
+        for line in f:
+            m_id = re.search(r'gene_id\s+"([^"]+)"', line)
+            m_name = re.search(r'gene_name\s+"([^"]+)"', line)
+            if m_id and m_name:
+                gene_map["ENSEMBL:" + m_id.group(1)] = m_name.group(1)
+            elif m_id:
+                gid = "ENSEMBL:" + m_id.group(1)
+                if gid not in gene_map:
+                    gene_map[gid] = m_id.group(1)
+    return pd.Series(gene_map)
 
 """
     Configures the command-line argument parser for the script.
@@ -75,7 +77,7 @@ def get_parser():
         "-o",
         "--output",
         nargs="+",
-        default="ensembl",
+        default="rnacentral",
         help="Output prefix. Default: out",
     )
     return parser
@@ -117,7 +119,7 @@ def main():
     # process the rnacentral file
     rnacentral = read_file(args.input, RNACENTRAL)
     rnacentral["RNACentral ID"] = (
-        rnacentralmapping["RNACentral ID"].str.split("_").str[0]
+        rnacentral["RNACentral ID"].str.split("_").str[0]
     )
     rnacentral["Ensembl Gene ID"] = rnacentral["RNACentral ID"].map(
         rnacentralgenemapping
@@ -150,7 +152,7 @@ def main():
             "source version",
         ]
     ].drop_duplicates()
-    edges["id"] = rnacentral["subject"].apply(lambda x: uuid.uuid4())
+    edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
 
     rna = rnacentral[ #create rna df
         [
@@ -200,7 +202,7 @@ def main():
             "source",
             "source version",
         ]
-    ].to_csv(f"{args.output [0]}", sep="\t", index=False)
+    ].to_csv(f"{args.output[0]}", sep="\t", index=False)
     edges[
         [
             "object",

@@ -5,10 +5,6 @@ It maps CL IDs to UniProt IDs and outputs the transformed data into new KGX-comp
 """
 import argparse
 import pandas as pd
-import requests
-
-# URL to fetch the latest CL release version from GitHub
-release = "https://api.github.com/repos/obophenotype/cell-ontology/releases/latest"
 
 
 def get_parser():
@@ -22,6 +18,9 @@ def get_parser():
         prog="cl_kgx_process.py",
         description="cl_kgx_process: convert protein ids from cl kgx files.",
     )
+    parser.add_argument("-i", "--input", nargs="+", help="Input files")
+    parser.add_argument("-m", "--mapping", help="Input files")
+    parser.add_argument("-v", "--version", required=True, help="CL release version")
     parser.add_argument(
         "-i", "--input", nargs="+", help="Input files (clnodes and cledges)"
     )
@@ -62,9 +61,7 @@ def main():
     cledges = pd.read_csv(args.input[1], sep="\t", low_memory=False)
     clmapping = pd.read_csv(args.mapping, sep="\t", header=None, low_memory=False)
 
-    # 3. Fetch the latest CL release version from GitHub.
-    response = requests.get(release)
-    version = response.json()["name"]
+    version = args.version
 
     # 4. Add source and version information to nodes.
     clnodes["source"] = "CL"
@@ -125,7 +122,13 @@ def main():
     # 8. Remove edges where subject or object start with PR (protein region).
     cledges = cledges[~cledges.subject.str.startswith("PR")]
     cledges = cledges[~cledges.object.str.startswith("PR")]
-    # 9. Output cledges to file.
+    cledges["predicate"] = cledges["predicate"].replace(
+        {"biolink:inverseOf": "owl:inverseOf", "biolink:subPropertyOf": "rdfs:subPropertyOf"}
+    )
+    cledges["relation"] = cledges["relation"].replace(
+        {"inverseOf": "owl:inverseOf", "subPropertyOf": "rdfs:subPropertyOf"}
+    )
+
     cledges[
         [
             "id",  # Edge ID

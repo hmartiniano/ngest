@@ -32,18 +32,50 @@ def read_id_mapping_uniprot(fname, id_column_name, db_type):
     return df
 
 
+def get_parser():
+    parser = argparse.ArgumentParser(
+        prog="stringdb_to_kgx.py",
+        description=(
+            "string_to_csv: convert an string file to CSVs with nodes and edges."
+        ),
+    )
+    parser.add_argument("-i", "--input", help="Input files")
+    parser.add_argument("-p", "--proteins", help="Input files")
+    parser.add_argument("-v", "--version", default=None, help="STRING database version")
+    parser.add_argument(
+        "--min-score",
+        type=int,
+        default=0,
+        help="Minimum combined score threshold (0-1000). e.g. 700 for high confidence. Default: 0",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        nargs="+",
+        default="string",
+        help="Output prefix. Default: out",
+    )
+    return parser
+
+
 def main():
     parser = get_parser()
     args = parser.parse_args()
 
-    # Extract the STRING database version from the input filename.
-    version = args.input.split("/")[-1]
-    version = version.split(".")[3]
+    if args.version:
+        version = args.version
+    else:
+        import re
+
+        m = re.search(r"v(\d+\.\d+)", args.input)
+        version = m.group(1) if m else "12.0"
 
     # Read the STRING interactions file.
     stringdbf = pd.read_csv(args.input, sep=" ", low_memory=False)
 
-    # Read UniProt ID mappings for STRING and UniProtKB-ID.
+    if args.min_score > 0 and "combined_score" in stringdbf.columns:
+        stringdbf = stringdbf[stringdbf["combined_score"] >= args.min_score]
+
     idmapping = read_id_mapping_uniprot(args.proteins, "Database ID", "STRING")
     namemapping = read_id_mapping_uniprot(args.proteins, "ID", "UniProtKB-ID")
 
@@ -62,9 +94,11 @@ def main():
     stringdbf["provided_by"] = "STRING"  # The data is provided by STRING database
     stringdbf["knowledge_source"] = "STRING"  # the source is the STRING database
     stringdbf["predicate"] = "biolink:interacts_with"
-    stringdbf["relation"] = "RO:0002436"
+    stringdbf["relation"] = "RO:0002434"
     stringdbf["category"] = "biolink:Protein"
     stringdbf["has_confidence_level"] = stringdbf["combined_score"]
+    stringdbf["confidence_score"] = stringdbf["combined_score"] / 1000.0
+    stringdbf["source"] = "STRING"
     stringdbf["source version"] = version
 
     # Create protein1 dataframe.
@@ -112,10 +146,14 @@ def main():
     edges = stringdbf[
         [
             "subject",
+            "predicate",
             "object",
             "knowledge_source",
-            "predicate",
+            "relation",
             "has_confidence_level",
+            "confidence_score",
+            "source",
+            "source version",
         ]
     ].drop_duplicates()
     edges["source"] = "STRING"  # source is STRING database

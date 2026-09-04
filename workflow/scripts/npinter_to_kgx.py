@@ -1,3 +1,4 @@
+import re
 import argparse
 import pandas as pd
 import uuid
@@ -9,13 +10,10 @@ import uuid
 # This dictionary defines the mapping between interaction classes (like "binding", "regulatory")
 # and their corresponding Biolink predicates.
 predicates = {
-    # Define predicates for different interaction types. "binding" and "binding;regulatory" are mapped to "biolink:binds".
-    "binding": "biolink:binds",
-    "binding;regulatory": "biolink:binds",
-
-    # Define predicates per class.
+    "binding": "biolink:interacts_with",
+    "binding;regulatory": "biolink:regulates",
     "regulatory": "biolink:regulates",
-    "expression correlation": "biolink:correlates",
+    "expression correlation": "biolink:correlated_with",
     "coexpression": "biolink:coexpressed_with",
 }
 
@@ -69,24 +67,16 @@ def read_rna(fnames, type):
 
 # Function to read gene data from a file, format it, and return a Series
 def read_genes(fname):
-    # Read the gene data from the specified file, assuming semicolon-separated values.
-    df = pd.read_csv(fname, sep=";", low_memory=False, header=None)  # Read gene data from file.
-    # Keep only the first three columns.
-    df = df.iloc[:, :3]
-    # Set the column names according to the GENES list.
-    df.columns = GENES
-    # Filter rows that contain 'gene_name' in the 'Gene Name' column. Only keep genes.
-    df = df[df["Gene Name"].str.contains("gene_name")]  # Filter rows for gene names.
-    # Format the 'Gene Id' by adding the ENSEMBL: prefix and cleaning the ID.
-    df["Gene Id"] = "ENSEMBL:" + df["Gene Id"].str.split(" ").str[-1].str.replace('"', "")
-    # Clean the gene name.
-    df["Gene Name"] = df["Gene Name"].str.split(" ").str[-1].str.replace('"', "")
-    # Keep only Gene ID and gene name.
-    df = df[["Gene Id", "Gene Name"]].drop_duplicates().set_index("Gene Name")
-    # Remove duplicates.
-    df = df[~df.index.duplicated(keep="first")].iloc[:, 0]
-    # Return a pandas Series.
-    return df
+    gene_map = {}
+    with open(fname, "r") as f:
+        for line in f:
+            m_id = re.search(r'gene_id\s+"([^"]+)"', line)
+            m_name = re.search(r'gene_name\s+"([^"]+)"', line)
+            if m_id and m_name:
+                gname = m_name.group(1)
+                if gname not in gene_map:
+                    gene_map[gname] = "ENSEMBL:" + m_id.group(1)
+    return pd.Series(gene_map)
 
 
 # Function to read UniProt ID mapping data, filter it, and return a Series
@@ -129,7 +119,21 @@ def get_parser():
     return parser
 
 
-# Main function to orchestrate the data processing
+def format_pmids(ref):
+    if pd.isna(ref) or str(ref).strip() in ["-", ""]:
+        return ""
+    pmids = [f"PMID:{p.strip()}" for p in str(ref).split(";") if p.strip().isdigit()]
+    return "|".join(pmids)
+
+
+relations = {
+    "biolink:interacts_with": "RO:0002434",
+    "biolink:regulates": "RO:0002448",
+    "biolink:correlated_with": "RO:0002610",
+    "biolink:coexpressed_with": "RO:0002610",
+}
+
+
 def main():
     # Get the parser.
     parser = get_parser()
@@ -166,7 +170,13 @@ def main():
     npinterf["source"] = "NPInter"
     npinterf["source version"] = version
 
-    # Process RNA-Protein interactions.
+    # Evidence and publication annotations
+    npinterf["assay_type"] = npinterf["experiment"].fillna("").replace("-", "")
+    npinterf["publications"] = npinterf["reference"].apply(format_pmids)
+    npinterf["interaction_level"] = npinterf["level"].fillna("")
+    npinterf["tissue_or_cell"] = npinterf["tissueOrCell"].fillna("").replace("-", "")
+    npinterf["relation"] = npinterf["predicate"].map(relations).fillna("RO:0002434")
+
     npinterproteins = npinterf[npinterf["level"].isin(["RNA-Protein"])]
     npinterproteins["Uniprot Name"] = npinterproteins["tarID"].map(uniprotf)
     npinterproteins = npinterproteins.dropna(subset=["Uniprot Name"])
@@ -287,46 +297,28 @@ def main():
 
     # Concatenate all nodes together.
     nodes = pd.concat([proteins, genes, rna, rnaobj]).drop_duplicates()
-    # Create the edges dataframe.
-    edges = pd.concat(  # Concatenate the edges
+
+    edge_cols = [
+        "subject",
+        "predicate",
+        "object",
+        "knowledge_source",
+        "relation",
+        "assay_type",
+        "interaction_level",
+        "publications",
+        "tissue_or_cell",
+        "source",
+        "source version",
+    ]
+
+    edges = pd.concat(
         [
-            # get needed columns
-            npintergenes[
-                # list of needed columns
-                [
-                    "subject",
-                    "object",
-                    "knowledge_source",
-                    "predicate",
-                    "source",
-                    "source version",
-                ]
-            ],
-             # get needed columns
-            npinterrna[
-                [
-                    "subject",
-                    "object",
-                    "knowledge_source",
-                    "predicate",
-                    "source",
-                    "source version",
-                ]
-            ],
-            # get needed columns
-            npinterproteins[
-                [
-                    "subject",
-                    "object",
-                    "knowledge_source",
-                    "predicate",
-                    "source",
-                    "source version",
-                ]
-            ],
+            npintergenes[edge_cols],
+            npinterrna[edge_cols],
+            npinterproteins[edge_cols],
         ]
-    )
-    # Create a unique id for each edge.
+    ).drop_duplicates()
     edges["id"] = edges["subject"].apply(lambda x: uuid.uuid4())
 
     # Save to the defined files.

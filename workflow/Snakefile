@@ -36,23 +36,58 @@ include: "rules/uberon.smk"
 include: "rules/cl.smk"
 #Bgee
 include: "rules/bgee.smk"
-#Mirtarbase
-include: "rules/mirtarbase.smk"
+#TarBase (DIANA-TarBase v9)
+include: "rules/tarbase.smk"
 #NPInter
 include: "rules/npinter.smk"
 #String
 include: "rules/stringdb.smk"
+#HMDD (Human microRNA Disease Database v4.0)
+include: "rules/hmdd.smk"
+#LncBook (CNCB-NGDC Human lncRNA Knowledgebase v2.0)
+include: "rules/lncbook.smk"
+#miRTarBase (miRTarBase 10.0 / 2025)
+include: "rules/mirtarbase.smk"
 
 
 rule all:
-    input: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_nodes.tsv"
+    input: 
+        "../data/processed/finals/lcc.tar.gz",
+        "../data/processed/finals/analysis/lcc_predicates.tsv",
+        "../paper/Figures/Figure2paper.png",
+        "../paper/Figures/Figure3map.png",
+        "../paper/Figures/Figure1_pipeline_dag.png"
 
 rule gather_data:
     input: databases.get_input_files()
-    output: "../data/processed/finals/merged_nodes.tsv", "../data/processed/finals/merged_edges.tsv"
+    output: "../data/processed/finals/merged.tar.gz"
     shell: "kgx merge --merge-config ../config/merge_config.yaml"
 
 rule find_lcc:
-    input: nodes="../data/processed/finals/merged_nodes.tsv", edges="../data/processed/finals/merged_edges.tsv"
-    output: "../data/processed/finals/lcc_nodes.tsv", "../data/processed/finals/lcc_edges.tsv"
-    shell: "python scripts/lcc.py -n {input.nodes} -e {input.edges} -o ../data/processed/finals/lcc "
+    input: "../data/processed/finals/merged.tar.gz"
+    output: "../data/processed/finals/lcc.tar.gz"
+    shell: "python scripts/lcc.py -i {input} -o ../data/processed/finals/lcc"
+
+rule analyze_graph:
+    input:
+        lcc = "../data/processed/finals/lcc.tar.gz",
+        stats = "../data/processed/finals/merged_graph_stats.yaml",
+        config = "../config/databases_config.yaml"
+    output:
+        predicates = "../data/processed/finals/analysis/lcc_predicates.tsv",
+        schema = "../data/processed/finals/analysis/metagraph_schema.tsv"
+    shell:
+        "python scripts/graph_analysis.py --lcc {input.lcc} --stats {input.stats} --config {input.config} -o ../data/processed/finals/analysis --plots"
+
+rule generate_paper_figures:
+    input:
+        lcc = "../data/processed/finals/lcc.tar.gz",
+        predicates = "../data/processed/finals/analysis/lcc_predicates.tsv",
+        schema = "../data/processed/finals/analysis/metagraph_schema.tsv"
+    output:
+        fig1 = "../paper/Figures/Figure1_pipeline_dag.png",
+        fig2 = "../paper/Figures/Figure2paper.png",
+        fig3 = "../paper/Figures/Figure3map.png"
+    shell:
+        "python scripts/generate_paper_figures.py --lcc {input.lcc} --workflow-dir . --output-dir ../paper/Figures"
+

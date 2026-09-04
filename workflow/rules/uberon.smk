@@ -1,3 +1,4 @@
+UBERON_VERSION = "v2026-06-23"
 UBERON = "http://purl.obolibrary.org/obo/uberon/subsets/human-view.json"
 
 rule download_uberon:
@@ -12,5 +13,6 @@ rule process_uberon:
 
 rule add_uberon_version:
   input: "../data/processed/intermediary/uberon_nodes.tsv","../data/processed/intermediary/uberon_edges.tsv"
+  params: version = UBERON_VERSION
   output: "../data/processed/finals/uberon_nodes.tsv","../data/processed/finals/uberon_edges.tsv"
-  shell: "python scripts/uberon_kgx_process.py -i {input} -o {output}"
+  shell: "python scripts/uberon_kgx_process.py -i {input} -v '{params.version}' -o {output}"

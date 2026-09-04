@@ -41,6 +41,12 @@ def main():
     # Add source and version
     goedges["source"] = "GO"
     goedges["source version"] = version
+    goedges["predicate"] = goedges["predicate"].replace(
+        {"biolink:inverseOf": "owl:inverseOf", "biolink:subPropertyOf": "rdfs:subPropertyOf"}
+    )
+    goedges["relation"] = goedges["relation"].replace(
+        {"inverseOf": "owl:inverseOf", "subPropertyOf": "rdfs:subPropertyOf"}
+    )
 
     # Select required column and drop duplicates
     # Then, save the results in a file

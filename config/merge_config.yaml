@@ -4,7 +4,7 @@ configuration:
 merged_graph:
   destination:
     merged-kg-tsv:
-      compression: gz
+      compression: tar.gz
       filename: merged
       format: tsv
   name: KG
@@ -43,9 +43,9 @@ merged_graph:
           edge_filters:
             predicate:
               - biolink:subclass_of
-              - biolink:inverseOf
-              - biolink:subPropertyOf
               - biolink:related_to
+              - owl:inverseOf
+              - rdfs:subPropertyOf
           node_filters:
             category:
               - biolink:BiologicalProcess
@@ -97,8 +97,8 @@ merged_graph:
             predicate:
               - biolink:subclass_of
               - biolink:related_to
-              - biolink:inverseOf
-              - biolink:subPropertyOf
+              - owl:inverseOf
+              - rdfs:subPropertyOf
           node_filters:
             category:
               - biolink:BiologicalProcess
@@ -124,19 +124,34 @@ merged_graph:
               - biolink:colocalizes_with
               - biolink:contributes_to
               - biolink:enables
-              - biolink:involved_in
+              - biolink:actively_involved_in
               - biolink:located_in
               - biolink:part_of
           node_filters:
             category:
               - biolink:RNAProduct
               - biolink:Protein
-              - biolink:MacromolecularComplexMixin
+              - biolink:MacromolecularComplex
               - biolink:BiologicalProcess
               - biolink:CellularComponent
               - biolink:MolecularActivity
         format: tsv
         name: GOA
+    hmdd:
+      input:
+        filename:
+          - ../data/processed/finals/hmdd_nodes.tsv
+          - ../data/processed/finals/hmdd_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:associated_with
+          node_filters:
+            category:
+              - biolink:RNAProduct
+              - biolink:Disease
+        format: tsv
+        name: HMDD
     human_phenotype_ontology:
       input:
         filename:
@@ -166,6 +181,20 @@ merged_graph:
               - biolink:PhenotypicFeature
         format: tsv
         name: HPOA
+    lncbook:
+      input:
+        filename:
+          - ../data/processed/finals/lncbook_nodes.tsv
+          - ../data/processed/finals/lncbook_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:interacts_with
+          node_filters:
+            category:
+              - biolink:RNAProduct
+        format: tsv
+        name: LncBook
     mirtarbase:
       input:
         filename:
@@ -180,7 +209,7 @@ merged_graph:
               - biolink:RNAProduct
               - biolink:Gene
         format: tsv
-        name: Mirtarbase
+        name: miRTarBase
     mondo:
       input:
         filename:
@@ -191,9 +220,9 @@ merged_graph:
             predicate:
               - biolink:type
               - biolink:subclass_of
-              - biolink:subPropertyOf
-              - biolink:inverseOf
               - biolink:related_to
+              - owl:inverseOf
+              - rdfs:subPropertyOf
           node_filters:
             category:
               - biolink:AnatomicalEntity
@@ -213,9 +242,9 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:binds
+              - biolink:interacts_with
               - biolink:regulates
-              - biolink:correlates
+              - biolink:correlated_with
               - biolink:coexpressed_with
           node_filters:
             category:
@@ -253,6 +282,21 @@ merged_graph:
               - biolink:Protein
         format: tsv
         name: STRING
+    tarbase:
+      input:
+        filename:
+          - ../data/processed/finals/tarbase_nodes.tsv
+          - ../data/processed/finals/tarbase_edges.tsv
+        filters:
+          edge_filters:
+            predicate:
+              - biolink:interacts_with
+          node_filters:
+            category:
+              - biolink:RNAProduct
+              - biolink:Gene
+        format: tsv
+        name: DIANA-TarBase
     uberon:
       input:
         filename:
@@ -261,10 +305,10 @@ merged_graph:
         filters:
           edge_filters:
             predicate:
-              - biolink:subPropertyOf
-              - biolink:inverseOf
               - biolink:subclass_of
               - biolink:related_to
+              - owl:inverseOf
+              - rdfs:subPropertyOf
           node_filters:
             category:
               - biolink:AnatomicalEntity

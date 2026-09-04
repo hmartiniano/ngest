@@ -5,9 +5,11 @@ import umap
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
+import os, sys
 import csrgraph as cg
 import nodevectors
+sys.path.append("../scripts")
+from graph_analysis import load_nodes, load_edges
 
 %matplotlib inline
 
@@ -15,8 +17,13 @@ import nodevectors
 
 ```python
 # read graph
-G = cg.read_edgelist("../../data/processed/finals/lcc_edges.tsv", directed=False, 
-                     sep='\t', low_memory=False, usecols=["subject", "object"], header=0)
+lcc_path = "../../data/processed/finals/lcc.tar.gz" if not os.path.exists("../../data/processed/finals/lcc_edges.tsv") else "../../data/processed/finals/lcc_edges.tsv"
+if os.path.exists("../../data/processed/finals/lcc_edges.tsv"):
+    G = cg.read_edgelist("../../data/processed/finals/lcc_edges.tsv", directed=False, 
+                         sep='\t', low_memory=False, usecols=["subject", "object"], header=0)
+else:
+    edges_df = load_edges(lcc_path, usecols=["subject", "object"])
+    G = cg.csrgraph(edges_df, directed=False)
 ```
 
 ```python
@@ -32,7 +39,7 @@ embeddings = ggvec_model.fit_transform(G)
 ```python
 # Get node names and types
 nodes = list(G.nodes())
-node_types = pd.read_csv("../../data/processed/finals/lcc_nodes.tsv", usecols=["id", "category"], sep='\t')
+node_types = load_nodes(lcc_path, usecols=["id", "category"])
 node_types = node_types.set_index("id").astype("category")
 ```
 

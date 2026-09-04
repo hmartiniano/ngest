@@ -19,7 +19,7 @@ def get_parser():
             "lcc: extract the largest connected component from a tsv format KG."
         ),
     )
-    # Add an argument for the node file.
+    parser.add_argument("-i", "--input", help="Input archive file (.tar.gz)")
     parser.add_argument("-n", "--nodes", help="Node file")
     # Add an argument for the edge file.
     parser.add_argument("-e", "--edges", help="Edge files")
@@ -38,11 +38,15 @@ def main():
     # Get the command-line arguments.
     parser = get_parser()
     args = parser.parse_args()
-    # Define input arguments for the transformer.
-    input_args = {"filename": [args.nodes, args.edges], "format": "tsv"}
-    # Define output arguments for the transformer.
-    output_args = {"filename": args.output, "format": "tsv"}
-    # Create a Transformer object.
+    if args.input:
+        input_args = {
+            "filename": [args.input],
+            "format": "tsv",
+            "compression": "tar.gz",
+        }
+    else:
+        input_args = {"filename": [args.nodes, args.edges], "format": "tsv"}
+    output_args = {"filename": args.output, "format": "tsv", "compression": "tar.gz"}
     t = Transformer(stream=False)
     # Transform the input graph.
     t.transform(input_args=input_args)

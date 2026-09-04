@@ -1,11 +1,7 @@
-version: '3'
-
 services:
   neo4j:
-    image: neo4j:latest
+    image: neo4j:5
     restart: unless-stopped
-    secrets:
-      - neo4j_auth
     ports:
       - 7474:7474
       - 7687:7687

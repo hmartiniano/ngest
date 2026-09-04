@@ -16,9 +16,9 @@
 data/*/*txt
 data/*/*/*yaml
 data/*/*yaml
+data/
 
-release
-
+*.zip
 .idea
 
 .pybiomart.sqlite
@@ -26,3 +26,4 @@ release
 .ipynb_checkpoints
 neo4j/env
 .aider*
+paper/

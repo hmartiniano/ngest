@@ -20,6 +20,9 @@ import pandas as pd
 import numpy as npa
 import networkx as nx
 from matplotlib_venn import venn3
+import sys, os
+sys.path.append("../scripts")
+from graph_analysis import load_edges
 
 pd.options.display.max_colwidth = None
 ```
@@ -66,7 +69,8 @@ def process_ids(ids):
 ```
 
 ```python
-df = pd.read_csv("../../data/processed/finals/lcc_edges.tsv", sep="\t", usecols=["subject", "object", "predicate"])
+lcc_edges_path = "../../data/processed/finals/lcc.tar.gz" if not os.path.exists("../../data/processed/finals/lcc_edges.tsv") else "../../data/processed/finals/lcc_edges.tsv"
+df = load_edges(lcc_edges_path, usecols=["subject", "object", "predicate"])
 ```
 
 ```python

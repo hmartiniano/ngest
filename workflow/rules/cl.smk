@@ -1,5 +1,5 @@
-#CL = "https://github.com/obophenotype/cell-ontology/raw/master/cl.json"
-CL = "https://github.com/obophenotype/cell-ontology/releases/download/v2023-02-15/cl.json"
+CL_VERSION = "v2026-06-08"
+CL = f"https://github.com/obophenotype/cell-ontology/releases/download/{CL_VERSION}/cl.json"
 PRMAPPING = "https://proconsortium.org/download/current/promapping.txt"
 
 rule download_cl:
@@ -18,5 +18,6 @@ rule download_pr_mapping:
 
 rule process_cl:
   input: nodes = "../data/processed/intermediary/cl_nodes.tsv", edges = "../data/processed/intermediary/cl_edges.tsv", mapping = "../data/raw/pr_mapping.txt"
+  params: version = CL_VERSION
   output: "../data/processed/finals/cl_nodes.tsv", "../data/processed/finals/cl_edges.tsv"
-  shell: "python scripts/cl_kgx_process.py -i {input.nodes} {input.edges} -m {input.mapping} -o {output}"
+  shell: "python scripts/cl_kgx_process.py -i {input.nodes} {input.edges} -m {input.mapping} -v '{params.version}' -o {output}"

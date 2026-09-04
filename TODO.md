@@ -35,13 +35,35 @@
 - [x] Add BGEE, NPINter, Mirtarbase, STRING version
 - [x] Fix STRING protein names 
 - [x] Remove Isoforms duplicates from emsembl
-- [ ] Add code to standardize and clean the KG:
-          * remove isolated groups of nodes (if any exist)
-          * clean relationships (merge, trim, etc)
-          * Clean nodes (group similar/duplicated nodes?) 
-- [ ] Add code to import final dataset into neo4j
+- [x] Add code to standardize and clean the KG:
+          * remove isolated groups of nodes (`workflow/scripts/lcc.py` extracts Largest Connected Component)
+          * clean relationships (Biolink / RO predicate normalization)
+          * clean nodes (CURIE prefix harmonization)
+- [x] Add code to import final dataset into neo4j (`workflow/scripts/tsv_to_neo4j.py`)
+- [x] Replace defunct miRTarBase with DIANA-TarBase v9.0
+- [x] Automated Graph Analysis & Reporting Engine (`workflow/scripts/graph_analysis.py`)
+- [x] Refactor and execute all analysis notebooks in-place (`workflow/notebooks/`)
+- [x] Update paper manuscript draft and bibliography with latest graph metrics and DIANA-TarBase (`paper/TODO_MANUSCRIPT.md`)
 - [ ] Add versioning and deployment tools
 - [ ] Add Reactome (and/or KEGG?, Rhea) pathways
 - [ ] Remove NCBITaxon nodes?
-- [ ] Verify KGX automatic annotations for edges and nodes
-- [ ] Add Docker file
+- [x] Verify KGX automatic annotations for edges and nodes
+- [ ] Add Docker file / Singularity recipe for containerized workflow execution
+- [x] **Evidence & Quality Control Thresholding (Reviewer Action)**:
+  - Added assay categorization and PubMed ID retention in `tarbase_to_kgx.py` (with `--direct-only` and `--assay-type` filtering)
+  - Added assay type, interaction level, and PubMed ID formatting in `npinter_to_kgx.py` (confirmed NPInter v5)
+  - Added normalized confidence score ($[0, 1]$) and configurable `--min-score` filtering in `stringdb_to_kgx.py`
+  - Added call quality, FDR, expression score retention and `--gold-only` / `--max-fdr` filtering in `bgee_to_kgx.py`
+  - Strongly typed edge properties (`:float`, `:int`, `:string[]`) in `tsv_to_neo4j.py` for direct Cypher numeric/array filtering
+  - Documented in `docs/evidence_filtering_and_edge_attributes.md`
+- [x] **Neo4j Practical Demonstration (Reviewer Action)**:
+  - Created `workflow/notebooks/sample_queries.cypher` with multi-hop regulatory queries (phenotype $\leftarrow$ gene $\leftarrow$ ncRNA paths, direct assay filtering, high-confidence PPIs)
+- [ ] **Link Prediction & Degree-Bias Evaluation (Reviewer Action)**:
+  - Update `workflow/notebooks/asd_rna.md` to output quantitative metrics table (Adamic-Adar, Jaccard, Preferential Attachment, Node Degree)
+  - Implement degree-normalized score evaluation against randomized graph null models to control for hub bias
+- [ ] **RNA-KG Benchmarking & Strategic Positioning (Reviewer Action)**:
+  - Add RNA-KG v1.0 and v2.0 to bibliography and manuscript Introduction/Discussion
+  - Construct comprehensive comparative feature table benchmarking `ngest` against RNA-KG, PrimeKG, Hetionet, SPOKE, and RTX-KG2
+  - Differentiate `ngest`'s automated Snakemake ETL pipeline, Biolink compliance, and clinical phenotype coupling from RNA-KG's monolithic 100M-edge static repository
+
+

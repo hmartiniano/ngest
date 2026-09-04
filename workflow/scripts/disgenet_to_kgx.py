@@ -103,7 +103,7 @@ def main():
     # Map 'diseaseId' to 'code' in the main disgenet DataFrame and add prefix to geneId
     # And add constants
     disgenet["object"] = disgenet["diseaseId"].map(disgenet_mapping)
-    disgenet["subject"] = "ENSEMBL:" + disgenet["geneId"].map(entrez_to_ensembl)
+    disgenet["subject"] = "NCBIGene:" + disgenet["geneId"]
     disgenet["provided_by"] = "Disgenet"
     disgenet["source"] = "Disgenet"
     disgenet["source version"] = get_version(args.version)
@@ -174,7 +174,7 @@ def main():
             "source",
             "source version",
         ]
-    ].drop_duplicates().to_csv(f"{args.output[1]}", sep="\t", index=False)
+    ].drop_duplicates().to_csv(f"{args.output[1]}", sep="\t", index=False, lineterminator="\n")
 
     phenotypes = gene_to_phenotype
     # Generate the nodes
@@ -199,11 +199,10 @@ def main():
     nodes["name"] = disgenet["geneSymbol"]
     nodes = nodes[["id", "category", "name", "provided_by", "source", "source version"]]
 
-    # Concatenate all nodes.
-    nodes = pd.concat([nodes, phenotypes, diseases]).drop_duplicates()
-    # Save the nodes
+    nodes = pd.concat([nodes, phenotypes, diseases]).drop_duplicates(subset=["id"])
+
     nodes[["id", "name", "category", "provided_by", "source", "source version"]].to_csv(
-        f"{args.output[0]}", sep="\t", index=False
+        f"{args.output[0]}", sep="\t", index=False, lineterminator="\n"
     )
 
 # Check the file name

@@ -64,7 +64,8 @@ def read_gaf(fnames, biolinkclasses):
         # Normalize "Qualifier" column values
         df["Qualifier"] = df["Qualifier"].replace("is_active_in", "active_in")
         df["Qualifier"] = df["Qualifier"].replace("NOT|is_active_in", "NOT|active_in")
-        # Convert database names to uppercase
+        df["Qualifier"] = df["Qualifier"].replace("involved_in", "actively_involved_in")
+        df["Qualifier"] = df["Qualifier"].replace("NOT|involved_in", "NOT|actively_involved_in")
         df["DB"] = df["DB"].str.upper()
         # Map databases to their corresponding Biolink categories
         df["Biolink Category"] = df["DB"].map(biolinkclasses)
@@ -89,6 +90,8 @@ def get_predicate_map(fname):
         if predicate is not None:
             relation = relation.split("/")[-1].replace("_", ":")
             predicate_to_relation[predicate.replace(" ", "_")] = relation
+    predicate_to_relation["actively_involved_in"] = "RO:0002331"
+    predicate_to_relation["NOT|actively_involved_in"] = "RO:0002331"
     return predicate_to_relation
 
 ####################################################################

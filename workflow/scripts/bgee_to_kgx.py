@@ -52,9 +52,21 @@ def get_parser():
     """
     parser = argparse.ArgumentParser(
         prog="bgee_to_kgx.py",
-        description="bgee_to_csv: convert an bgee file to CSVs with nodes and edges.",
+        description="bgee_to_csv: convert a Bgee expression file to CSVs with nodes and edges.",
     )
     parser.add_argument("-i", "--input", help="Input files")
+    parser.add_argument(
+        "--gold-only",
+        action="store_true",
+        default=False,
+        help="Filter to retain only 'gold quality' expression calls. Default: False",
+    )
+    parser.add_argument(
+        "--max-fdr",
+        type=float,
+        default=None,
+        help="Maximum FDR threshold to filter expression calls (e.g. 0.01). Default: None",
+    )
     parser.add_argument(
         "-o", "--output", nargs="+", default="bgee", help="Output prefix. Default: out"
     )
@@ -82,12 +94,17 @@ def main():
     args = parser.parse_args()
     bgee = read_files(args.input)
 
-    # Step 2: Filter data and Prepare for nodes and edges creation
-
-    # Filter data:
-    # Filter for rows where 'Expression' is 'present', removes 'absent' values
     bgee = bgee[bgee["Expression"].isin(["present"])]
-    # Remove rows where object column contains '∩', these are complex annotations that cannot be easily parsed
+
+    # Optional quality and FDR filtering
+    if args.gold_only and "Call quality" in bgee.columns:
+        bgee = bgee[bgee["Call quality"] == "gold quality"]
+    if args.max_fdr is not None and "FDR" in bgee.columns:
+        bgee = bgee[bgee["FDR"] <= args.max_fdr]
+
+    bgee["object"] = bgee["Anatomical entity ID"]
+    bgee["subject"] = "ENSEMBL:" + bgee["Gene ID"]
+    bgee["provided_by"] = "BGEE"
     bgee = bgee[~bgee["object"].str.contains("∩", na=False)]
 
     # Prepare data for edges creation:
@@ -106,35 +123,40 @@ def main():
     # Extract the version from the input filename (e.g., "14_2" from "file_14_2_something.tsv")
     bgee["source version"] = url.split("_")[1] + "_" + url.split("_")[2]
 
-    # Step 3: Create edge files (gene_to_ae)
-
-    # Prepare edge files:
-    # Create edge file: gene_to_ae (gene to anatomical entity)
-    gene_to_ae = bgee
-    # Add KGX properties
+    gene_to_ae = bgee.copy()
     gene_to_ae["category"] = "biolink:GeneToExpressionSiteAssociation"
     gene_to_ae["predicate"] = "biolink:expressed_in"
     gene_to_ae["relation"] = "RO:0002206"
     gene_to_ae["knowledge_source"] = "BGEE"
 
-    # Select and organize the columns needed in the edge file:
-    gene_to_ae = gene_to_ae[
-        [
-            "subject",
-            "predicate",
-            "object",
-            "category",
-             "relation",
-             "knowledge_source",
-             "source",
-             "source version",
-        ]
-    ].drop_duplicates()
-    
-    # Create a unique uuid for each edge (required in KGX)
-    gene_to_ae["id"] = [uuid.uuid4() for _ in range(len(gene_to_ae.index))]
-    
-    # Step 5: Write edges file to disk.
+    # Retain expression quality metrics
+    if "Call quality" in gene_to_ae.columns:
+        gene_to_ae["call_quality"] = gene_to_ae["Call quality"].fillna("")
+    if "FDR" in gene_to_ae.columns:
+        gene_to_ae["fdr"] = gene_to_ae["FDR"]
+    if "Expression score" in gene_to_ae.columns:
+        gene_to_ae["expression_score"] = gene_to_ae["Expression score"]
+    if "Expression rank" in gene_to_ae.columns:
+        gene_to_ae["expression_rank"] = gene_to_ae["Expression rank"]
+
+    edge_cols = [
+        "subject",
+        "predicate",
+        "object",
+        "category",
+        "relation",
+        "call_quality",
+        "fdr",
+        "expression_score",
+        "expression_rank",
+        "knowledge_source",
+        "source",
+        "source version",
+    ]
+    # Keep only available columns
+    avail_cols = [c for c in edge_cols if c in gene_to_ae.columns]
+    gene_to_ae = gene_to_ae[avail_cols].drop_duplicates()
+    gene_to_ae["id"] = gene_to_ae["subject"].apply(lambda x: uuid.uuid4())
     gene_to_ae.to_csv(f"{args.output[1]}", sep="\t", index=False)
 
     # Step 4: Create node files (anatomical entities and genes)

@@ -1,8 +1,5 @@
 import pandas as pd
 import argparse
-import requests
-# Define the URL for the latest release of the MONDO ontology from the Monarch Initiative GitHub repository.
-release = "https://api.github.com/repos/monarch-initiative/mondo/releases/latest"
 
 
 def get_parser():
@@ -18,12 +15,12 @@ def get_parser():
     )
     # add input file arguments
     parser.add_argument("-i", "--input", nargs="+", help="Input files")
-    # add output file prefix arguments
+    parser.add_argument("-v", "--version", required=True, help="Mondo release version")
     parser.add_argument(
         "-o",
         "--output",
         nargs="+",
-        default="out",
+        default="mondo",
         help="Output prefix. Default: out",
     )
     return parser
@@ -38,9 +35,7 @@ def main():
     mondonodes = pd.read_csv(args.input[0], sep="\t", low_memory=False)
     mondoedges = pd.read_csv(args.input[1], sep="\t", low_memory=False)
 
-    # Get the latest MONDO release version from GitHub API
-    response = requests.get(release)
-    version = response.json()["name"]
+    version = args.version
 
     # Add source and source version columns to the DataFrames
     mondonodes["source"] = "MONDO"
@@ -48,6 +43,12 @@ def main():
 
     mondoedges["source"] = "MONDO"
     mondoedges["source version"] = version
+    mondoedges["predicate"] = mondoedges["predicate"].replace(
+        {"biolink:inverseOf": "owl:inverseOf", "biolink:subPropertyOf": "rdfs:subPropertyOf"}
+    )
+    mondoedges["relation"] = mondoedges["relation"].replace(
+        {"inverseOf": "owl:inverseOf", "subPropertyOf": "rdfs:subPropertyOf"}
+    )
 
     # output the dataframes to tsv format 
     # select the columns from the dataframes and drop duplicates if any

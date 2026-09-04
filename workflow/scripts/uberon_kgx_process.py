@@ -1,10 +1,6 @@
 # Import necessary libraries
 import pandas as pd
 import argparse
-import requests
-
-# Define the URL for the latest release of the Uberon ontology on GitHub
-release = "https://api.github.com/repos/obophenotype/uberon/releases/latest"
 
 
 def get_parser():
@@ -20,12 +16,12 @@ def get_parser():
     )
     # Add an argument for input files
     parser.add_argument("-i", "--input", nargs="+", help="Input files")
-    # Add an argument for the output prefix, with a default value
+    parser.add_argument("-v", "--version", required=True, help="Uberon release version")
     parser.add_argument(
         "-o",
         "--output",
         nargs="+",
-        default="out",
+        default="uberon",
         help="Output prefix. Default: out",
     )
     return parser
@@ -44,10 +40,7 @@ def main():
     # Read the Uberon edges data from the second input file
     uberonedges = pd.read_csv(args.input[1], sep="\t", low_memory=False)
 
-    # Get the latest release information from GitHub API
-    response = requests.get(release)
-    # Extract the version name from the JSON response
-    version = response.json()["name"]
+    version = args.version
 
     # Add a "source" column to the nodes dataframe and fill it with "Uberon"
     uberonnodes["source"] = "Uberon"
@@ -58,6 +51,12 @@ def main():
     uberonedges["source"] = "Uberon"
     # Add a "source version" column to the edges dataframe and fill it with the version
     uberonedges["source version"] = version
+    uberonedges["predicate"] = uberonedges["predicate"].replace(
+        {"biolink:inverseOf": "owl:inverseOf", "biolink:subPropertyOf": "rdfs:subPropertyOf"}
+    )
+    uberonedges["relation"] = uberonedges["relation"].replace(
+        {"inverseOf": "owl:inverseOf", "subPropertyOf": "rdfs:subPropertyOf"}
+    )
 
     # Select specific columns, drop duplicates, and save the nodes data to a tab-separated file
     uberonnodes[

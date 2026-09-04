@@ -1,8 +1,4 @@
-"""
-This script processes Ensembl data to generate KGX-formatted nodes and edges files.
-It reads data from Ensembl, UniProt, and gene files, then maps and transforms
-the data into the required KGX format.
-"""
+import re
 import uuid
 import argparse
 import pandas as pd
@@ -29,22 +25,18 @@ def read_id_mapping_uniprot(fname):
 
 
 def read_genes(fname):
-    """
-    Reads a gene file and extracts gene IDs and names, mapping them to an ENSEMBL format.
-    Args:
-        fname (str): The path to the gene file.
-    Returns:
-        pd.Series: A Series with ENSEMBL gene IDs as index and gene names as values.
-    """
-    df = pd.read_csv(fname, sep=";", low_memory=False, header=None)
-    df = df.iloc[:, :3]
-    df.columns = GENES
-    df = df[df["Gene Name"].str.contains("gene_name")]  # filter the header
-    df["Gene Id"] = "ENSEMBL:" + df["Gene Id"].str.split(" ").str[-1].str.replace('"', "")
-    df["Gene Name"] = df["Gene Name"].str.split(" ").str[-1].str.replace('"', "")  # clean gene names
-    df = df[["Gene Id", "Gene Name"]].drop_duplicates().set_index("Gene Id")
-    df = df[~df.index.duplicated(keep="first")].iloc[:, 0]  # Remove duplicated indexes
-    return df
+    gene_map = {}
+    with open(fname, "r") as f:
+        for line in f:
+            m_id = re.search(r'gene_id\s+"([^"]+)"', line)
+            m_name = re.search(r'gene_name\s+"([^"]+)"', line)
+            if m_id and m_name:
+                gene_map["ENSEMBL:" + m_id.group(1)] = m_name.group(1)
+            elif m_id:
+                gid = "ENSEMBL:" + m_id.group(1)
+                if gid not in gene_map:
+                    gene_map[gid] = m_id.group(1)
+    return pd.Series(gene_map)
 
 
 def get_parser():
